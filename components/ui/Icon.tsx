@@ -20,5 +20,15 @@ export {
   MapPinned,
   Building2,
   UtensilsCrossed,
+  PenLine,
+  User,
+  UserPlus,
+  ShoppingBag,
+  Wine,
+  Dumbbell,
+  Sparkles,
+  Car,
+  Wrench,
+  MoreHorizontal,
 } from "lucide-react";
 export type { LucideIcon } from "lucide-react";

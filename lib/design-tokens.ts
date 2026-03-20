@@ -1,5 +1,5 @@
 /**
- * Design system tokens — single source of truth.
+ * Design system tokens — matches brand style guide.
  * Actual values are in app/globals.css. Use Tailwind classes in UI.
  */
 
@@ -8,27 +8,28 @@ export const colors = {
     primary: "#d32323",
     primaryHover: "#b71f1f",
     primaryMuted: "#f5e6e6",
-    secondary: "#0073bb",
-    secondaryHover: "#005a92",
-    secondaryMuted: "#e6f2f8",
+    secondary: "#2d2e2f",
+    secondaryHover: "#3d3e3f",
+    tertiary: "#bbbac0",
   },
   neutral: {
     0: "#ffffff",
     50: "#f5f5f5",
     200: "#e6e6e6",
     500: "#666666",
-    900: "#333333",
-    950: "#000000",
+    900: "#2d2e2f",
+    950: "#1a1a1b",
   },
 } as const;
 
+/** Default rounded = md (0.5rem). Use rounded-md or rounded for UI. */
 export const radius = {
-  sm: "0.375rem",
-  DEFAULT: "0.5rem",
+  sm: "0.25rem",
+  DEFAULT: "0.5rem", // md — design system default
   md: "0.5rem",
-  lg: "0.75rem",
-  xl: "1rem",
-  "2xl": "1.5rem",
+  lg: "0.5rem",
+  xl: "0.75rem",
+  "2xl": "1rem",
 } as const;
 
 export const fonts = {
@@ -36,13 +37,16 @@ export const fonts = {
   display: "var(--font-poppins)",
 } as const;
 
+/** Button default size = lg. Override with size="sm" | "default" | "icon" etc. */
+export const buttonSize = { default: "lg" } as const;
+
 export const semantic = {
-  primary: "Brand primary — CTAs, primary buttons, badges",
-  secondary: "Brand secondary — links, secondary buttons, focus ring",
-  accent: "Brand secondary — hover states",
+  primary: "Brand primary — CTAs, primary buttons, links, focus ring",
+  secondary: "Brand secondary (charcoal) — inverted/secondary buttons",
+  accent: "Brand tertiary — hover states, muted UI",
   destructive: "Brand primary — errors, delete",
   muted: "Neutral 50 — secondary text, placeholders",
   border: "Neutral 200 — borders, dividers",
   input: "Neutral 200 — input borders",
-  ring: "Brand secondary — focus ring",
+  ring: "Brand primary — focus ring",
 } as const;

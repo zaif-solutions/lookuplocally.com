@@ -2,34 +2,34 @@
 @import "tw-animate-css";
 
 /* ==========================================================================
-   Design system — brand + semantic tokens for shadcn/ui
-   Primary: red. Secondary/links: teal. Display: Poppins. Body: Open Sans.
+   Design system — matches brand style guide
+   Primary: #D32323. Secondary: #2D2E2F (charcoal). Tertiary: #BBBAC0.
    ========================================================================== */
 
 :root {
-  /* Brand palette */
+  /* Brand palette — from style guide */
   --brand-primary: #d32323;
   --brand-primary-hover: #b71f1f;
   --brand-primary-muted: #f5e6e6;
-  --brand-secondary: #0073bb;
-  --brand-secondary-hover: #005a92;
-  --brand-secondary-muted: #e6f2f8;
+  --brand-secondary: #2d2e2f;
+  --brand-secondary-hover: #3d3e3f;
+  --brand-tertiary: #bbbac0;
 
-  /* Neutrals */
+  /* Neutrals — secondary/neutral from guide is #2D2E2F */
   --neutral-0: #ffffff;
   --neutral-50: #f5f5f5;
   --neutral-200: #e6e6e6;
   --neutral-500: #666666;
-  --neutral-900: #333333;
-  --neutral-950: #000000;
+  --neutral-900: #2d2e2f;
+  --neutral-950: #1a1a1b;
 
-  /* Border radius */
+  /* Border radius — default is md (0.5rem); slight, ~4px–8px per guide */
   --radius: 0.5rem;
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem; /* default rounded */
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
 
   /* Semantic (shadcn) */
   --background: var(--neutral-0);
@@ -44,17 +44,17 @@
   --secondary-foreground: var(--neutral-0);
   --muted: var(--neutral-50);
   --muted-foreground: var(--neutral-500);
-  --accent: var(--brand-secondary);
-  --accent-foreground: var(--neutral-0);
+  --accent: var(--brand-tertiary);
+  --accent-foreground: var(--neutral-900);
   --destructive: var(--brand-primary);
   --destructive-foreground: var(--neutral-0);
   --border: var(--neutral-200);
   --input: var(--neutral-200);
-  --ring: var(--brand-secondary);
+  --ring: var(--brand-primary);
 
   --chart-1: var(--brand-primary);
   --chart-2: var(--brand-secondary);
-  --chart-3: var(--neutral-500);
+  --chart-3: var(--brand-tertiary);
   --chart-4: var(--neutral-900);
   --chart-5: var(--neutral-200);
 
@@ -65,42 +65,42 @@
   --sidebar-accent: var(--neutral-50);
   --sidebar-accent-foreground: var(--neutral-900);
   --sidebar-border: var(--neutral-200);
-  --sidebar-ring: var(--brand-secondary);
+  --sidebar-ring: var(--brand-primary);
 }
 
 .dark {
   --background: var(--neutral-900);
   --foreground: var(--neutral-0);
-  --card: #2a2a2a;
+  --card: #252627;
   --card-foreground: var(--neutral-0);
-  --popover: #2a2a2a;
+  --popover: #252627;
   --popover-foreground: var(--neutral-0);
   --primary: var(--brand-primary);
   --primary-foreground: var(--neutral-0);
   --secondary: var(--brand-secondary);
   --secondary-foreground: var(--neutral-0);
   --muted: #404040;
-  --muted-foreground: #a3a3a3;
-  --accent: var(--brand-secondary);
+  --muted-foreground: var(--brand-tertiary);
+  --accent: #404040;
   --accent-foreground: var(--neutral-0);
   --destructive: var(--brand-primary);
   --destructive-foreground: var(--neutral-0);
   --border: #404040;
   --input: #404040;
-  --ring: var(--brand-secondary);
+  --ring: var(--brand-primary);
   --chart-1: var(--brand-primary);
   --chart-2: var(--brand-secondary);
-  --chart-3: #a3a3a3;
+  --chart-3: var(--brand-tertiary);
   --chart-4: #737373;
   --chart-5: #525252;
-  --sidebar: #1a1a1a;
+  --sidebar: #1a1a1b;
   --sidebar-foreground: var(--neutral-0);
   --sidebar-primary: var(--brand-primary);
   --sidebar-primary-foreground: var(--neutral-0);
   --sidebar-accent: #404040;
   --sidebar-accent-foreground: var(--neutral-0);
   --sidebar-border: #404040;
-  --sidebar-ring: var(--brand-secondary);
+  --sidebar-ring: var(--brand-primary);
 }
 
 @theme inline {
@@ -136,7 +136,6 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --color-brand-secondary-muted: var(--brand-secondary-muted);
   --radius: var(--radius);
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
@@ -157,10 +156,11 @@ body {
   font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Links — primary (red) per style guide */
 a[data-link="secondary"] {
-  color: var(--secondary);
+  color: var(--primary);
 }
 a[data-link="secondary"]:hover {
-  color: var(--brand-secondary-hover);
+  color: var(--brand-primary-hover);
   text-decoration: underline;
 }
