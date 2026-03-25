@@ -14,105 +14,120 @@ export function Header() {
     <header
       className={cn(
         "top-0 z-50 w-full",
-        isHome ? "fixed pb-4 pt-5" : "sticky bg-card shadow-sm"
+        isHome ? "fixed pb-4 pt-5" : "sticky bg-card shadow-sm",
       )}
     >
-      {/* One row: no fixed h-12 + py-2 (that squeezed children vs 48px-tall controls) */}
-      <div
-        className={cn(
-          "flex w-full flex-nowrap items-center gap-4",
-          CONTENT_MAX,
-          CONTENT_GUTTER
-        )}
-      >
-        {/* Find / Near / Search — left-aligned on home (same gutter as hero) */}
-        <div
-          className={cn(
-            "hidden min-w-0 flex-1 items-center md:flex",
-            isHome ? "justify-start" : "justify-center"
-          )}
-        >
-          <form
-            action="/search"
-            method="get"
-            className="flex h-12 w-full max-w-3xl overflow-hidden rounded-md border-none bg-card shadow-lg"
-            role="search"
+      {/* Outer container — applies horizontal padding + max-width */}
+      {/* <div className={cn(CONTENT_MAX, CONTENT_GUTTER)}> */}
+      <div className={cn(" px-4 sm:px-6 lg:px-8")}>
+        {/*
+          3-column grid: logo (left) | search (center) | nav (right)
+          The auto columns take only what they need; the 1fr center column
+          is shared equally so the search form sits in true horizontal center.
+        */}
+        {/* <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4"> */}
+        <div className="grid grid-cols-6 items-center gap-4">
+
+          {/* ── 1. Logo ── */}
+          <Link
+            href="/"
+            className={cn(
+              "shrink-0 text-lg font-bold tracking-tight border col-span-1",
+              isHome ? "text-white" : "text-foreground",
+            )}
           >
-            <label htmlFor="header-find" className="sr-only">
-              Find
-            </label>
-            <input
-              id="header-find"
-              type="search"
-              name="q"
-              placeholder="restaurants, services..."
-              className="h-12 flex-1 border-0 bg-transparent px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0"
-            />
-            <span className="w-px bg-border" aria-hidden />
-            <label htmlFor="header-near" className="sr-only">
-              Near
-            </label>
-            <input
-              id="header-near"
-              type="text"
-              name="loc"
-              placeholder="address, city..."
-              className="h-12 w-60 shrink-0 border-0 bg-transparent px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0"
-            />
-            <Button
-              type="submit"
-              size="lg"
-              className="h-12 shrink-0 rounded-none rounded-r-md border-none px-3.5 py-3.5 text-lg font-semibold"
+            Lookup Locally
+          </Link>
+
+          {/* ── 2. Search (centered) ── */}
+          <div className="hidden  justify-center md:flex  border col-span-2">
+            <form
+              action="/search"
+              method="get"
+              className="flex h-12 w-full max-w-3xl overflow-hidden rounded-md border-none bg-card shadow-lg"
+              role="search"
+            >
+              <label htmlFor="header-find" className="sr-only">
+                Find
+              </label>
+              <input
+                id="header-find"
+                type="search"
+                name="q"
+                placeholder="restaurants, services..."
+                className="h-12 flex-1 border-0 bg-transparent px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0"
+              />
+              <span className="w-px bg-border" aria-hidden />
+              <label htmlFor="header-near" className="sr-only">
+                Near
+              </label>
+              <input
+                id="header-near"
+                type="text"
+                name="loc"
+                placeholder="address, city..."
+                className="h-12 w-60 shrink-0 border-0 bg-transparent px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0"
+              />
+              <Button
+                type="submit"
+                size="lg"
+                className="h-12 shrink-0 rounded-none rounded-r-md border-none px-3.5 py-3.5 text-lg font-semibold"
+              >
+                <Search className="size-5" />
+                Search
+              </Button>
+            </form>
+          </div>
+
+          {/* ── 3. Right nav ── */}
+          <div className="flex shrink-0 items-center justify-end gap-1 sm:gap-2 col-span-3">
+            <Link
+              href="/search"
+              className="flex size-10 items-center justify-center rounded-full text-foreground hover:bg-muted md:hidden"
+              aria-label="Search"
             >
               <Search className="size-5" />
-              Search
+            </Link>
+            <Link
+              href="/search?write-review"
+              className="hidden h-12 items-center gap-2 rounded-sm px-3.5 text-lg font-semibold text-white hover:text-white/80 sm:flex"
+            >
+              Write a Review
+            </Link>
+            <Button
+              size="lg"
+              className="h-12 rounded-sm border-none px-3.5 py-3.5 text-lg font-semibold text-white hover:bg-white"
+              asChild
+              variant="ghost"
+            >
+              <Link
+                href="/login"
+                className="gap-1.5 text-lg text-white hover:text-white"
+              >
+                Log In
+              </Link>
             </Button>
-          </form>
-        </div>
+            <Button
+              asChild
+              size="lg"
+              className="h-12 rounded-sm px-3.5 py-3.5 text-lg font-semibold"
+            >
+              <Link href="/signup" className="gap-1.5 text-lg">
+                Sign Up
+              </Link>
+            </Button>
+            <button
+              type="button"
+              className="flex size-10 items-center justify-center rounded-full text-foreground hover:bg-muted md:hidden"
+              aria-label="Open menu"
+            >
+              <Menu className="size-5" />
+            </button>
+          </div>
 
-        {/* Right: Nav links + auth */}
-        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-          <Link
-            href="/search"
-            className="flex size-10 items-center justify-center rounded-full text-foreground hover:bg-muted md:hidden"
-            aria-label="Search"
-          >
-            <Search className="size-5" />
-          </Link>
-          <Link
-            href="/search?write-review"
-            className="hidden h-12 items-center gap-2 rounded-sm px-3.5 text-lg font-semibold text-white hover:text-white/80 sm:flex"
-          >
-            Write a Review
-          </Link>
-          <Button
-            size="lg"
-            className="h-12 rounded-sm border-none px-3.5 py-3.5 text-lg font-semibold text-white hover:bg-white"
-            asChild
-            variant="ghost"
-          >
-            <Link href="/login" className="gap-1.5 text-lg text-white hover:text-white">
-              Log In
-            </Link>
-          </Button>
-          <Button
-            asChild
-            size="lg"
-            className="h-12 rounded-sm px-3.5 py-3.5 text-lg font-semibold"
-          >
-            <Link href="/signup" className="gap-1.5 text-lg">
-              Sign Up
-            </Link>
-          </Button>
-          <button
-            type="button"
-            className="flex size-10 items-center justify-center rounded-full text-foreground hover:bg-muted md:hidden"
-            aria-label="Open menu"
-          >
-            <Menu className="size-5" />
-          </button>
         </div>
       </div>
     </header>
   );
 }
+
