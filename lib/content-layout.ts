@@ -1,5 +1,5 @@
 /**
- * Shared horizontal gutter so header search + hero copy + indicators share one vertical line.
+ * Shared shell: same max-width + horizontal padding for header, hero, page sections, footer.
  */
-export const CONTENT_MAX = "mx-auto w-full max-w-[63%]";
-export const CONTENT_GUTTER = "px-4 sm:px-6 lg:px-6";
+export const CONTENT_MAX = "md:container mx-auto px-2 md:px-8 lg:px-12 2xl:px-28";
+export const CONTENT_GUTTER = "md:container mx-auto px-2 md:px-8 lg:px-12 2xl:px-28 ";

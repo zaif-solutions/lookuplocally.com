@@ -1,125 +1,250 @@
 "use client";
 
 import Link from "next/link";
-import { Search, Menu } from "@/components/ui/Icon";
+import { Search, Menu, X } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { CONTENT_GUTTER, CONTENT_MAX } from "@/lib/content-layout";
+
+function HeaderSearchForm({
+  className,
+  idPrefix = "header",
+}: {
+  className?: string;
+  idPrefix?: string;
+}) {
+  return (
+    <form
+      action="/search"
+      method="get"
+      className={cn(
+        "flex w-full overflow-hidden rounded-md border border-border bg-card shadow-md",
+        "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch",
+        className,
+      )}
+      role="search"
+      aria-label="Search businesses"
+    >
+      <label htmlFor={`${idPrefix}-find`} className="sr-only">
+        Find
+      </label>
+      <input
+        id={`${idPrefix}-find`}
+        type="search"
+        name="q"
+        placeholder="restaurants, services..."
+        className="min-h-12 min-w-0 flex-1 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:py-2.5 sm:text-sm"
+      />
+      <span
+        className="hidden h-auto w-px shrink-0 bg-border sm:block"
+        aria-hidden
+      />
+      <label htmlFor={`${idPrefix}-near`} className="sr-only">
+        Near
+      </label>
+      <input
+        id={`${idPrefix}-near`}
+        type="text"
+        name="loc"
+        placeholder="address, city..."
+        className="min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:w-44 sm:shrink-0 sm:py-2.5 sm:text-sm md:w-52 lg:w-60"
+      />
+      <Button
+        type="submit"
+        size="lg"
+        className="min-h-12 w-full shrink-0 rounded-none rounded-b-md border-none px-4 py-3 text-base font-semibold sm:h-auto sm:w-auto sm:rounded-none sm:rounded-r-md sm:px-3.5 sm:text-lg"
+      >
+        <Search className="size-5 sm:mr-1" aria-hidden />
+        Search
+      </Button>
+    </form>
+  );
+}
 
 export function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [mobileOpen]);
+
+  const logoClass = cn(
+    "min-w-0 shrink-0 truncate text-base font-bold tracking-tight sm:text-lg",
+    isHome ? "text-white" : "text-foreground",
+  );
+
+  const navLinkClass = (extra?: string) =>
+    cn(
+      "inline-flex items-center whitespace-nowrap rounded-md px-2 py-2 text-sm font-semibold transition-colors",
+      isHome
+        ? "text-white hover:bg-white/10"
+        : "text-foreground hover:bg-muted",
+      extra,
+    );
+
   return (
     <header
       className={cn(
-        "top-0 z-50 w-full",
-        isHome ? "fixed pb-4 pt-5" : "sticky bg-card shadow-sm",
+        "relative top-0 z-50 w-full",
+        isHome
+          ? "fixed pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:pb-4 sm:pt-[max(1rem,env(safe-area-inset-top))]"
+          : "sticky border-b border-border bg-card pt-[env(safe-area-inset-top)] shadow-sm",
       )}
     >
-      {/* Outer container — applies horizontal padding + max-width */}
-      {/* <div className={cn(CONTENT_MAX, CONTENT_GUTTER)}> */}
-      <div className={cn(" px-4 sm:px-6 lg:px-8")}>
+      <div className={cn(CONTENT_MAX, CONTENT_GUTTER)}>
         {/*
-          3-column grid: logo (left) | search (center) | nav (right)
-          The auto columns take only what they need; the 1fr center column
-          is shared equally so the search form sits in true horizontal center.
+          Desktop: grid [logo | flexible center | nav]. Search lives only in the
+          center track so it can never paint under “Write a Review” / buttons.
         */}
-        {/* <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4"> */}
-        <div className="flex justify-between items-center gap-4 w-full">
-          {/* ── 1. Logo ── */}
-          <Link
-            href="/"
-            className={cn(
-              "shrink-0 text-lg font-bold tracking-tight w-[18%]",
-              isHome ? "text-white" : "text-foreground",
-            )}
+        <div className="hidden min-h-13 items-center gap-3 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center">
+          <div className="flex min-w-0 items-center justify-self-start">
+            <Link href="/" className={cn(logoClass, "max-w-48 xl:max-w-none")}>
+              Lookup Locally
+            </Link>
+          </div>
+
+          <div className="flex min-w-0 justify-center justify-self-stretch px-2">
+            <div className="w-full max-w-xl ">
+              <HeaderSearchForm idPrefix="hdr-desk" />
+            </div>
+          </div>
+
+          <nav
+            className="flex min-w-0 shrink-0 items-center justify-end justify-self-end gap-1 xl:gap-2"
+            aria-label="Account"
           >
+            <Link href="/search?write-review" className={navLinkClass()}>
+              Write a Review
+            </Link>
+            <Button
+              size="lg"
+              className={cn(
+                "h-10 shrink-0 px-2.5 text-sm font-semibold sm:px-3",
+                isHome
+                  ? "border-0 text-white hover:bg-white/10"
+                  : "border-0 hover:bg-muted",
+              )}
+              asChild
+              variant="ghost"
+            >
+              <Link href="/login">Log In</Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              className="h-10 shrink-0 px-2.5 text-sm font-semibold sm:px-3"
+            >
+              <Link href="/signup">Sign Up</Link>
+            </Button>
+          </nav>
+        </div>
+
+        {/* Mobile + small tablet: logo | actions */}
+        <div className="flex min-h-13 items-center justify-between gap-3 lg:hidden">
+          <Link href="/" className={cn(logoClass, "max-w-[55%]")}>
             Lookup Locally
           </Link>
 
-          <div className="flex flex-1 justify-between items-center w-[64%]">
-            {/* ── 2. Search (centered) ── */}
-            <div className="w-full">
-              <form
-                action="/search"
-                method="get"
-                className="flex h-12 w-full max-w-3xl overflow-hidden rounded-md border-none bg-card shadow-lg"
-                role="search"
-              >
-                <label htmlFor="header-find" className="sr-only">
-                  Find
-                </label>
-                <input
-                  id="header-find"
-                  type="search"
-                  name="q"
-                  placeholder="restaurants, services..."
-                  className="h-12 flex-1 border-0 bg-transparent px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0"
-                />
-                <span className="w-px bg-border" aria-hidden />
-                <label htmlFor="header-near" className="sr-only">
-                  Near
-                </label>
-                <input
-                  id="header-near"
-                  type="text"
-                  name="loc"
-                  placeholder="address, city..."
-                  className="h-12 w-60 shrink-0 border-0 bg-transparent px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0"
-                />
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="h-12 shrink-0 rounded-none rounded-r-md border-none px-3.5 py-3.5 text-lg font-semibold"
-                >
-                  <Search className="size-5" />
-                  Search
-                </Button>
-              </form>
-            </div>
+          <div className="flex shrink-0 items-center gap-1">
+            <Link
+              href="/search"
+              className={cn(
+                "flex size-11 items-center justify-center rounded-full transition-colors",
+                isHome
+                  ? "text-white hover:bg-white/15"
+                  : "text-foreground hover:bg-muted",
+              )}
+              aria-label="Search"
+            >
+              <Search className="size-5" />
+            </Link>
+            <button
+              type="button"
+              className={cn(
+                "flex size-11 items-center justify-center rounded-full transition-colors",
+                isHome
+                  ? "text-white hover:bg-white/15"
+                  : "text-foreground hover:bg-muted",
+              )}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-nav"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              onClick={() => setMobileOpen((o) => !o)}
+            >
+              {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            </button>
+          </div>
+        </div>
 
-            {/* ── 3. Right nav ── */}
-            <div className="flex shrink-0 items-center justify-end gap-1 sm:gap-2">
+        {/* Medium screens: full-width search under logo row (no overlap) */}
+        <div
+          className={cn(
+            "mt-3 hidden md:block lg:hidden",
+            isHome && "border-t border-white/10 pt-3",
+          )}
+        >
+          <HeaderSearchForm idPrefix="hdr-md" />
+        </div>
+      </div>
+
+      {/* Mobile slide-down panel (below header bar) */}
+      {mobileOpen ? (
+        <div
+          id="mobile-nav"
+          className={cn(
+            "absolute left-0 right-0 top-full z-60 max-h-[min(75dvh,32rem)] overflow-y-auto overscroll-contain border-b shadow-xl lg:hidden",
+            isHome
+              ? "border-white/15 bg-neutral-950/98 backdrop-blur-md"
+              : "border-border bg-card",
+          )}
+        >
+          <div className={cn(CONTENT_MAX, CONTENT_GUTTER, "py-4")}>
+            <HeaderSearchForm idPrefix="hdr-mob" className="shadow-lg" />
+            <nav className="mt-4 flex flex-col gap-0.5" aria-label="Mobile">
               <Link
                 href="/search?write-review"
-                className="hidden h-12 items-center gap-2 rounded-sm px-3.5 text-lg font-semibold text-white hover:text-white/80 sm:flex"
+                className={cn(
+                  "flex min-h-11 items-center rounded-lg px-3 py-3 text-base font-semibold",
+                  isHome ? "text-white hover:bg-white/10" : "text-foreground hover:bg-muted",
+                )}
+                onClick={closeMobile}
               >
                 Write a Review
               </Link>
-              <Button
-                size="lg"
-                className="h-12 rounded-sm border-none px-3.5 py-3.5 text-lg font-semibold text-white hover:bg-white"
-                asChild
-                variant="ghost"
+              <Link
+                href="/login"
+                className={cn(
+                  "flex min-h-11 items-center rounded-lg px-3 py-3 text-base font-semibold",
+                  isHome ? "text-white hover:bg-white/10" : "text-foreground hover:bg-muted",
+                )}
+                onClick={closeMobile}
               >
-                <Link
-                  href="/login"
-                  className="gap-1.5 text-lg text-white hover:text-white"
-                >
-                  Log In
-                </Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                className="h-12 rounded-sm px-3.5 py-3.5 text-lg font-semibold"
-              >
-                <Link href="/signup" className="gap-1.5 text-lg">
+                Log In
+              </Link>
+              <Button asChild className="mt-2 h-11 w-full" size="lg">
+                <Link href="/signup" onClick={closeMobile}>
                   Sign Up
                 </Link>
               </Button>
-              <button
-                type="button"
-                className="flex size-10 items-center justify-center rounded-full text-foreground hover:bg-muted md:hidden"
-                aria-label="Open menu"
-              >
-                <Menu className="size-5" />
-              </button>
-            </div>
+            </nav>
           </div>
         </div>
-      </div>
+      ) : null}
     </header>
   );
 }

@@ -51,19 +51,19 @@ export function Footer() {
 
   return (
     <footer className="border-t border-border bg-card">
-      <div className={cn(CONTENT_MAX, CONTENT_GUTTER, "py-12 sm:py-14")}>
-        <div className="grid grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-4">
+      <div className={cn(CONTENT_MAX, CONTENT_GUTTER, "py-10 sm:py-12 lg:py-14")}>
+        <div className="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
           {footerColumns.map((column) => (
             <nav key={column.title} aria-label={column.title}>
-              <h2 className="mb-4 text-sm font-semibold text-foreground">
+              <h2 className="mb-3 text-sm font-semibold text-foreground sm:mb-4">
                 {column.title}
               </h2>
-              <ul className="flex flex-col gap-3">
+              <ul className="flex flex-col gap-2.5 sm:gap-3">
                 {column.links.map(({ label, href }) => (
                   <li key={label + href}>
                     <Link
                       href={href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      className="inline-flex min-h-10 items-center text-sm text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {label}
                     </Link>
@@ -74,7 +74,7 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-10 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-8 flex flex-col gap-3 border-t border-border pt-6 text-center sm:mt-10 sm:flex-row sm:items-start sm:justify-between sm:gap-6 sm:text-left">
           <p className="text-sm text-muted-foreground">
             © {year} {SITE_NAME}, Inc. Building trusted local discovery.
           </p>
