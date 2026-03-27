@@ -1,126 +1,97 @@
-"use client";
-
-import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search } from "@/components/ui/Icon";
+import { Star, ChevronRight } from "@/components/ui/Icon";
 import { cn } from "@/lib/utils";
-import { HERO_SLIDES } from "@/lib/hero-slides";
 import { CONTENT_GUTTER, CONTENT_MAX } from "@/lib/content-layout";
-
-const AUTOPLAY_MS = 6500;
+import { SITE_NAME } from "@/lib/constants";
 
 export function Hero() {
-  const [index, setIndex] = useState(0);
-  const total = HERO_SLIDES.length;
-  const slide = HERO_SLIDES[index]!;
-
-  const goTo = useCallback((i: number) => {
-    setIndex(((i % total) + total) % total);
-  }, [total]);
-
-  const next = useCallback(() => goTo(index + 1), [goTo, index]);
-
-  useEffect(() => {
-    const t = window.setInterval(next, AUTOPLAY_MS);
-    return () => window.clearInterval(t);
-  }, [next]);
-
   return (
     <section
-      className="relative isolate w-full min-h-[min(88vh,820px)] overflow-hidden "
-      aria-roledescription="carousel"
-      aria-label="Featured highlights"
+      className="relative isolate w-full overflow-hidden bg-neutral-950 text-white"
+      aria-labelledby="hero-heading"
     >
-      {/* Slides */}
-      {HERO_SLIDES.map((s, i) => (
-        <div
-          key={s.id}
-          className={cn(
-            "absolute inset-0 transition-opacity duration-700 ease-out",
-            i === index ? "z-[1] opacity-100" : "z-0 opacity-0"
-          )}
-          aria-hidden={i !== index}
-        >
-          <Image
-            src={s.src}
-            alt={s.alt}
-            fill
-            priority={i === 0}
-            sizes="100vw"
-            className="object-cover object-center"
-          />
-        </div>
-      ))}
+      <Image
+        src="/hero-slides/painter.jpg"
+        alt="Professional painting a wall"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
+      />
 
-      {/* Readability gradients (Yelp-style: top dark for header + left for copy) */}
       <div
-        className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-black/50 via-black/10 to-black/30"
+        className="pointer-events-none absolute inset-0 z-2 bg-linear-to-b from-black/75 via-black/35 to-black/70"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-r from-black/50 via-black/10 to-transparent sm:from-black/30"
+        className="pointer-events-none absolute inset-0 z-2 bg-linear-to-r from-black/70 via-black/40 to-black/10"
         aria-hidden
       />
 
-      {/* Content — one left edge: indicators, headline, CTA share CONTENT_GUTTER */}
       <div
         className={cn(
-          "relative z-10 flex min-h-[min(88vh,820px)] flex-col justify-end pb-10 pt-28 sm:justify-center sm:pb-16 sm:pt-32 lg:pt-36",
+          "relative z-10 flex min-h-[min(90vh,840px)] flex-col justify-center pb-14 pt-36 sm:pb-20 sm:pt-40",
           CONTENT_MAX,
-          CONTENT_GUTTER
+          CONTENT_GUTTER,
         )}
       >
-        <div className="flex w-full max-w-3xl flex-col items-start gap-6 sm:flex-row sm:items-start sm:gap-5 md:gap-6">
-          {/* Carousel indicators */}
-          <div
-            className="flex shrink-0 flex-row gap-2 sm:flex-col sm:gap-3"
-            role="tablist"
-            aria-label="Slide"
-          >
-            {HERO_SLIDES.map((_, i) => (
-              <button
-                key={HERO_SLIDES[i]!.id}
-                type="button"
-                role="tab"
-                aria-selected={i === index}
-                aria-label={`Slide ${i + 1} of ${total}`}
-                onClick={() => goTo(i)}
-                className={cn(
-                  "rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white",
-                  i === index
-                    ? "h-10 w-1.5 bg-white shadow-[0_0_12px_rgba(255,255,255,0.6)] md:h-24 md:w-2"
-                    : "h-6 w-1 bg-white/35 hover:bg-white/55 md:h-16 md:w-1.5"
-                )}
-              />
-            ))}
-            <span
-              className="hidden h-2 w-2 shrink-0 rounded-full bg-white/50 md:block"
-              aria-hidden
-            />
+        <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_24rem] xl:grid-cols-[minmax(0,1fr)_26rem]">
+          <div className="max-w-3xl">
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-3 py-1 text-xs font-semibold tracking-[0.08em] uppercase text-white/90 backdrop-blur-sm">
+              <Star className="size-3.5" aria-hidden />
+              Trusted local discovery platform
+            </p>
+            <h1
+              id="hero-heading"
+              className="mt-5 font-display text-4xl font-bold leading-[1.04] tracking-tight text-white sm:text-5xl lg:text-6xl"
+            >
+              Find the right local business in minutes.
+            </h1>
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/85 sm:text-lg">
+              Compare real reviews, check service quality, and connect with
+              top-rated businesses near you - all in one trusted place.
+            </p>
+
+            <p className="mt-8 text-sm text-white/75">
+              Use the search bar at the top to find businesses and services near
+              you.
+            </p>
+            <Link
+              href="/search"
+              className="mt-3 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-lg transition hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              Go to search
+              <ChevronRight className="size-4" aria-hidden />
+            </Link>
+
+            <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/80">
+              <span>1.2M+ monthly visitors</span>
+              <span>250K+ verified reviews</span>
+              <span>100+ categories</span>
+            </div>
           </div>
 
-          {/* Headline + CTA share one left edge; mt-6 + pill styles unchanged */}
-          <div className="flex min-w-0 flex-1 flex-col items-start text-left">
-            <h1 className="m-0 font-display text-4xl font-bold leading-tight tracking-tight text-white drop-shadow-sm sm:text-5xl lg:text-6xl">
-              {slide.headline}
-            </h1>
+          <aside className="rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-md">
+            <h2 className="text-lg font-semibold text-white">
+              Why people choose {SITE_NAME}
+            </h2>
+            <ul className="mt-4 space-y-3 text-sm leading-relaxed text-white/85">
+              <li>Verified review moderation to reduce fake ratings.</li>
+              <li>Faster response rates from active local businesses.</li>
+              <li>Location-aware search built for neighborhood intent.</li>
+              <li>Transparent business profiles with recent updates.</li>
+            </ul>
             <Link
-              href={slide.ctaHref}
-              className="mt-6 inline-flex items-center gap-2 self-start rounded-full bg-primary px-6 py-3.5 text-base font-semibold text-primary-foreground shadow-lg transition hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:text-lg"
+              href="/biz"
+              className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/90"
             >
-              <Search className="size-5 shrink-0" />
-              {slide.ctaLabel}
+              Browse all categories
+              <ChevronRight className="size-4" aria-hidden />
             </Link>
-          </div>
+          </aside>
         </div>
       </div>
-
-      {slide.credit ? (
-        <p className="absolute bottom-4 left-4 z-10 max-w-[min(90vw,28rem)] text-xs text-white/75 sm:left-6 sm:text-sm lg:left-8">
-          {slide.credit}
-        </p>
-      ) : null}
     </section>
   );
 }
