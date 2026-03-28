@@ -16,10 +16,101 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import { Label } from "../ui/label";
 
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import {
+  ShoppingBag,
+  Truck,
+  Flame,
+  Sparkles,
+  Coffee,
+  UtensilsCrossed,
+  Wine,
+  Pizza,
+  Package,
+  CakeSlice,
+  Beer,
+  Zap,
+  Leaf,
+  Wind,
+  Hammer,
+  Paintbrush,
+  Bug,
+  Droplets,
+  Waves,
+  House,
+  Car,
+  Wrench,
+} from "@/components/ui/Icon";
+
+const restaurantLinks = [
+  { label: "Takeout", href: "/search?q=takeout", icon: ShoppingBag },
+  { label: "Delivery", href: "/search?q=delivery", icon: Truck },
+  { label: "Hot & Trendy", href: "/search?q=hot-trendy", icon: Flame },
+  { label: "New Restaurants", href: "/search?q=new-restaurants", icon: Sparkles },
+  { label: "Breakfast & Brunch", href: "/search?q=breakfast-brunch", icon: Coffee },
+  { label: "Lunch", href: "/search?q=lunch", icon: UtensilsCrossed },
+  { label: "Dinner", href: "/search?q=dinner", icon: Wine },
+  { label: "Coffee & Cafes", href: "/search?q=coffee-cafes", icon: Coffee },
+  { label: "Pizza", href: "/search?q=pizza", icon: Pizza },
+  { label: "Chinese", href: "/search?q=chinese", icon: Package },
+  { label: "Mexican", href: "/search?q=mexican", icon: Flame },
+  { label: "Bakeries", href: "/search?q=bakeries", icon: CakeSlice },
+  { label: "Italian", href: "/search?q=italian", icon: Pizza },
+  { label: "Food Trucks", href: "/search?q=food-trucks", icon: Truck },
+  { label: "Sports Bars & Pubs", href: "/search?q=sports-bars", icon: Beer },
+];
+
+const homeGardenLinks = [
+  { label: "Plumbers", href: "/search?q=plumbers", icon: Droplets },
+  { label: "Electricians", href: "/search?q=electricians", icon: Zap },
+  { label: "Landscaping", href: "/search?q=landscaping", icon: Leaf },
+  { label: "HVAC", href: "/search?q=hvac", icon: Wind },
+  { label: "House Cleaning", href: "/search?q=house-cleaning", icon: Sparkles },
+  { label: "Contractors", href: "/search?q=contractors", icon: Hammer },
+  { label: "Painters", href: "/search?q=painters", icon: Paintbrush },
+  { label: "Roofing", href: "/search?q=roofing", icon: House },
+  { label: "Pest Control", href: "/search?q=pest-control", icon: Bug },
+  { label: "Moving Services", href: "/search?q=movers", icon: Truck },
+];
+
+const autoServiceLinks = [
+  { label: "Auto Repair", href: "/search?q=auto-repair", icon: Wrench },
+  { label: "Oil Change", href: "/search?q=oil-change", icon: Droplets },
+  { label: "Tire Shops", icon: Wrench, href: "/search?q=tire-shops" },
+  { label: "Car Wash", icon: Waves, href: "/search?q=car-wash" },
+  { label: "Body Shops", icon: Hammer, href: "/search?q=body-shops" },
+  { label: "Auto Detailing", icon: Sparkles, href: "/search?q=auto-detailing" },
+  { label: "Towing", icon: Truck, href: "/search?q=towing" },
+  { label: "Car Dealers", icon: Car, href: "/search?q=car-dealers" },
+  { label: "Glass Repair", icon: Wrench, href: "/search?q=glass-repair" },
+];
+
 const categories = [
-  { label: "Restaurants", href: "/search?q=restaurants" },
-  { label: "Home & Garden", href: "/search?q=home-garden" },
-  { label: "Auto Services", href: "/search?q=auto-services" },
+  {
+    label: "Restaurants",
+    href: "/search?q=restaurants",
+    hasDropdown: true,
+    links: restaurantLinks,
+  },
+  {
+    label: "Home & Garden",
+    href: "/search?q=home-garden",
+    hasDropdown: true,
+    links: homeGardenLinks,
+  },
+  {
+    label: "Auto Services",
+    href: "/search?q=auto-services",
+    hasDropdown: true,
+    links: autoServiceLinks,
+  },
   { label: "Health & Beauty", href: "/search?q=health-beauty" },
   { label: "Travel & Activities", href: "/search?q=travel" },
   { label: "More", href: "/biz" },
@@ -295,23 +386,48 @@ export function Header() {
           {/* </div> */}
         </div>
 
-        <nav
+        <NavigationMenu
           className={cn(
-            "gap-6 border-b border-border xl:flex xl:flex-wrap ",
-            // "xl:max-w-7xl xl:mx-auto",
+            "w-full max-w-full justify-start border-b border-border ",
           )}
           aria-label="Browse categories"
         >
-          {categories.map(({ label, href }) => (
-            <Link
-              key={href}
-              href={href}
-              className="border-b-2 border-transparent py-3 text-lg font-medium text-muted-foreground transition-colors hover:border-border hover:text-foreground"
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
+          <NavigationMenuList className="flex-wrap justify-start gap-1">
+            {categories.map((cat) => (
+              <NavigationMenuItem key={cat.label} className="flex">
+                {cat.hasDropdown ? (
+                  <>
+                    <NavigationMenuTrigger className="group relative h-auto bg-transparent px-2.5 py-3.5 text-[15px] font-medium text-muted-foreground hover:bg-transparent hover:text-foreground data-[state=open]:text-foreground 2xl:px-4 2xl:text-lg">
+                      {cat.label}
+                      <span className="absolute bottom-[-1px] left-0 h-[2.5px] w-full scale-x-0 bg-primary transition-transform group-data-[state=open]:scale-x-100" />
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent className="w-[680px] rounded-lg border bg-card p-6 shadow-2xl">
+                      <div className="grid grid-cols-3 gap-x-6 gap-y-1">
+                        {cat.links?.map((link) => (
+                          <NavigationMenuLink
+                            key={link.label}
+                            href={link.href}
+                            className="flex items-center gap-3 rounded-md px-3 py-2.5 text-[15px] font-medium transition-colors hover:bg-muted hover:text-foreground"
+                          >
+                            <link.icon className="size-[18px] shrink-0 text-muted-foreground/80 transition-colors group-hover:text-primary" />
+                            <span>{link.label}</span>
+                          </NavigationMenuLink>
+                        ))}
+                      </div>
+                    </NavigationMenuContent>
+                  </>
+                ) : (
+                  <NavigationMenuLink
+                    href={cat.href}
+                    className="flex h-auto items-center px-2.5 py-3.5 text-[15px] font-medium text-muted-foreground transition-colors hover:text-foreground 2xl:px-4 2xl:text-lg"
+                  >
+                    {cat.label}
+                  </NavigationMenuLink>
+                )}
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
       </div>
     </header>
   );
