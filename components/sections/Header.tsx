@@ -77,7 +77,7 @@ function DesktopSearchForm({
       action="/search"
       method="get"
       className={cn(
-        "flex w-7xl overflow-hidden rounded-md border border-border bg-card shadow-md",
+        "flex w-full overflow-hidden rounded-md border border-border bg-card shadow-md",
         "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch ",
         className,
       )}
@@ -130,13 +130,13 @@ export function Header() {
       <div className={"mx-auto w-full content-max"}>
         <div
           className={cn(
-            "grid h-16 w-full items-center border-b border-border sm:h-20",
+            "grid h-16 w-full items-center sm:h-20",
             "grid-cols-[1fr_auto] gap-x-3 gap-y-0",
             "sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-x-3",
             "lg:gap-x-4 xl:gap-x-6",
           )}
         >
-          <div className="min-w-0 justify-self-start w-[12rem]">
+          <div className="min-w-0 justify-self-start w-48">
             <Link href="/">
               <Image
                 src="/logo.svg"
@@ -148,10 +148,10 @@ export function Header() {
             </Link>
           </div>
           {/* <div className="flex justify-between items-center "> */}
-            <div className="hidden self-center max-w-full xl:min-w-2/2 2xl:min-w-2/3 sm:flex ">
+            <div className="hidden min-w-0 w-full justify-self-center sm:flex">
               <DesktopSearchForm
                 idPrefix="hdr-desk"
-                className="w-full max-w-full min-w-fit"
+                className="w-full min-w-0 max-w-full 2xl:max-w-3xl"
               />
             </div>
 
