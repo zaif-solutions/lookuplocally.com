@@ -2,29 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, Search } from "lucide-react";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { SITE_NAME } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
-import Image from "next/image";
-import { Label } from "../ui/label";
-
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import {
+  Menu,
+  Search,
+  ChevronDown,
   ShoppingBag,
   Truck,
   Flame,
@@ -47,27 +28,90 @@ import {
   House,
   Car,
   Wrench,
+  Scissors,
+  Smile,
+  Eye,
+  Dumbbell,
+  Stethoscope,
+  Palette,
+  Plane,
+  Mountain,
+  Tent,
+  Camera,
+  Ticket,
+  Music,
+  Bike,
+  Sailboat,
+  Briefcase,
+  GraduationCap,
+  PawPrint,
+  Shirt,
+  Store,
+  Landmark,
+  Scale,
+  Shield,
+  Salad,
 } from "@/components/ui/Icon";
+import type { LucideIcon } from "@/components/ui/Icon";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { SITE_NAME } from "@/lib/constants";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import Image from "next/image";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
-const restaurantLinks = [
+interface CategoryLink {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+}
+
+interface Category {
+  label: string;
+  href: string;
+  hasDropdown?: boolean;
+  links?: CategoryLink[];
+}
+
+/** Row-major order for a 3-column mega grid (columns read top-to-bottom like the reference UI). */
+const restaurantLinks: CategoryLink[] = [
   { label: "Takeout", href: "/search?q=takeout", icon: ShoppingBag },
-  { label: "Delivery", href: "/search?q=delivery", icon: Truck },
-  { label: "Hot & Trendy", href: "/search?q=hot-trendy", icon: Flame },
-  { label: "New Restaurants", href: "/search?q=new-restaurants", icon: Sparkles },
-  { label: "Breakfast & Brunch", href: "/search?q=breakfast-brunch", icon: Coffee },
   { label: "Lunch", href: "/search?q=lunch", icon: UtensilsCrossed },
+  { label: "Mexican", href: "/search?q=mexican", icon: Salad },
+  { label: "Delivery", href: "/search?q=delivery", icon: Truck },
   { label: "Dinner", href: "/search?q=dinner", icon: Wine },
-  { label: "Coffee & Cafes", href: "/search?q=coffee-cafes", icon: Coffee },
-  { label: "Pizza", href: "/search?q=pizza", icon: Pizza },
-  { label: "Chinese", href: "/search?q=chinese", icon: Package },
-  { label: "Mexican", href: "/search?q=mexican", icon: Flame },
-  { label: "Bakeries", href: "/search?q=bakeries", icon: CakeSlice },
+  { label: "Bakeries", href: "/search?q=bakery", icon: CakeSlice },
+  { label: "Hot & Trendy", href: "/search?q=trending", icon: Flame },
+  { label: "Coffee & Cafes", href: "/search?q=coffee", icon: Coffee },
   { label: "Italian", href: "/search?q=italian", icon: Pizza },
+  { label: "New Restaurants", href: "/search?q=new-restaurants", icon: Sparkles },
+  { label: "Pizza", href: "/search?q=pizza", icon: Pizza },
   { label: "Food Trucks", href: "/search?q=food-trucks", icon: Truck },
+  { label: "Breakfast & Brunch", href: "/search?q=breakfast-brunch", icon: Coffee },
+  { label: "Chinese", href: "/search?q=chinese", icon: Package },
   { label: "Sports Bars & Pubs", href: "/search?q=sports-bars", icon: Beer },
 ];
 
-const homeGardenLinks = [
+const homeGardenLinks: CategoryLink[] = [
   { label: "Plumbers", href: "/search?q=plumbers", icon: Droplets },
   { label: "Electricians", href: "/search?q=electricians", icon: Zap },
   { label: "Landscaping", href: "/search?q=landscaping", icon: Leaf },
@@ -80,19 +124,56 @@ const homeGardenLinks = [
   { label: "Moving Services", href: "/search?q=movers", icon: Truck },
 ];
 
-const autoServiceLinks = [
+const autoServiceLinks: CategoryLink[] = [
   { label: "Auto Repair", href: "/search?q=auto-repair", icon: Wrench },
   { label: "Oil Change", href: "/search?q=oil-change", icon: Droplets },
-  { label: "Tire Shops", icon: Wrench, href: "/search?q=tire-shops" },
-  { label: "Car Wash", icon: Waves, href: "/search?q=car-wash" },
-  { label: "Body Shops", icon: Hammer, href: "/search?q=body-shops" },
-  { label: "Auto Detailing", icon: Sparkles, href: "/search?q=auto-detailing" },
-  { label: "Towing", icon: Truck, href: "/search?q=towing" },
-  { label: "Car Dealers", icon: Car, href: "/search?q=car-dealers" },
-  { label: "Glass Repair", icon: Wrench, href: "/search?q=glass-repair" },
+  { label: "Tire Shops", href: "/search?q=tire-shops", icon: Wrench },
+  { label: "Car Wash", href: "/search?q=car-wash", icon: Waves },
+  { label: "Body Shops", href: "/search?q=body-shops", icon: Hammer },
+  { label: "Auto Detailing", href: "/search?q=auto-detailing", icon: Sparkles },
+  { label: "Towing", href: "/search?q=towing", icon: Truck },
+  { label: "Car Dealers", href: "/search?q=car-dealers", icon: Car },
+  { label: "Glass Repair", href: "/search?q=glass-repair", icon: Wrench },
 ];
 
-const categories = [
+const healthBeautyLinks: CategoryLink[] = [
+  { label: "Hair Salons", href: "/search?q=hair-salons", icon: Scissors },
+  { label: "Spas", href: "/search?q=spas", icon: Sparkles },
+  { label: "Nail Salons", href: "/search?q=nail-salons", icon: Palette },
+  { label: "Skin Care", href: "/search?q=skin-care", icon: Smile },
+  { label: "Gyms & Fitness", href: "/search?q=gyms", icon: Dumbbell },
+  { label: "Eye Care", href: "/search?q=eye-care", icon: Eye },
+  { label: "Dentists", href: "/search?q=dentists", icon: Smile },
+  { label: "Doctors", href: "/search?q=doctors", icon: Stethoscope },
+  { label: "Massage", href: "/search?q=massage", icon: Sparkles },
+  { label: "Barbers", href: "/search?q=barbers", icon: Scissors },
+];
+
+const travelLinks: CategoryLink[] = [
+  { label: "Hotels", href: "/search?q=hotels", icon: Landmark },
+  { label: "Hiking & Trails", href: "/search?q=hiking", icon: Mountain },
+  { label: "Camping", href: "/search?q=camping", icon: Tent },
+  { label: "Tours", href: "/search?q=tours", icon: Camera },
+  { label: "Attractions", href: "/search?q=attractions", icon: Ticket },
+  { label: "Nightlife", href: "/search?q=nightlife", icon: Music },
+  { label: "Cycling", href: "/search?q=cycling", icon: Bike },
+  { label: "Boating", href: "/search?q=boating", icon: Sailboat },
+  { label: "Travel Agents", href: "/search?q=travel-agents", icon: Plane },
+];
+
+const moreLinks: CategoryLink[] = [
+  { label: "Professional Services", href: "/search?q=professional-services", icon: Briefcase },
+  { label: "Education & Tutoring", href: "/search?q=education", icon: GraduationCap },
+  { label: "Pet Services", href: "/search?q=pet-services", icon: PawPrint },
+  { label: "Shopping", href: "/search?q=shopping", icon: Store },
+  { label: "Dry Cleaning", href: "/search?q=dry-cleaning", icon: Shirt },
+  { label: "Legal Services", href: "/search?q=legal", icon: Scale },
+  { label: "Insurance", href: "/search?q=insurance", icon: Shield },
+  { label: "Real Estate", href: "/search?q=real-estate", icon: House },
+  { label: "Financial Services", href: "/search?q=financial", icon: Landmark },
+];
+
+const categories: Category[] = [
   {
     label: "Restaurants",
     href: "/search?q=restaurants",
@@ -111,50 +192,25 @@ const categories = [
     hasDropdown: true,
     links: autoServiceLinks,
   },
-  { label: "Health & Beauty", href: "/search?q=health-beauty" },
-  { label: "Travel & Activities", href: "/search?q=travel" },
-  { label: "More", href: "/biz" },
-] as const;
-
-// function DesktopSearchForm({ idPrefix }: { idPrefix: string }) {
-//   return (
-//     <form
-//       action="/search"
-//       method="get"
-//       className="flex w-full max-w-4xl flex-1 items-stretch gap-2"
-//       role="search"
-//       aria-label="Search businesses"
-//     >
-//       <label htmlFor={`${idPrefix}-q`} className="sr-only">
-//         Search
-//       </label>
-//       <input
-//         id={`${idPrefix}-q`}
-//         name="q"
-//         type="search"
-//         placeholder="things to do, nail salons, plumbers"
-//         className="min-w-0 flex-1 rounded-md border border-input bg-background px-3 py-2 text-xs text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-4 sm:text-sm"
-//       />
-//       <label htmlFor={`${idPrefix}-loc`} className="sr-only">
-//         Location
-//       </label>
-//       <input
-//         id={`${idPrefix}-loc`}
-//         name="loc"
-//         type="text"
-//         placeholder="address, neighborhood, city…"
-//         className="min-w-0 flex-1 rounded-md border border-input bg-background px-3 py-2 text-xs text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-4 sm:text-sm md:max-w-xs"
-//       />
-//       <button
-//         type="submit"
-//         className="inline-flex shrink-0 items-center justify-center rounded-md bg-primary px-3 py-2 text-primary-foreground transition hover:bg-primary/90 sm:px-5"
-//         aria-label="Search"
-//       >
-//         <Search className="size-[18px]" aria-hidden />
-//       </button>
-//     </form>
-//   );
-// }
+  {
+    label: "Health & Beauty",
+    href: "/search?q=health-beauty",
+    hasDropdown: true,
+    links: healthBeautyLinks,
+  },
+  {
+    label: "Travel & Activities",
+    href: "/search?q=travel",
+    hasDropdown: true,
+    links: travelLinks,
+  },
+  {
+    label: "More",
+    href: "/biz",
+    hasDropdown: true,
+    links: moreLinks,
+  },
+];
 
 function DesktopSearchForm({
   className,
@@ -169,7 +225,7 @@ function DesktopSearchForm({
       method="get"
       className={cn(
         "flex w-full overflow-hidden rounded-md border border-border bg-card shadow-md",
-        "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch ",
+        "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch",
         className,
       )}
       role="search"
@@ -205,11 +261,122 @@ function DesktopSearchForm({
         className="h-full shrink-0 rounded-l-sm text-lg font-semibold"
       >
         <Search className="size-5" />
-        <Label htmlFor={`${idPrefix}-find`} className="hidden xl:block xl:text-lg xl:font-semibold">
-            Search
+        <Label
+          htmlFor={`${idPrefix}-find`}
+          className="hidden xl:block xl:text-lg xl:font-semibold"
+        >
+          Search
         </Label>
       </Button>
     </form>
+  );
+}
+
+function DesktopCategoryMegaItem({ cat }: { cat: Category }) {
+  return (
+    <>
+      <NavigationMenuTrigger
+        className={cn(
+          "h-auto gap-1 rounded-none border-0 bg-transparent px-3 py-3 text-[15px] font-medium text-muted-foreground shadow-none",
+          "hover:bg-transparent hover:text-foreground focus:bg-transparent focus-visible:ring-0",
+          "data-[state=open]:bg-transparent data-[state=open]:text-foreground data-[state=open]:hover:bg-transparent",
+          "[&_svg]:text-current",
+          "2xl:text-base",
+        )}
+      >
+        <span className="whitespace-nowrap">{cat.label}</span>
+      </NavigationMenuTrigger>
+      <NavigationMenuContent
+        className={cn(
+          /* md:w-auto on the primitive shrink-wraps to the narrow <li>; force the real mega width. */
+          "box-border max-w-[calc(100vw-2.5rem)]! min-w-0",
+          "w-[min(920px,calc(100vw-2.5rem))] md:w-[min(920px,calc(100vw-2.5rem))]!",
+          "left-3 z-50 p-6! pb-6! pl-6! pr-6! pt-7!",
+          "overflow-hidden rounded-xl border border-black/10 bg-white shadow-xl",
+          "dark:border-border dark:bg-card dark:shadow-2xl",
+        )}
+      >
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 z-1 h-0.5 bg-red-600"
+          aria-hidden
+        />
+        <div
+          className="grid w-full min-w-0 grid-cols-3 gap-x-8 gap-y-0.5 lg:gap-x-10"
+        >
+          {(cat.links ?? []).map((link) => (
+            <NavigationMenuLink
+              key={link.label}
+              href={link.href}
+              className="group/row flex! min-w-0 w-full flex-row! items-center gap-3 rounded-lg px-2 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80 [&_svg]:shrink-0"
+            >
+              <link.icon
+                className="size-[18px] shrink-0 text-foreground/80"
+                strokeWidth={1.35}
+              />
+              <span className="min-w-0 flex-1 leading-tight">{link.label}</span>
+            </NavigationMenuLink>
+          ))}
+        </div>
+      </NavigationMenuContent>
+    </>
+  );
+}
+
+function MobileCategorySection({
+  category,
+  onLinkClick,
+}: {
+  category: Category;
+  onLinkClick: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  if (!category.hasDropdown || !category.links) {
+    return (
+      <Link
+        href={category.href}
+        className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+        onClick={onLinkClick}
+      >
+        {category.label}
+      </Link>
+    );
+  }
+
+  return (
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <CollapsibleTrigger className="flex w-full min-h-11 items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted">
+        <span>{category.label}</span>
+        <ChevronDown
+          className={cn(
+            "size-4 shrink-0 text-muted-foreground transition-transform duration-200",
+            open && "rotate-180",
+          )}
+        />
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <div className="flex flex-col gap-0.5 pb-1 pl-2">
+          <Link
+            href={category.href}
+            className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-muted"
+            onClick={onLinkClick}
+          >
+            View All {category.label}
+          </Link>
+          {category.links.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+              onClick={onLinkClick}
+            >
+              <link.icon className="size-4 shrink-0 text-muted-foreground" />
+              <span>{link.label}</span>
+            </Link>
+          ))}
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
 
@@ -217,209 +384,202 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border shadow-sm px-2 md:px-8 lg:px-12">
-      <div className={"mx-auto w-full content-max"}>
+    <header className="sticky top-0 z-50 overflow-visible border-b border-border bg-background shadow-sm">
+      <div className="mx-auto w-full content-max overflow-visible px-2 md:px-8 lg:px-12">
+        {/* ─── Main header row ─── */}
         <div
           className={cn(
-            "grid h-16 w-full items-center sm:h-20",
+            "grid h-14 w-full items-center sm:h-16 md:h-20",
             "grid-cols-[1fr_auto] gap-x-3 gap-y-0",
             "sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-x-3",
             "lg:gap-x-4 xl:gap-x-6",
           )}
         >
-          <div className="min-w-0 justify-self-start w-48">
+          {/* Logo */}
+          <div className="min-w-0 w-32 justify-self-start sm:w-40 md:w-48">
             <Link href="/">
               <Image
                 src="/logo.svg"
                 alt={SITE_NAME}
                 width={200}
                 height={200}
-                className="w-full h-full object-contain"
+                className="size-full object-contain"
               />
             </Link>
           </div>
-          {/* <div className="flex justify-between items-center "> */}
-            <div className="hidden min-w-0 w-full justify-self-center sm:flex">
-              <DesktopSearchForm
-                idPrefix="hdr-desk"
-                className="w-full min-w-0 max-w-full 2xl:max-w-3xl"
-              />
+
+          {/* Desktop search */}
+          <div className="hidden min-w-0 w-full justify-self-center sm:flex">
+            <DesktopSearchForm
+              idPrefix="hdr-desk"
+              className="w-full min-w-0 max-w-full 2xl:max-w-3xl"
+            />
+          </div>
+
+          {/* Desktop nav buttons + mobile hamburger */}
+          <div className="flex shrink-0 items-center justify-end justify-self-end gap-1 xl:gap-2">
+            <div className="hidden shrink-0 items-center gap-1 xl:flex xl:gap-2">
+              <Button
+                size="lg"
+                className="h-10 shrink-0 px-3 font-semibold"
+                variant="ghost"
+              >
+                For Business
+              </Button>
+              <Button
+                size="lg"
+                className="h-10 shrink-0 px-3 font-semibold"
+                asChild
+                variant="ghost"
+              >
+                <Link href="/write-review">Write a Review</Link>
+              </Button>
+              <Button
+                size="lg"
+                className="h-10 shrink-0 px-3 font-semibold"
+                asChild
+                variant="ghost"
+              >
+                <Link href="/login">Log In</Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                className="h-10 shrink-0 px-3 font-semibold"
+              >
+                <Link href="/signup">Sign Up</Link>
+              </Button>
             </div>
 
-            <div className="flex shrink-0 items-center justify-end justify-self-end gap-2 xl:gap-3 ">
-              <div className="hidden shrink-0 items-center gap-2 xl:flex xl:gap-3">
-                <Button
-                  size="lg"
-                  className="rounded-sm py-3.5 h-12 px-3.5 font-semibold text-lg"
-                  variant={"ghost"}
+            {/* Mobile / tablet hamburger */}
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <button
+                  type="button"
+                  className="inline-flex shrink-0 items-center justify-center rounded-md p-2 text-foreground transition-colors hover:bg-muted xl:hidden"
+                  aria-label="Open menu"
                 >
-                  For Business
-                </Button>
-                <Button
-                  size="lg"
-                  className="rounded-sm py-3.5 h-12 px-3.5 font-semibold text-lg"
-                  asChild
-                  variant={"ghost"}
-                >
-                  <Link href="/write-review" className="gap-1.5 text-lg">
-                    Write a Review
-                  </Link>
-                </Button>
-                <Button
-                  size="lg"
-                  className="rounded-sm py-3.5 h-12 px-3.5 font-semibold text-lg"
-                  asChild
-                  variant={"ghost"}
-                >
-                  <Link href="/login" className="gap-1.5 text-lg">
-                    Log In
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  className="rounded-sm py-3.5 h-12 px-3.5 font-semibold text-lg"
-                >
-                  <Link href="/signup" className="gap-1.5 text-lg">
-                    {/* <User className="size-4" /> */}
-                    Sign Up
-                  </Link>
-                </Button>
-              </div>
+                  <Menu className="size-6" />
+                </button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="flex w-full max-w-sm flex-col overflow-hidden bg-background p-0"
+              >
+                <SheetHeader className="border-b border-border px-4 py-3">
+                  <SheetTitle className="text-left text-base font-semibold">
+                    Menu
+                  </SheetTitle>
+                </SheetHeader>
 
-              <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                <SheetTrigger asChild>
-                  <button
-                    type="button"
-                    className="inline-flex shrink-0 p-2 xl:hidden"
-                    aria-label="Open menu"
-                  >
-                    <Menu className="size-6 text-foreground" />
-                  </button>
-                </SheetTrigger>
-                <SheetContent
-                  side="right"
-                  className="w-full max-w-sm bg-background"
-                >
-                  <SheetHeader>
-                    <SheetTitle className="sr-only">Main menu</SheetTitle>
-                  </SheetHeader>
-                  <div className="flex flex-col gap-6 px-2 pb-6 pt-2">
-                    {/* Only when outer header search is hidden (< sm); tablet/desktop use outer bar only */}
-                    <div className="sm:hidden">
-                      <form
-                        action="/search"
-                        method="get"
-                        className="flex flex-col gap-3"
-                        role="search"
-                        onSubmit={() => setIsOpen(false)}
-                      >
-                        <input
-                          name="q"
-                          type="search"
-                          placeholder="things to do, nail salons…"
-                          className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                        />
-                        <input
-                          name="loc"
-                          type="text"
-                          placeholder="Location"
-                          className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                        />
-                        <button
-                          type="submit"
-                          className="w-full rounded-md bg-primary py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-                        >
-                          Search
-                        </button>
-                      </form>
-                    </div>
+                <div className="flex flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-4 pb-6 pt-4">
+                  {/* Mobile search (only below sm where the header search is hidden) */}
+                  <div className="sm:hidden">
+                    <form
+                      action="/search"
+                      method="get"
+                      className="flex flex-col gap-2.5"
+                      role="search"
+                      onSubmit={() => setIsOpen(false)}
+                    >
+                      <input
+                        name="q"
+                        type="search"
+                        placeholder="things to do, nail salons…"
+                        className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      />
+                      <input
+                        name="loc"
+                        type="text"
+                        placeholder="Location"
+                        className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      />
+                      <Button type="submit" className="w-full">
+                        Search
+                      </Button>
+                    </form>
+                  </div>
 
-                    <div className="flex gap-2">
-                      <Link
-                        href="/login"
-                        className={cn(
-                          "flex flex-1 items-center justify-center rounded-md border border-input py-2 text-sm font-medium text-foreground hover:bg-muted",
-                        )}
-                        onClick={() => setIsOpen(false)}
-                      >
+                  {/* Auth buttons */}
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      asChild
+                    >
+                      <Link href="/login" onClick={() => setIsOpen(false)}>
                         Log In
                       </Link>
-                      <Link
-                        href="/signup"
-                        className={cn(
-                          "flex flex-1 items-center justify-center rounded-md bg-primary py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90",
-                        )}
-                        onClick={() => setIsOpen(false)}
-                      >
+                    </Button>
+                    <Button className="flex-1" asChild>
+                      <Link href="/signup" onClick={() => setIsOpen(false)}>
                         Sign Up
                       </Link>
-                    </div>
-
-                    <nav className="flex flex-col gap-1 border-t border-border pt-4 text-sm">
-                      <Link
-                        href="/business"
-                        className="border-b border-border py-3 font-medium text-foreground hover:bg-muted/50"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        For Business
-                      </Link>
-                      <Link
-                        href="/search?write-review"
-                        className="border-b border-border py-3 font-medium text-foreground hover:bg-muted/50"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        Write a Review
-                      </Link>
-                      <Link
-                        href="/search?ref=project"
-                        className="py-3 font-medium text-foreground hover:bg-muted/50"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        Start a Project
-                      </Link>
-                    </nav>
+                    </Button>
                   </div>
-                </SheetContent>
-              </Sheet>
-            </div>
-          {/* </div> */}
+
+                  {/* Quick links */}
+                  <nav className="flex flex-col gap-0.5 border-t border-border pt-3">
+                    <Link
+                      href="/business"
+                      className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      For Business
+                    </Link>
+                    <Link
+                      href="/write-review"
+                      className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Write a Review
+                    </Link>
+                    <Link
+                      href="/search?ref=project"
+                      className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Start a Project
+                    </Link>
+                  </nav>
+
+                  {/* Categories (with collapsible sub-links) */}
+                  <div className="flex flex-col gap-0.5 border-t border-border pt-3">
+                    <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Browse Categories
+                    </p>
+                    {categories.map((cat) => (
+                      <MobileCategorySection
+                        key={cat.label}
+                        category={cat}
+                        onLinkClick={() => setIsOpen(false)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
 
+        {/* ─── Desktop category navigation bar (xl+ only, same breakpoint where hamburger hides) ─── */}
         <NavigationMenu
-          className={cn(
-            "w-full max-w-full justify-start border-b border-border ",
-          )}
+          viewport={false}
+          className="relative z-50 hidden w-full max-w-full justify-start overflow-visible xl:flex"
           aria-label="Browse categories"
         >
-          <NavigationMenuList className="flex-wrap justify-start gap-1">
+          <NavigationMenuList className="flex-wrap justify-start gap-0 overflow-visible">
             {categories.map((cat) => (
-              <NavigationMenuItem key={cat.label} className="flex">
+              <NavigationMenuItem
+                key={cat.label}
+                className="relative shrink-0 overflow-visible"
+              >
                 {cat.hasDropdown ? (
-                  <>
-                    <NavigationMenuTrigger className="group relative h-auto bg-transparent px-2.5 py-3.5 text-[15px] font-medium text-muted-foreground hover:bg-transparent hover:text-foreground data-[state=open]:text-foreground 2xl:px-4 2xl:text-lg">
-                      {cat.label}
-                      <span className="absolute bottom-[-1px] left-0 h-[2.5px] w-full scale-x-0 bg-primary transition-transform group-data-[state=open]:scale-x-100" />
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent className="w-[680px] rounded-lg border bg-card p-6 shadow-2xl">
-                      <div className="grid grid-cols-3 gap-x-6 gap-y-1">
-                        {cat.links?.map((link) => (
-                          <NavigationMenuLink
-                            key={link.label}
-                            href={link.href}
-                            className="flex items-center gap-3 rounded-md px-3 py-2.5 text-[15px] font-medium transition-colors hover:bg-muted hover:text-foreground"
-                          >
-                            <link.icon className="size-[18px] shrink-0 text-muted-foreground/80 transition-colors group-hover:text-primary" />
-                            <span>{link.label}</span>
-                          </NavigationMenuLink>
-                        ))}
-                      </div>
-                    </NavigationMenuContent>
-                  </>
+                  <DesktopCategoryMegaItem cat={cat} />
                 ) : (
                   <NavigationMenuLink
                     href={cat.href}
-                    className="flex h-auto items-center px-2.5 py-3.5 text-[15px] font-medium text-muted-foreground transition-colors hover:text-foreground 2xl:px-4 2xl:text-lg"
+                    className="flex h-auto items-center px-3 py-3 text-[15px] font-medium text-muted-foreground transition-colors hover:text-foreground 2xl:px-4 2xl:text-base"
                   >
                     {cat.label}
                   </NavigationMenuLink>
