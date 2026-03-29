@@ -14,9 +14,7 @@ import {
   UtensilsCrossed,
   Wine,
   Pizza,
-  Package,
   CakeSlice,
-  Beer,
   Zap,
   Leaf,
   Wind,
@@ -92,7 +90,7 @@ interface Category {
   links?: CategoryLink[];
 }
 
-/** Row-major order for a 3-column mega grid (columns read top-to-bottom like the reference UI). */
+/** Exactly 12 links: 4 rows × 3 columns (grid fills row-wise). */
 const restaurantLinks: CategoryLink[] = [
   { label: "Takeout", href: "/search?q=takeout", icon: ShoppingBag },
   { label: "Lunch", href: "/search?q=lunch", icon: UtensilsCrossed },
@@ -103,12 +101,9 @@ const restaurantLinks: CategoryLink[] = [
   { label: "Hot & Trendy", href: "/search?q=trending", icon: Flame },
   { label: "Coffee & Cafes", href: "/search?q=coffee", icon: Coffee },
   { label: "Italian", href: "/search?q=italian", icon: Pizza },
-  { label: "New Restaurants", href: "/search?q=new-restaurants", icon: Sparkles },
+  { label: "Restaurants", href: "/search?q=restaurants", icon: Sparkles },
   { label: "Pizza", href: "/search?q=pizza", icon: Pizza },
   { label: "Food Trucks", href: "/search?q=food-trucks", icon: Truck },
-  { label: "Breakfast & Brunch", href: "/search?q=breakfast-brunch", icon: Coffee },
-  { label: "Chinese", href: "/search?q=chinese", icon: Package },
-  { label: "Sports Bars & Pubs", href: "/search?q=sports-bars", icon: Beer },
 ];
 
 const homeGardenLinks: CategoryLink[] = [
@@ -116,12 +111,14 @@ const homeGardenLinks: CategoryLink[] = [
   { label: "Electricians", href: "/search?q=electricians", icon: Zap },
   { label: "Landscaping", href: "/search?q=landscaping", icon: Leaf },
   { label: "HVAC", href: "/search?q=hvac", icon: Wind },
+  { label: "Pest Control", href: "/search?q=pest-control", icon: Bug },
+  { label: "Moving Services", href: "/search?q=movers", icon: Truck },
+  { label: "Appliance Repair", href: "/search?q=appliance-repair", icon: Wrench },
+  { label: "Pool Service", href: "/search?q=pool-service", icon: Waves },
   { label: "House Cleaning", href: "/search?q=house-cleaning", icon: Sparkles },
   { label: "Contractors", href: "/search?q=contractors", icon: Hammer },
   { label: "Painters", href: "/search?q=painters", icon: Paintbrush },
   { label: "Roofing", href: "/search?q=roofing", icon: House },
-  { label: "Pest Control", href: "/search?q=pest-control", icon: Bug },
-  { label: "Moving Services", href: "/search?q=movers", icon: Truck },
 ];
 
 const autoServiceLinks: CategoryLink[] = [
@@ -134,6 +131,9 @@ const autoServiceLinks: CategoryLink[] = [
   { label: "Towing", href: "/search?q=towing", icon: Truck },
   { label: "Car Dealers", href: "/search?q=car-dealers", icon: Car },
   { label: "Glass Repair", href: "/search?q=glass-repair", icon: Wrench },
+  { label: "Transmission", href: "/search?q=transmission", icon: Car },
+  { label: "Inspections", href: "/search?q=vehicle-inspection", icon: Car },
+  { label: "Brakes", href: "/search?q=brake-service", icon: Wrench },
 ];
 
 const healthBeautyLinks: CategoryLink[] = [
@@ -147,6 +147,8 @@ const healthBeautyLinks: CategoryLink[] = [
   { label: "Doctors", href: "/search?q=doctors", icon: Stethoscope },
   { label: "Massage", href: "/search?q=massage", icon: Sparkles },
   { label: "Barbers", href: "/search?q=barbers", icon: Scissors },
+  { label: "Yoga & Pilates", href: "/search?q=yoga", icon: Dumbbell },
+  { label: "Waxing", href: "/search?q=waxing", icon: Sparkles },
 ];
 
 const travelLinks: CategoryLink[] = [
@@ -159,11 +161,12 @@ const travelLinks: CategoryLink[] = [
   { label: "Cycling", href: "/search?q=cycling", icon: Bike },
   { label: "Boating", href: "/search?q=boating", icon: Sailboat },
   { label: "Travel Agents", href: "/search?q=travel-agents", icon: Plane },
+  { label: "Museums", href: "/search?q=museums", icon: Landmark },
+  { label: "Beaches", href: "/search?q=beaches", icon: Waves },
+  { label: "Adventure Parks", href: "/search?q=adventure-parks", icon: Mountain },
 ];
 
 const moreLinks: CategoryLink[] = [
-  { label: "Professional Services", href: "/search?q=professional-services", icon: Briefcase },
-  { label: "Education & Tutoring", href: "/search?q=education", icon: GraduationCap },
   { label: "Pet Services", href: "/search?q=pet-services", icon: PawPrint },
   { label: "Shopping", href: "/search?q=shopping", icon: Store },
   { label: "Dry Cleaning", href: "/search?q=dry-cleaning", icon: Shirt },
@@ -171,6 +174,9 @@ const moreLinks: CategoryLink[] = [
   { label: "Insurance", href: "/search?q=insurance", icon: Shield },
   { label: "Real Estate", href: "/search?q=real-estate", icon: House },
   { label: "Financial Services", href: "/search?q=financial", icon: Landmark },
+  { label: "Photography", href: "/search?q=photography", icon: Camera },
+  { label: "Events & Catering", href: "/search?q=catering", icon: Ticket },
+  { label: "Storage", href: "/search?q=storage", icon: Store },
 ];
 
 const categories: Category[] = [
@@ -281,39 +287,35 @@ function DesktopCategoryMegaItem({ cat }: { cat: Category }) {
           "hover:bg-transparent hover:text-foreground focus:bg-transparent focus-visible:ring-0",
           "data-[state=open]:bg-transparent data-[state=open]:text-foreground data-[state=open]:hover:bg-transparent",
           "[&_svg]:text-current",
-          "2xl:text-base",
         )}
       >
         <span className="whitespace-nowrap">{cat.label}</span>
       </NavigationMenuTrigger>
       <NavigationMenuContent
         className={cn(
-          /* md:w-auto on the primitive shrink-wraps to the narrow <li>; force the real mega width. */
           "box-border max-w-[calc(100vw-2.5rem)]! min-w-0",
-          "w-[min(920px,calc(100vw-2.5rem))] md:w-[min(920px,calc(100vw-2.5rem))]!",
-          "left-3 z-50 p-6! pb-6! pl-6! pr-6! pt-7!",
-          "overflow-hidden rounded-xl border border-black/10 bg-white shadow-xl",
-          "dark:border-border dark:bg-card dark:shadow-2xl",
+          "w-[min(800px,calc(100vw-2.5rem))] md:w-[min(620px,calc(100vw-2.5rem))]!",
+          "z-50 p-4! pb-4! pl-4! pr-4! pt-4!",
+          "overflow-hidden rounded-xl border border-black/10 bg-white shadow-none",
+          "dark:border-border dark:bg-card dark:shadow-none rounded-none",
         )}
       >
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 z-1 h-0.5 bg-red-600"
+          className="pointer-events-none absolute inset-x-0 top-0 z-1 h-0.5"
           aria-hidden
         />
-        <div
-          className="grid w-full min-w-0 grid-cols-3 gap-x-8 gap-y-0.5 lg:gap-x-10"
-        >
-          {(cat.links ?? []).map((link) => (
+        <div className="grid w-full min-w-0 grid-cols-3 grid-rows-4 gap-x-5 gap-y-0.5 lg:gap-x-1">
+          {(cat.links ?? []).slice(0, 12).map((link) => (
             <NavigationMenuLink
               key={link.label}
               href={link.href}
-              className="group/row flex! min-w-0 w-full flex-row! items-center gap-3 rounded-lg px-2 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80 [&_svg]:shrink-0"
+              className="group/row flex! min-w-0 w-full flex-row! items-center gap-3 whitespace-nowrap rounded-lg px-2 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80 [&_svg]:shrink-0"
             >
               <link.icon
                 className="size-[18px] shrink-0 text-foreground/80"
                 strokeWidth={1.35}
               />
-              <span className="min-w-0 flex-1 leading-tight">{link.label}</span>
+              <span className="shrink-0 leading-tight">{link.label}</span>
             </NavigationMenuLink>
           ))}
         </div>
@@ -363,15 +365,15 @@ function MobileCategorySection({
           >
             View All {category.label}
           </Link>
-          {category.links.map((link) => (
+          {category.links.slice(0, 12).map((link) => (
             <Link
               key={link.label}
               href={link.href}
-              className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+              className="flex items-center gap-2.5 whitespace-nowrap rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted lg:px-1 lg:py-1"
               onClick={onLinkClick}
             >
               <link.icon className="size-4 shrink-0 text-muted-foreground" />
-              <span>{link.label}</span>
+              <span className="shrink-0">{link.label}</span>
             </Link>
           ))}
         </div>
