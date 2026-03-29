@@ -164,3 +164,16 @@ a[data-link="secondary"]:hover {
   color: var(--brand-primary-hover);
   text-decoration: underline;
 }
+
+/* Hero carousel dot progress */
+@keyframes hero-dot-fill {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [style*="hero-dot-fill"] {
+    animation: none !important;
+    width: 100% !important;
+  }
+}
