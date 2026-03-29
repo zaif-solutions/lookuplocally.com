@@ -74,7 +74,7 @@ export function Hero2() {
   return (
     <>
       <section
-        className="relative isolate h-96 w-full overflow-hidden sm:h-[500px] md:h-[600px]"
+        className="relative isolate  w-full overflow-hidden h-[80vh] md:min-h-[500px]"
         aria-labelledby="hero2-heading"
       >
         <Image
