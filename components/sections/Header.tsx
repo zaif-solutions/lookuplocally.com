@@ -231,7 +231,7 @@ function DesktopSearchForm({
       action="/search"
       method="get"
       className={cn(
-        "flex w-full overflow-hidden rounded-md border border-border bg-card shadow-md",
+        "flex w-full overflow-hidden rounded-md  bg-card shadow-md",
         "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch",
         className,
       )}
@@ -265,7 +265,7 @@ function DesktopSearchForm({
       <Button
         type="button"
         size="lg"
-        className="h-full shrink-0 rounded-l-sm text-lg font-semibold"
+        className="h-full shrink-0 rounded-l-lg text-lg font-semibold"
       >
         <Search className="size-5" />
         <Label
@@ -362,13 +362,6 @@ function MobileCategorySection({
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className="flex flex-col gap-0.5 pb-1 pl-2">
-          <Link
-            href={category.href}
-            className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-muted"
-            onClick={onLinkClick}
-          >
-            View All {category.label}
-          </Link>
           {category.links.slice(0, 12).map((link) => (
             <Link
               key={link.label}
