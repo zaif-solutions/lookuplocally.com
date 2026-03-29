@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   Menu,
   Search,
@@ -278,15 +279,18 @@ function DesktopSearchForm({
   );
 }
 
-function DesktopCategoryMegaItem({ cat }: { cat: Category }) {
+function DesktopCategoryMegaItem({ cat, isTransparent = false }: { cat: Category; isTransparent?: boolean }) {
   return (
     <>
       <NavigationMenuTrigger
         className={cn(
-          "h-auto gap-1 rounded-none border-0 bg-transparent px-3 py-3 text-[15px] font-medium text-muted-foreground shadow-none",
-          "hover:bg-transparent hover:text-foreground focus:bg-transparent focus-visible:ring-0",
-          "data-[state=open]:bg-transparent data-[state=open]:text-foreground data-[state=open]:hover:bg-transparent",
+          "h-auto gap-1 rounded-none border-0 bg-transparent px-3 py-3 text-[15px] font-medium shadow-none transition-colors duration-300",
+          "hover:bg-transparent focus:bg-transparent focus-visible:ring-0",
+          "data-[state=open]:bg-transparent data-[state=open]:hover:bg-transparent",
           "[&_svg]:text-current",
+          isTransparent
+            ? "text-white/80 hover:text-white data-[state=open]:text-white"
+            : "text-muted-foreground hover:text-foreground data-[state=open]:text-foreground",
         )}
       >
         <span className="whitespace-nowrap">{cat.label}</span>
@@ -383,214 +387,267 @@ function MobileCategorySection({
 }
 
 export function Header() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!isHome) return;
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isHome]);
+
+  const closeMobile = useCallback(() => setIsOpen(false), []);
+
+  const isTransparent = isHome && !scrolled;
 
   return (
-    <header className="sticky top-0 z-50 overflow-visible border-b border-border bg-background shadow-sm">
-      <div className="mx-auto w-full content-max overflow-visible px-2 md:px-8 lg:px-12">
-        {/* ─── Main header row ─── */}
-        <div
-          className={cn(
-            "grid h-14 w-full items-center sm:h-16 md:h-20",
-            "grid-cols-[1fr_auto] gap-x-3 gap-y-0",
-            "sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-x-3",
-            "lg:gap-x-4 xl:gap-x-6",
-          )}
-        >
-          {/* Logo */}
-          <div className="min-w-0 w-32 justify-self-start sm:w-40 md:w-48">
-            <Link href="/">
-              <Image
-                src="/logo.svg"
-                alt={SITE_NAME}
-                width={200}
-                height={200}
-                className="size-full object-contain"
-              />
-            </Link>
-          </div>
-
-          {/* Desktop search */}
-          <div className="hidden min-w-0 w-full justify-self-center sm:flex">
-            <DesktopSearchForm
-              idPrefix="hdr-desk"
-              className="w-full min-w-0 max-w-full 2xl:max-w-3xl"
-            />
-          </div>
-
-          {/* Desktop nav buttons + mobile hamburger */}
-          <div className="flex shrink-0 items-center justify-end justify-self-end gap-1 xl:gap-2">
-            <div className="hidden shrink-0 items-center gap-1 xl:flex xl:gap-2">
-              <Button
-                size="lg"
-                className="h-10 shrink-0 px-3 font-semibold"
-                variant="ghost"
-              >
-                For Business
-              </Button>
-              <Button
-                size="lg"
-                className="h-10 shrink-0 px-3 font-semibold"
-                asChild
-                variant="ghost"
-              >
-                <Link href="/write-review">Write a Review</Link>
-              </Button>
-              <Button
-                size="lg"
-                className="h-10 shrink-0 px-3 font-semibold"
-                asChild
-                variant="ghost"
-              >
-                <Link href="/login">Log In</Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                className="h-10 shrink-0 px-3 font-semibold"
-              >
-                <Link href="/signup">Sign Up</Link>
-              </Button>
+    <>
+      <header
+        className={cn(
+          "fixed top-0 z-50 w-full overflow-visible transition-all duration-300",
+          isTransparent
+            ? "border-b border-transparent bg-transparent"
+            : "border-b border-border bg-background/95 shadow-sm backdrop-blur-md",
+        )}
+      >
+        <div className="mx-auto w-full content-max overflow-visible px-2 md:px-8 lg:px-12">
+          {/* ─── Main header row ─── */}
+          <div
+            className={cn(
+              "grid h-14 w-full items-center sm:h-16 md:h-20",
+              "grid-cols-[1fr_auto] gap-x-3 gap-y-0",
+              "sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-x-3",
+              "lg:gap-x-4 xl:gap-x-6",
+            )}
+          >
+            {/* Logo */}
+            <div className="min-w-0 w-32 justify-self-start sm:w-40 md:w-48">
+              <Link href="/">
+                <Image
+                  src="/logo.svg"
+                  alt={SITE_NAME}
+                  width={200}
+                  height={200}
+                  className={cn(
+                    "size-full object-contain transition-all duration-300",
+                    isTransparent && "brightness-0 invert",
+                  )}
+                />
+              </Link>
             </div>
 
-            {/* Mobile / tablet hamburger */}
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger asChild>
-                <button
-                  type="button"
-                  className="inline-flex shrink-0 items-center justify-center rounded-md p-2 text-foreground transition-colors hover:bg-muted xl:hidden"
-                  aria-label="Open menu"
+            {/* Desktop search */}
+            <div className="hidden min-w-0 w-full justify-self-center sm:flex">
+              <DesktopSearchForm
+                idPrefix="hdr-desk"
+                className="w-full min-w-0 max-w-full 2xl:max-w-3xl"
+              />
+            </div>
+
+            {/* Desktop nav buttons + mobile hamburger */}
+            <div className="flex shrink-0 items-center justify-end justify-self-end gap-1 xl:gap-2">
+              <div className="hidden shrink-0 items-center gap-1 xl:flex xl:gap-2">
+                <Button
+                  size="lg"
+                  className={cn(
+                    "h-10 shrink-0 px-3 font-semibold transition-colors duration-300",
+                    isTransparent
+                      ? "text-white hover:bg-white/10"
+                      : "",
+                  )}
+                  variant="ghost"
                 >
-                  <Menu className="size-6" />
-                </button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="flex w-full max-w-sm flex-col overflow-hidden bg-background p-0"
-              >
-                <SheetHeader className="border-b border-border px-4 py-3">
-                  <SheetTitle className="text-left text-base font-semibold">
-                    Menu
-                  </SheetTitle>
-                </SheetHeader>
+                  For Business
+                </Button>
+                <Button
+                  size="lg"
+                  className={cn(
+                    "h-10 shrink-0 px-3 font-semibold transition-colors duration-300",
+                    isTransparent
+                      ? "text-white hover:bg-white/10"
+                      : "",
+                  )}
+                  asChild
+                  variant="ghost"
+                >
+                  <Link href="/write-review">Write a Review</Link>
+                </Button>
+                <Button
+                  size="lg"
+                  className={cn(
+                    "h-10 shrink-0 px-3 font-semibold transition-colors duration-300",
+                    isTransparent
+                      ? "text-white hover:bg-white/10"
+                      : "",
+                  )}
+                  asChild
+                  variant="ghost"
+                >
+                  <Link href="/login">Log In</Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-10 shrink-0 px-3 font-semibold"
+                >
+                  <Link href="/signup">Sign Up</Link>
+                </Button>
+              </div>
 
-                <div className="flex flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-4 pb-6 pt-4">
-                  {/* Mobile search (only below sm where the header search is hidden) */}
-                  <div className="sm:hidden">
-                    <form
-                      action="/search"
-                      method="get"
-                      className="flex flex-col gap-2.5"
-                      role="search"
-                      onSubmit={() => setIsOpen(false)}
-                    >
-                      <input
-                        name="q"
-                        type="search"
-                        placeholder="things to do, nail salons…"
-                        className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      />
-                      <input
-                        name="loc"
-                        type="text"
-                        placeholder="Location"
-                        className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      />
-                      <Button type="submit" className="w-full">
-                        Search
-                      </Button>
-                    </form>
-                  </div>
-
-                  {/* Auth buttons */}
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      className="flex-1"
-                      asChild
-                    >
-                      <Link href="/login" onClick={() => setIsOpen(false)}>
-                        Log In
-                      </Link>
-                    </Button>
-                    <Button className="flex-1" asChild>
-                      <Link href="/signup" onClick={() => setIsOpen(false)}>
-                        Sign Up
-                      </Link>
-                    </Button>
-                  </div>
-
-                  {/* Quick links */}
-                  <nav className="flex flex-col gap-0.5 border-t border-border pt-3">
-                    <Link
-                      href="/business"
-                      className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      For Business
-                    </Link>
-                    <Link
-                      href="/write-review"
-                      className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Write a Review
-                    </Link>
-                    <Link
-                      href="/search?ref=project"
-                      className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Start a Project
-                    </Link>
-                  </nav>
-
-                  {/* Categories (with collapsible sub-links) */}
-                  <div className="flex flex-col gap-0.5 border-t border-border pt-3">
-                    <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                      Browse Categories
-                    </p>
-                    {categories.map((cat) => (
-                      <MobileCategorySection
-                        key={cat.label}
-                        category={cat}
-                        onLinkClick={() => setIsOpen(false)}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-        </div>
-
-        {/* ─── Desktop category navigation bar (xl+ only, same breakpoint where hamburger hides) ─── */}
-        <NavigationMenu
-          viewport={false}
-          className="relative z-50 hidden w-full max-w-full justify-start overflow-visible xl:flex"
-          aria-label="Browse categories"
-        >
-          <NavigationMenuList className="flex-wrap justify-start gap-0 overflow-visible">
-            {categories.map((cat) => (
-              <NavigationMenuItem
-                key={cat.label}
-                className="relative shrink-0 overflow-visible"
-              >
-                {cat.hasDropdown ? (
-                  <DesktopCategoryMegaItem cat={cat} />
-                ) : (
-                  <NavigationMenuLink
-                    href={cat.href}
-                    className="flex h-auto items-center px-3 py-3 text-[15px] font-medium text-muted-foreground transition-colors hover:text-foreground 2xl:px-4 2xl:text-base"
+              {/* Mobile / tablet hamburger */}
+              <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                <SheetTrigger asChild>
+                  <button
+                    type="button"
+                    className={cn(
+                      "inline-flex shrink-0 items-center justify-center rounded-md p-2 transition-colors xl:hidden",
+                      isTransparent
+                        ? "text-white hover:bg-white/15"
+                        : "text-foreground hover:bg-muted",
+                    )}
+                    aria-label="Open menu"
                   >
-                    {cat.label}
-                  </NavigationMenuLink>
-                )}
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
-    </header>
+                    <Menu className="size-6" />
+                  </button>
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="flex w-full max-w-sm flex-col overflow-hidden bg-background p-0"
+                >
+                  <SheetHeader className="border-b border-border px-4 py-3">
+                    <SheetTitle className="text-left text-base font-semibold">
+                      Menu
+                    </SheetTitle>
+                  </SheetHeader>
+
+                  <div className="flex flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-4 pb-6 pt-4">
+                    {/* Mobile search (only below sm where the header search is hidden) */}
+                    <div className="sm:hidden">
+                      <form
+                        action="/search"
+                        method="get"
+                        className="flex flex-col gap-2.5"
+                        role="search"
+                        onSubmit={closeMobile}
+                      >
+                        <input
+                          name="q"
+                          type="search"
+                          placeholder="things to do, nail salons…"
+                          className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        />
+                        <input
+                          name="loc"
+                          type="text"
+                          placeholder="Location"
+                          className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        />
+                        <Button type="submit" className="w-full">
+                          Search
+                        </Button>
+                      </form>
+                    </div>
+
+                    {/* Auth buttons */}
+                    <div className="flex gap-2">
+                      <Button variant="outline" className="flex-1" asChild>
+                        <Link href="/login" onClick={closeMobile}>
+                          Log In
+                        </Link>
+                      </Button>
+                      <Button className="flex-1" asChild>
+                        <Link href="/signup" onClick={closeMobile}>
+                          Sign Up
+                        </Link>
+                      </Button>
+                    </div>
+
+                    {/* Quick links */}
+                    <nav className="flex flex-col gap-0.5 border-t border-border pt-3">
+                      <Link
+                        href="/business"
+                        className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                        onClick={closeMobile}
+                      >
+                        For Business
+                      </Link>
+                      <Link
+                        href="/write-review"
+                        className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                        onClick={closeMobile}
+                      >
+                        Write a Review
+                      </Link>
+                      <Link
+                        href="/search?ref=project"
+                        className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                        onClick={closeMobile}
+                      >
+                        Start a Project
+                      </Link>
+                    </nav>
+
+                    {/* Categories (with collapsible sub-links) */}
+                    <div className="flex flex-col gap-0.5 border-t border-border pt-3">
+                      <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        Browse Categories
+                      </p>
+                      {categories.map((cat) => (
+                        <MobileCategorySection
+                          key={cat.label}
+                          category={cat}
+                          onLinkClick={closeMobile}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          </div>
+
+          {/* ─── Desktop category navigation bar (xl+ only) ─── */}
+          <NavigationMenu
+            viewport={false}
+            className="relative z-50 hidden w-full max-w-full justify-start overflow-visible xl:flex"
+            aria-label="Browse categories"
+          >
+            <NavigationMenuList className="flex-wrap justify-start gap-0 overflow-visible">
+              {categories.map((cat) => (
+                <NavigationMenuItem
+                  key={cat.label}
+                  className="relative shrink-0 overflow-visible"
+                >
+                  {cat.hasDropdown ? (
+                    <DesktopCategoryMegaItem cat={cat} isTransparent={isTransparent} />
+                  ) : (
+                    <NavigationMenuLink
+                      href={cat.href}
+                      className={cn(
+                        "flex h-auto items-center px-3 py-3 text-[15px] font-medium transition-colors 2xl:px-4 2xl:text-base",
+                        isTransparent
+                          ? "text-white/80 hover:text-white"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      {cat.label}
+                    </NavigationMenuLink>
+                  )}
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+      </header>
+
+      {/* Spacer: pushes content below the fixed header on non-home pages */}
+      {!isHome && (
+        <div className="h-14 sm:h-16 md:h-20 xl:h-[calc(5rem+3rem)]" aria-hidden />
+      )}
+    </>
   );
 }
