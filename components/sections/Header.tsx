@@ -274,7 +274,7 @@ function DesktopSearchForm({
   const [showPopular, setShowPopular] = useState(false);
   const [showNearPopular, setShowNearPopular] = useState(false);
   const [findValue, setFindValue] = useState("");
-  const [nearValue, setNearValue] = useState("San Francisco, CA");
+  const [nearValue, setNearValue] = useState("");
   const findPopoverRef = React.useRef<HTMLDivElement>(null);
   const nearPopoverRef = React.useRef<HTMLDivElement>(null);
 
@@ -434,7 +434,7 @@ function DesktopSearchForm({
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [findValue, setFindValue] = useState("");
-  const [nearValue, setNearValue] = useState("San Francisco, CA");
+  const [nearValue, setNearValue] = useState("");
   const [showPopularMobile, setShowPopularMobile] = useState(false);
   const [showNearPopularMobile, setShowNearPopularMobile] = useState(false);
 
@@ -545,101 +545,7 @@ export function Header() {
                 <SheetHeader>
                   <SheetTitle className="sr-only">Main menu</SheetTitle>
                 </SheetHeader>
-                <div className="flex flex-col p-4 pb-2 sm:hidden relative">
-                  <form
-                    action="/search"
-                    method="get"
-                    className="flex flex-col gap-3"
-                    role="search"
-                    onSubmit={() => setIsOpen(false)}
-                  >
-                    <div className="relative">
-                      <input
-                        name="q"
-                        type="search"
-                        value={findValue}
-                        onChange={(e) => setFindValue(e.target.value)}
-                        onFocus={() => setShowPopularMobile(true)}
-                        onBlur={() => setTimeout(() => setShowPopularMobile(false), 200)}
-                        placeholder="things to do, nail salons…"
-                        className={cn(
-                          "w-full border border-input bg-background px-4 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                          showPopularMobile ? "rounded-t-md border-b-0" : "rounded-md"
-                        )}
-                      />
-                      {showPopularMobile && (
-                        <div className="absolute top-full left-0 z-[70] w-full rounded-b-md border border-input border-t-0 bg-card p-3 shadow-xl -mt-[1px]">
-                          <h3 className="mb-2 text-[12px] font-bold text-muted-foreground uppercase px-1">Popular</h3>
-                          <div className="flex flex-wrap gap-2">
-                            {popularSearches.map((item) => (
-                              <button
-                                key={item.label}
-                                type="button"
-                                onClick={() => {
-                                  setFindValue(item.label);
-                                  setShowPopularMobile(false);
-                                }}
-                                className="flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-xs font-semibold transition hover:bg-muted"
-                              >
-                                <item.icon className="size-3.5 text-foreground/70" />
-                                <span>{item.label}</span>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="relative">
-                      <input
-                        name="loc"
-                        type="text"
-                        value={nearValue}
-                        onChange={(e) => setNearValue(e.target.value)}
-                        onFocus={() => setShowNearPopularMobile(true)}
-                        onBlur={() => setTimeout(() => setShowNearPopularMobile(false), 200)}
-                        placeholder="Location"
-                        className={cn(
-                          "w-full border border-input bg-background px-4 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                          showNearPopularMobile ? "rounded-t-md border-b-0" : "rounded-md"
-                        )}
-                      />
-                      {showNearPopularMobile && (
-                        <div className="absolute top-full left-0 z-[70] w-full rounded-b-md bg-card p-3 shadow-xl -mt-[1px]">
-                          <button
-                            type="button"
-                            className="flex w-full items-center gap-2.5 px-1.5 py-2 text-primary transition hover:bg-muted rounded-md"
-                          >
-                            <div className="flex size-7 items-center justify-center rounded-full bg-primary/10">
-                              <MapPin className="size-4" />
-                            </div>
-                            <span className="text-[13px] font-semibold">Current Location</span>
-                          </button>
-                          <div className="mt-2 flex flex-col">
-                            {recentLocations.map((loc, i) => (
-                              <button
-                                key={i}
-                                type="button"
-                                onClick={() => {
-                                  setNearValue(loc.split(",")[0]);
-                                  setShowNearPopularMobile(false);
-                                }}
-                                className="flex w-full items-center px-2 py-1.5 text-left text-[13px] transition hover:bg-muted rounded-md"
-                              >
-                                <span className="truncate text-foreground/80">{loc}</span>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full rounded-md bg-primary py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-                    >
-                      Search
-                    </button>
-                  </form>
-                </div>
+
 
                 <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-4 pb-6 pt-4">
 
@@ -732,7 +638,131 @@ export function Header() {
           {/* </div> */}
         </div>
 
-        {/* SECTION: DESKTOP NAVIGATION CATEGORIES (Bottom Bar) */}
+        {/* ============================================================================ */}
+        {/* SECTION: MOBILE SEARCH BAR (Under Navbar) */}
+        {/* ============================================================================ */}
+        <div className="block pb-4 pt-1 sm:hidden">
+          <form
+            action="/search"
+            method="get"
+            className="flex flex-row items-stretch gap-1.5 relative z-50 overflow-visible"
+            role="search"
+          >
+            <div className="relative flex-[1.2] min-w-0">
+              <input
+                id="mobile-find-input"
+                name="q"
+                type="search"
+                value={findValue}
+                onChange={(e) => setFindValue(e.target.value)}
+                onFocus={() => setShowPopularMobile(true)}
+                onBlur={() => setTimeout(() => setShowPopularMobile(false), 200)}
+                placeholder="Find"
+                className="w-full h-full rounded-md border border-input bg-background px-3 py-2 text-[13px] font-medium text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            </div>
+            
+            <div className="relative flex-1 min-w-0">
+              <input
+                id="mobile-near-input"
+                name="loc"
+                type="text"
+                value={nearValue}
+                onChange={(e) => setNearValue(e.target.value)}
+                onFocus={() => setShowNearPopularMobile(true)}
+                onBlur={() => setTimeout(() => setShowNearPopularMobile(false), 200)}
+                placeholder="Near"
+                className="w-full h-full rounded-md border border-input bg-background px-3 py-2 text-[13px] font-medium text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="shrink-0 flex items-center justify-center rounded-md bg-primary px-3 text-sm font-bold text-primary-foreground hover:bg-primary/90"
+            >
+              <Search className="size-4" />
+            </button>
+
+            {(showPopularMobile || showNearPopularMobile) && (
+              <div className="absolute top-full left-0 z-[70] mt-2 flex w-full flex-col gap-4 rounded-md border border-input bg-card p-3 shadow-xl">
+                <div>
+                  <h3 className="mb-2 px-1 text-[11px] font-bold uppercase text-muted-foreground">
+                    Popular Searches
+                  </h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {popularSearches.map((item) => (
+                      <button
+                        key={item.label}
+                        type="button"
+                        onClick={() => {
+                          setFindValue(item.label);
+                          if (!nearValue) {
+                            document.getElementById("mobile-near-input")?.focus();
+                          } else {
+                            setShowPopularMobile(false);
+                            setShowNearPopularMobile(false);
+                          }
+                        }}
+                        className="flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-semibold transition hover:bg-muted"
+                      >
+                        <item.icon className="size-3 text-foreground/70" />
+                        <span>{item.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border-t border-border pt-3">
+                  <h3 className="mb-2 px-1 text-[11px] font-bold uppercase text-muted-foreground">
+                    Recent Locations
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNearValue("Current Location");
+                      if (!findValue) {
+                        document.getElementById("mobile-find-input")?.focus();
+                      } else {
+                        setShowNearPopularMobile(false);
+                        setShowPopularMobile(false);
+                      }
+                    }}
+                    className="flex w-full items-center gap-2 rounded-md px-1.5 py-1.5 text-primary transition hover:bg-muted"
+                  >
+                    <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
+                      <MapPin className="size-3.5" />
+                    </div>
+                    <span className="text-[12px] font-semibold">
+                      Current Location
+                    </span>
+                  </button>
+                  <div className="mt-2 flex flex-col gap-1">
+                    {recentLocations.map((loc, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => {
+                          setNearValue(loc.split(",")[0]);
+                          if (!findValue) {
+                            document.getElementById("mobile-find-input")?.focus();
+                          } else {
+                            setShowNearPopularMobile(false);
+                            setShowPopularMobile(false);
+                          }
+                        }}
+                        className="flex w-full items-center rounded-md px-2 py-1.5 text-left text-[12px] transition hover:bg-muted"
+                      >
+                        <span className="truncate text-foreground/80">
+                          {loc}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </form>
+        </div>
         <NavigationMenu
           className={cn(
             "hidden xl:flex w-full max-w-full justify-start",
