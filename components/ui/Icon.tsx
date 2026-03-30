@@ -79,5 +79,7 @@ export {
   Dog,
   Landmark,
   Building,
+  Calculator,
+  Utensils,
 } from "lucide-react";
 export type { LucideIcon } from "lucide-react";

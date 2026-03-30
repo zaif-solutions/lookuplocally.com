@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -13,6 +12,8 @@ import { SITE_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import * as React from "react";
 import { Label } from "../ui/label";
 
 import {
@@ -79,8 +80,12 @@ import {
   Menu,
   Search,
   ChevronDown,
+  Calculator,
+  Utensils,
+  MapPin,
 } from "@/components/ui/Icon";
 
+// DATA: NAVIGATION CATEGORIES & LINKS
 const restaurantLinks = [
   { label: "Takeout", href: "/search?q=takeout", icon: ShoppingBag },
   { label: "Delivery", href: "/search?q=delivery", icon: Truck },
@@ -257,6 +262,7 @@ const categories = [
 //   );
 // }
 
+// COMPONENT: DESKTOP SEARCH FORM
 function DesktopSearchForm({
   className,
   idPrefix = "header",
@@ -264,58 +270,181 @@ function DesktopSearchForm({
   className?: string;
   idPrefix?: string;
 }) {
+  const [showPopular, setShowPopular] = useState(false);
+  const [showNearPopular, setShowNearPopular] = useState(false);
+  const [findValue, setFindValue] = useState("");
+  const [nearValue, setNearValue] = useState("San Francisco, CA");
+  const findPopoverRef = React.useRef<HTMLDivElement>(null);
+  const nearPopoverRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (findPopoverRef.current && !findPopoverRef.current.contains(event.target as Node)) {
+        setShowPopular(false);
+      }
+      if (nearPopoverRef.current && !nearPopoverRef.current.contains(event.target as Node)) {
+        setShowNearPopular(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const popularSearches = [
+    { label: "Restaurants", icon: Utensils },
+    { label: "Delivery", icon: Truck },
+    { label: "Takeout", icon: ShoppingBag },
+    { label: "Accountants", icon: Calculator },
+    { label: "Plumbers", icon: Wrench },
+    { label: "Auto Repair", icon: Car },
+  ];
+
+  const recentLocations = [
+    "San Francisco, CA, United States",
+    "South San Francisco, CA, United States",
+    "Péninsule de San Francisco, CA, United States",
+    "Área de la Bahía de San Francisco, CA, United States",
+    "Région de la baie de San Francisco, CA, United States",
+  ];
+
   return (
-    <form
-      action="/search"
-      method="get"
-      className={cn(
-        "flex w-full overflow-hidden rounded-md border border-border bg-card shadow-md",
-        "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch ",
-        className,
-      )}
-      role="search"
-      aria-label="Search businesses"
-    >
-      <label htmlFor={`${idPrefix}-find`} className="sr-only">
-        Find
-      </label>
-      <input
-        id={`${idPrefix}-find`}
-        type="search"
-        name="q"
-        placeholder="restaurants, services..."
-        className="min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm"
-      />
-      <span
-        className="hidden h-auto w-px shrink-0 bg-border sm:block"
-        aria-hidden
-      />
-      <label htmlFor={`${idPrefix}-near`} className="sr-only">
-        Near
-      </label>
-      <input
-        id={`${idPrefix}-near`}
-        type="text"
-        name="loc"
-        placeholder="address, city..."
-        className="min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm"
-      />
-      <Button
-        type="button"
-        size="lg"
-        className="h-full shrink-0 rounded-l-sm text-lg font-semibold"
+    <div className="relative w-full max-w-full 2xl:max-w-3xl">
+      <form
+        action="/search"
+        method="get"
+        className={cn(
+          "flex w-full overflow-visible rounded-md border border-border bg-card shadow-md",
+          "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch ",
+          className,
+        )}
+        role="search"
+        aria-label="Search businesses"
       >
-        <Search className="size-5" />
-        <Label htmlFor={`${idPrefix}-find`} className="hidden xl:block xl:text-lg xl:font-semibold">
-          Search
-        </Label>
-      </Button>
-    </form>
+        <div className="flex flex-1 items-stretch relative" ref={findPopoverRef}>
+          <label htmlFor={`${idPrefix}-find`} className="sr-only">
+            Find
+          </label>
+          <input
+            id={`${idPrefix}-find`}
+            type="search"
+            name="q"
+            value={findValue}
+            onChange={(e) => setFindValue(e.target.value)}
+            onFocus={() => setShowPopular(true)}
+            placeholder="restaurants, services..."
+            className="min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm"
+          />
+
+          {showPopular && (
+            <div className="absolute top-full left-0 z-[60] w-[calc(100%+80px)] rounded-b-xl bg-card p-4 shadow-xl -mt-[1px]">
+              <h3 className="mb-3 text-[13px] font-bold text-muted-foreground uppercase tracking-wider px-1">Popular</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {popularSearches.map((item) => (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => {
+                      setFindValue(item.label);
+                      setShowPopular(false);
+                    }}
+                    className="flex items-center gap-2 rounded-full bg-background px-3 py-1.5 text-sm font-semibold transition hover:bg-muted"
+                  >
+                    <item.icon className="size-4 text-foreground/70" />
+                    <span>{item.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <span
+          className="hidden h-auto w-px shrink-0 bg-border sm:block"
+          aria-hidden
+        />
+
+        <div className="flex flex-1 items-stretch relative" ref={nearPopoverRef}>
+          <label htmlFor={`${idPrefix}-near`} className="sr-only">
+            Near
+          </label>
+          <input
+            id={`${idPrefix}-near`}
+            type="text"
+            name="loc"
+            value={nearValue}
+            onChange={(e) => setNearValue(e.target.value)}
+            onFocus={() => setShowNearPopular(true)}
+            placeholder="address, city..."
+            className="min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm"
+          />
+
+          {showNearPopular && (
+            <div className="absolute top-full left-0 z-[60] w-[calc(100%+120px)] rounded-b-xl bg-card p-4 shadow-xl -mt-[1px]">
+              <button
+                type="button"
+                className="flex w-full items-center gap-3 px-2 py-3 text-primary transition hover:bg-muted rounded-lg"
+              >
+                <div className="flex size-8 items-center justify-center rounded-full bg-primary/10">
+                  <MapPin className="size-5" />
+                </div>
+                <span className="font-semibold">Current Location</span>
+              </button>
+
+              <div className="mt-4 flex flex-col">
+                {recentLocations.map((loc, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => {
+                      setNearValue(loc.split(",")[0]);
+                      setShowNearPopular(false);
+                    }}
+                    className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm transition hover:bg-muted rounded-lg"
+                  >
+                    <span className="truncate text-foreground/80">{loc}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          className="flex h-full shrink-0 items-center justify-center gap-2 rounded-r-md bg-primary px-6 text-lg font-bold text-primary-foreground hover:bg-primary/90 transition-colors"
+        >
+          <Search className="size-5" />
+          <span className="hidden xl:block">Search</span>
+        </button>
+      </form>
+    </div>
   );
 }
 
+// COMPONENT: MAIN HEADER (Navbar)
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [findValue, setFindValue] = useState("");
+  const [nearValue, setNearValue] = useState("San Francisco, CA");
+  const [showPopularMobile, setShowPopularMobile] = useState(false);
+  const [showNearPopularMobile, setShowNearPopularMobile] = useState(false);
+
+  const popularSearches = [
+    { label: "Restaurants", icon: Utensils },
+    { label: "Delivery", icon: Truck },
+    { label: "Takeout", icon: ShoppingBag },
+    { label: "Accountants", icon: Calculator },
+    { label: "Plumbers", icon: Wrench },
+    { label: "Auto Repair", icon: Car },
+  ];
+
+  const recentLocations = [
+    "San Francisco, CA, United States",
+    "South San Francisco, CA, United States",
+    "Péninsule de San Francisco, CA, United States",
+    "Área de la Bahía de San Francisco, CA, United States",
+    "Région de la baie de San Francisco, CA, United States",
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-border shadow-sm px-2 md:px-8 lg:px-12">
@@ -388,6 +517,7 @@ export function Header() {
               </Button>
             </div>
 
+            {/* SECTION: MOBILE SIDEBAR (Drawer Menu) */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <button
@@ -400,124 +530,191 @@ export function Header() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-full max-w-sm bg-background overflow-y-auto"
+                className="flex w-full max-w-sm flex-col bg-background p-0"
               >
                 <SheetHeader>
                   <SheetTitle className="sr-only">Main menu</SheetTitle>
                 </SheetHeader>
-                <div className="flex flex-col gap-6 px-2 pb-6 pt-2">
-                  {/* Only when outer header search is hidden (< sm); tablet/desktop use outer bar only */}
-                  <div className="sm:hidden">
-                    <form
-                      action="/search"
-                      method="get"
-                      className="flex flex-col gap-3"
-                      role="search"
-                      onSubmit={() => setIsOpen(false)}
-                    >
+                <div className="flex flex-col p-4 pb-2 sm:hidden relative">
+                  <form
+                    action="/search"
+                    method="get"
+                    className="flex flex-col gap-3"
+                    role="search"
+                    onSubmit={() => setIsOpen(false)}
+                  >
+                    <div className="relative">
                       <input
                         name="q"
                         type="search"
+                        value={findValue}
+                        onChange={(e) => setFindValue(e.target.value)}
+                        onFocus={() => setShowPopularMobile(true)}
+                        onBlur={() => setTimeout(() => setShowPopularMobile(false), 200)}
                         placeholder="things to do, nail salons…"
-                        className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        className={cn(
+                          "w-full border border-input bg-background px-4 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                          showPopularMobile ? "rounded-t-md border-b-0" : "rounded-md"
+                        )}
                       />
+                      {showPopularMobile && (
+                        <div className="absolute top-full left-0 z-[70] w-full rounded-b-md border border-input border-t-0 bg-card p-3 shadow-xl -mt-[1px]">
+                          <h3 className="mb-2 text-[12px] font-bold text-muted-foreground uppercase px-1">Popular</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {popularSearches.map((item) => (
+                              <button
+                                key={item.label}
+                                type="button"
+                                onClick={() => {
+                                  setFindValue(item.label);
+                                  setShowPopularMobile(false);
+                                }}
+                                className="flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-xs font-semibold transition hover:bg-muted"
+                              >
+                                <item.icon className="size-3.5 text-foreground/70" />
+                                <span>{item.label}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="relative">
                       <input
                         name="loc"
                         type="text"
+                        value={nearValue}
+                        onChange={(e) => setNearValue(e.target.value)}
+                        onFocus={() => setShowNearPopularMobile(true)}
+                        onBlur={() => setTimeout(() => setShowNearPopularMobile(false), 200)}
                         placeholder="Location"
-                        className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        className={cn(
+                          "w-full border border-input bg-background px-4 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                          showNearPopularMobile ? "rounded-t-md border-b-0" : "rounded-md"
+                        )}
                       />
-                      <button
-                        type="submit"
-                        className="w-full rounded-md bg-primary py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-                      >
-                        Search
-                      </button>
-                    </form>
+                      {showNearPopularMobile && (
+                        <div className="absolute top-full left-0 z-[70] w-full rounded-b-md bg-card p-3 shadow-xl -mt-[1px]">
+                          <button
+                            type="button"
+                            className="flex w-full items-center gap-2.5 px-1.5 py-2 text-primary transition hover:bg-muted rounded-md"
+                          >
+                            <div className="flex size-7 items-center justify-center rounded-full bg-primary/10">
+                              <MapPin className="size-4" />
+                            </div>
+                            <span className="text-[13px] font-semibold">Current Location</span>
+                          </button>
+                          <div className="mt-2 flex flex-col">
+                            {recentLocations.map((loc, i) => (
+                              <button
+                                key={i}
+                                type="button"
+                                onClick={() => {
+                                  setNearValue(loc.split(",")[0]);
+                                  setShowNearPopularMobile(false);
+                                }}
+                                className="flex w-full items-center px-2 py-1.5 text-left text-[13px] transition hover:bg-muted rounded-md"
+                              >
+                                <span className="truncate text-foreground/80">{loc}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full rounded-md bg-primary py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                    >
+                      Search
+                    </button>
+                  </form>
+                </div>
+
+                <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-4 pb-6 pt-4">
+
+
+
+                  <div className="flex flex-col gap-1 border-t border-border pt-4">
+                    {categories.map((cat) => (
+                      <div key={cat.label} className="border-b border-border">
+                        {cat.hasDropdown ? (
+                          <details className="group">
+                            <summary className="flex cursor-pointer list-none items-center justify-between py-3 font-bold text-foreground">
+                              {cat.label}
+                              <ChevronDown className="size-4 transition-transform group-open:rotate-180" />
+                            </summary>
+                            <div className="flex flex-col gap-1 pb-4 pl-4">
+                              {cat.links?.map((link) => (
+                                <Link
+                                  key={link.label}
+                                  href={link.href}
+                                  className="flex items-center gap-2 py-2 text-[15px] font-medium text-[#202124] hover:text-primary"
+                                  onClick={() => setIsOpen(false)}
+                                >
+                                  <link.icon className="size-5 shrink-0 text-[#202124]/80" />
+                                  {link.label}
+                                </Link>
+                              ))}
+                            </div>
+                          </details>
+                        ) : (
+                          <Link
+                            href={cat.href}
+                            className="block py-3 font-bold text-foreground hover:text-primary"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            {cat.label}
+                          </Link>
+                        )}
+                      </div>
+                    ))}
                   </div>
 
+                  <div className="flex flex-col gap-1 border-t border-border pt-4 text-sm">
+                    <Link
+                      href="/business"
+                      className="border-b border-border py-3 font-medium text-foreground hover:bg-muted/50"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      For Business
+                    </Link>
+                    <Link
+                      href="/search?write-review"
+                      className="border-b border-border py-3 font-medium text-foreground hover:bg-muted/50"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Write a Review
+                    </Link>
+                    <Link
+                      href="/search?ref=project"
+                      className="py-3 font-medium text-foreground hover:bg-muted/50"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Start a Project
+                    </Link>
+                  </div>
 
-
-                    <div className="flex flex-col gap-1 border-t border-border pt-4">
-                      {categories.map((cat) => (
-                        <div key={cat.label} className="border-b border-border">
-                          {cat.hasDropdown ? (
-                            <details className="group">
-                              <summary className="flex cursor-pointer list-none items-center justify-between py-3 font-bold text-foreground">
-                                {cat.label}
-                                <ChevronDown className="size-4 transition-transform group-open:rotate-180" />
-                              </summary>
-                              <div className="flex flex-col gap-1 pb-4 pl-4">
-                                {cat.links?.map((link) => (
-                                  <Link
-                                    key={link.label}
-                                    href={link.href}
-                                    className="flex items-center gap-2 py-2 text-[15px] font-medium text-[#202124] hover:text-primary"
-                                    onClick={() => setIsOpen(false)}
-                                  >
-                                    <link.icon className="size-5 shrink-0 text-[#202124]/80" />
-                                    {link.label}
-                                  </Link>
-                                ))}
-                              </div>
-                            </details>
-                          ) : (
-                            <Link
-                              href={cat.href}
-                              className="block py-3 font-bold text-foreground hover:text-primary"
-                              onClick={() => setIsOpen(false)}
-                            >
-                              {cat.label}
-                            </Link>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="flex flex-col gap-1 border-t border-border pt-4 text-sm">
-                      <Link
-                        href="/business"
-                        className="border-b border-border py-3 font-medium text-foreground hover:bg-muted/50"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        For Business
-                      </Link>
-                      <Link
-                        href="/search?write-review"
-                        className="border-b border-border py-3 font-medium text-foreground hover:bg-muted/50"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        Write a Review
-                      </Link>
-                      <Link
-                        href="/search?ref=project"
-                        className="py-3 font-medium text-foreground hover:bg-muted/50"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        Start a Project
-                      </Link>
-                    </div>
-
-                    <div className="mt-auto flex gap-2 pt-4">
-                      <Link
-                        href="/login"
-                        className={cn(
-                          "flex flex-1 items-center justify-center rounded-md border border-input py-2 text-sm font-medium text-foreground hover:bg-muted",
-                        )}
-                        onClick={() => setIsOpen(false)}
-                      >
-                        Log In
-                      </Link>
-                      <Link
-                        href="/signup"
-                        className={cn(
-                          "flex flex-1 items-center justify-center rounded-md bg-primary py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90",
-                        )}
-                        onClick={() => setIsOpen(false)}
-                      >
-                        Sign Up
-                      </Link>
-                    </div>
+                  <div className="mt-auto flex gap-2 pt-4">
+                    <Link
+                      href="/login"
+                      className={cn(
+                        "flex flex-1 items-center justify-center rounded-md border border-input py-2 text-sm font-medium text-foreground hover:bg-muted",
+                      )}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Log In
+                    </Link>
+                    <Link
+                      href="/signup"
+                      className={cn(
+                        "flex flex-1 items-center justify-center rounded-md bg-primary py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90",
+                      )}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
@@ -525,6 +722,7 @@ export function Header() {
           {/* </div> */}
         </div>
 
+        {/* SECTION: DESKTOP NAVIGATION CATEGORIES (Bottom Bar) */}
         <NavigationMenu
           className={cn(
             "hidden xl:flex w-full max-w-full justify-start",
