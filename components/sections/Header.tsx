@@ -531,6 +531,7 @@ export function Header() {
               <SheetContent
                 side="right"
                 className="flex w-full max-w-sm flex-col bg-background p-0"
+                onOpenAutoFocus={(e) => e.preventDefault()}
               >
                 <SheetHeader>
                   <SheetTitle className="sr-only">Main menu</SheetTitle>
