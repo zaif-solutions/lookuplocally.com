@@ -1,17 +1,43 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Sparkles } from "@/components/ui/Icon";
 import { BusinessCard } from "@/components/business/BusinessCard";
 import { CONTENT_GUTTER, CONTENT_MAX } from "@/lib/content-layout";
 import { cn } from "@/lib/utils";
 import type { Business } from "@/types";
+import { HeroCarousel } from "./HeroCarousel";
+import type { HeroSlide } from "./HeroCarousel";
 
-const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&h=900&fit=crop";
+const heroSlides: HeroSlide[] = [
+  {
+    image:
+      "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?w=1920&h=1080&fit=crop&q=80",
+    heading: "Get a deep clean",
+    ctaLabel: "Cleaners",
+    ctaHref: "/search?q=cleaners",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&h=1080&fit=crop&q=80",
+    heading: "Discover great dining",
+    ctaLabel: "Restaurants",
+    ctaHref: "/search?q=restaurants",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1676210134188-4c05dd172f89?w=1920&h=1080&fit=crop&q=80",
+    heading: "Find trusted plumbers",
+    ctaLabel: "Plumbers",
+    ctaHref: "/search?q=plumbers",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=1920&h=1080&fit=crop&q=80",
+    heading: "Look your best",
+    ctaLabel: "Hair Salons",
+    ctaHref: "/search?q=hair-salons",
+  },
+];
 
 const ISO_STUB = "2024-01-01T00:00:00.000Z";
 
-/** Featured businesses shown under “Recent activity” — each row is user context + `BusinessCard`. */
 const recentActivity: {
   activityLabel: string;
   activityTime: string;
@@ -73,44 +99,7 @@ const recentActivity: {
 export function Hero2() {
   return (
     <>
-      <section
-        className="relative isolate h-96 w-full overflow-hidden sm:h-[500px] md:h-[600px]"
-        aria-labelledby="hero2-heading"
-      >
-        <Image
-          src={HERO_IMAGE}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-black/40" aria-hidden />
-
-        <div
-          className={cn(
-            "relative flex h-full w-full flex-col justify-center",
-            CONTENT_MAX,
-            CONTENT_GUTTER,
-          )}
-        >
-          <div className="w-full min-w-0">
-            <h2
-              id="hero2-heading"
-              className="mb-6 max-w-2xl font-display text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl"
-            >
-              Get a deep clean
-            </h2>
-            <Link
-              href="/search?q=cleaners"
-              className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground transition hover:bg-primary/90 sm:text-base"
-            >
-              <Sparkles className="size-5 shrink-0" aria-hidden />
-              Cleaners
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroCarousel slides={heroSlides} interval={6000} />
 
       <section
         className="bg-background py-10 sm:py-12 lg:py-14"

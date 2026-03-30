@@ -50,9 +50,9 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-card">
+    <footer className="border-t border-border bg-muted">
       <div className={cn(CONTENT_MAX, CONTENT_GUTTER, "py-10 sm:py-12 lg:py-14")}>
-        <div className="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
+        <div className="grid gap-x-8 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {footerColumns.map((column) => (
             <nav key={column.title} aria-label={column.title}>
               <h2 className="mb-3 text-sm font-semibold text-foreground sm:mb-4">
