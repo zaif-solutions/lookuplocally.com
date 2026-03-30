@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { SITE_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -332,12 +333,17 @@ function DesktopSearchForm({
             onChange={(e) => setFindValue(e.target.value)}
             onFocus={() => setShowPopular(true)}
             placeholder="restaurants, services..."
-            className="min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm"
+            className={cn(
+              "min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm relative z-[61]",
+              showPopular && "bg-background rounded-t-lg shadow-[0_-4px_16px_rgba(0,0,0,0.1)]",
+            )}
           />
 
           {showPopular && (
-            <div className="absolute top-full left-0 z-[60] w-[calc(100%+80px)] rounded-b-xl bg-card p-4 shadow-xl -mt-[1px]">
-              <h3 className="mb-3 text-[13px] font-bold text-muted-foreground uppercase tracking-wider px-1">Popular</h3>
+            <div className="absolute top-full left-0 right-0 z-[60] w-full rounded-b-lg bg-background p-4 shadow-[0_8px_16px_rgba(0,0,0,0.1)] border border-t-0 border-border -mt-[1px] flex flex-col">
+              <h3 className="mb-3 px-1 text-[13px] font-bold uppercase tracking-wider text-muted-foreground">
+                Popular
+              </h3>
               <div className="grid grid-cols-2 gap-2">
                 {popularSearches.map((item) => (
                   <button
@@ -347,7 +353,7 @@ function DesktopSearchForm({
                       setFindValue(item.label);
                       setShowPopular(false);
                     }}
-                    className="flex items-center gap-2 rounded-full bg-background px-3 py-1.5 text-sm font-semibold transition hover:bg-muted"
+                    className="flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-semibold transition hover:bg-muted"
                   >
                     <item.icon className="size-4 text-foreground/70" />
                     <span>{item.label}</span>
@@ -375,14 +381,17 @@ function DesktopSearchForm({
             onChange={(e) => setNearValue(e.target.value)}
             onFocus={() => setShowNearPopular(true)}
             placeholder="address, city..."
-            className="min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm"
+            className={cn(
+              "min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm relative z-[61]",
+              showNearPopular && "bg-background shadow-[0_-4px_16px_rgba(0,0,0,0.1)]",
+            )}
           />
 
           {showNearPopular && (
-            <div className="absolute top-full left-0 z-[60] w-[calc(100%+120px)] rounded-b-xl bg-card p-4 shadow-xl -mt-[1px]">
+            <div className="absolute top-full left-0 right-0 z-[60] w-full rounded-b-lg bg-background p-4 shadow-[0_8px_16px_rgba(0,0,0,0.1)] border border-t-0 border-border -mt-[1px] flex flex-col">
               <button
                 type="button"
-                className="flex w-full items-center gap-3 px-2 py-3 text-primary transition hover:bg-muted rounded-lg"
+                className="flex w-full items-center gap-3 rounded-lg px-2 py-3 text-primary transition hover:bg-muted"
               >
                 <div className="flex size-8 items-center justify-center rounded-full bg-primary/10">
                   <MapPin className="size-5" />
@@ -390,7 +399,7 @@ function DesktopSearchForm({
                 <span className="font-semibold">Current Location</span>
               </button>
 
-              <div className="mt-4 flex flex-col">
+              <div className="mt-2 flex flex-col">
                 {recentLocations.map((loc, i) => (
                   <button
                     key={i}
@@ -399,7 +408,7 @@ function DesktopSearchForm({
                       setNearValue(loc.split(",")[0]);
                       setShowNearPopular(false);
                     }}
-                    className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm transition hover:bg-muted rounded-lg"
+                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition hover:bg-muted"
                   >
                     <span className="truncate text-foreground/80">{loc}</span>
                   </button>
