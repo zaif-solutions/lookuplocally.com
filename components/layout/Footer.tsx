@@ -50,7 +50,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-card">
+    <footer className="border-t border-border bg-muted">
       <div className={cn(CONTENT_MAX, CONTENT_GUTTER, "py-10 sm:py-12 lg:py-14")}>
         <div className="grid gap-x-8 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {footerColumns.map((column) => (

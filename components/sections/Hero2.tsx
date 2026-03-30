@@ -29,7 +29,7 @@ const heroSlides: HeroSlide[] = [
   },
   {
     image:
-      "https://images.unsplash.com/photo-1559599101-f09722fb4948?w=1920&h=1080&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=1920&h=1080&fit=crop&q=80",
     heading: "Look your best",
     ctaLabel: "Hair Salons",
     ctaHref: "/search?q=hair-salons",

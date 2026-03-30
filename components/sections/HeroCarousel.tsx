@@ -51,7 +51,7 @@ export function HeroCarousel({ slides, interval = 6000 }: HeroCarouselProps) {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden h-dvh md:h-[80vh] md:min-h-[500px]"
+      className="relative isolate w-full overflow-hidden h-dvh md:h-[85vh] md:min-h-[500px]"
       aria-labelledby="hero-heading"
       aria-roledescription="carousel"
       aria-label="Featured categories"
@@ -78,14 +78,14 @@ export function HeroCarousel({ slides, interval = 6000 }: HeroCarouselProps) {
       ))}
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/40" aria-hidden />
+      <div className="absolute inset-0 bg-black/50" aria-hidden />
 
       {/* ─── Content ─── */}
       <div
         className={cn(
-          "relative flex h-full w-full flex-col justify-center",
-          CONTENT_MAX,
-          CONTENT_GUTTER,
+          "relative flex h-full w-full flex-col justify-center border items-center px-2 md:px-8 lg:px-12",
+          // CONTENT_MAX,
+          // CONTENT_GUTTER,
         )}
       >
         <div className="w-full min-w-0">
@@ -108,7 +108,7 @@ export function HeroCarousel({ slides, interval = 6000 }: HeroCarouselProps) {
               </h2>
               <Link
                 href={slide.ctaHref}
-                className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground transition hover:bg-primary/90 sm:text-base"
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-2.5 text-lg font-bold text-primary-foreground transition hover:bg-primary/90 sm:text-base"
                 tabIndex={i === active ? 0 : -1}
               >
                 {slide.ctaLabel}
