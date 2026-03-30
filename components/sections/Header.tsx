@@ -50,6 +50,8 @@ import {
   Scale,
   Shield,
   Salad,
+  CirclePlus,
+  LogIn,
 } from "@/components/ui/Icon";
 import type { LucideIcon } from "@/components/ui/Icon";
 import {
@@ -379,6 +381,52 @@ function MobileCategorySection({
   );
 }
 
+function MobileForBusinessSection({ onLinkClick }: { onLinkClick: () => void }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <CollapsibleTrigger className="flex w-full min-h-11 items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted">
+        <span>For Business</span>
+        <ChevronDown
+          className={cn(
+            "size-4 shrink-0 text-muted-foreground transition-transform duration-200",
+            open && "rotate-180",
+          )}
+        />
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <div className="flex flex-col gap-0.5 pb-1 pl-2">
+          <Link
+            href="/biz/add"
+            className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+            onClick={onLinkClick}
+          >
+            <CirclePlus className="size-4 shrink-0 text-muted-foreground" />
+            Add a Business
+          </Link>
+          <Link
+            href="/biz/claim"
+            className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+            onClick={onLinkClick}
+          >
+            <Shield className="size-4 shrink-0 text-muted-foreground" />
+            Claim Your Business
+          </Link>
+          <Link
+            href="/biz/login"
+            className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+            onClick={onLinkClick}
+          >
+            <LogIn className="size-4 shrink-0 text-muted-foreground" />
+            Login to Business Account
+          </Link>
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
 export function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -444,18 +492,57 @@ export function Header() {
             {/* Desktop nav buttons + mobile hamburger */}
             <div className="flex shrink-0 items-center justify-end justify-self-end gap-1 xl:gap-2">
               <div className="hidden shrink-0 items-center gap-1 xl:flex xl:gap-2">
-                <Button
-                  size="lg"
-                  className={cn(
-                    "h-10 shrink-0 px-3 font-semibold transition-colors duration-300",
-                    isTransparent
-                      ? "text-white hover:bg-white/10"
-                      : "",
-                  )}
-                  variant="ghost"
-                >
-                  For Business
-                </Button>
+                <NavigationMenu viewport={false} className="relative overflow-visible">
+                  <NavigationMenuList className="overflow-visible">
+                    <NavigationMenuItem className="relative overflow-visible">
+                      <NavigationMenuTrigger
+                        className={cn(
+                          "h-10 gap-1 rounded-md border-0 bg-transparent px-3 text-sm font-semibold shadow-none transition-colors duration-300",
+                          "hover:bg-transparent focus:bg-transparent focus-visible:ring-0",
+                          "data-[state=open]:bg-transparent data-[state=open]:hover:bg-transparent",
+                          "[&_svg]:text-current",
+                          isTransparent
+                            ? "text-white hover:bg-white/10 data-[state=open]:text-white"
+                            : "text-foreground hover:bg-muted data-[state=open]:text-foreground",
+                        )}
+                      >
+                        <span className="whitespace-nowrap">For Business</span>
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent
+                        className={cn(
+                          "z-50 p-2!",
+                          "w-[270px]!",
+                          "overflow-hidden rounded-xl border border-black/10 bg-white shadow-none",
+                          "dark:border-border dark:bg-card dark:shadow-none",
+                        )}
+                      >
+                        <div className="flex w-full flex-col gap-0.5">
+                          <NavigationMenuLink
+                            href="/biz/add"
+                            className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
+                          >
+                            <CirclePlus className="size-[18px] shrink-0 text-foreground/80" strokeWidth={1.35} />
+                            <span className="leading-tight">Add a Business</span>
+                          </NavigationMenuLink>
+                          <NavigationMenuLink
+                            href="/biz/claim"
+                            className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
+                          >
+                            <Shield className="size-[18px] shrink-0 text-foreground/80" strokeWidth={1.35} />
+                            <span className="leading-tight">Claim Your Business</span>
+                          </NavigationMenuLink>
+                          <NavigationMenuLink
+                            href="/biz/login"
+                            className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
+                          >
+                            <LogIn className="size-[18px] shrink-0 text-foreground/80" strokeWidth={1.35} />
+                            <span className="leading-tight">Login to Business Account</span>
+                          </NavigationMenuLink>
+                        </div>
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+                  </NavigationMenuList>
+                </NavigationMenu>
                 <Button
                   size="lg"
                   className={cn(
@@ -561,13 +648,7 @@ export function Header() {
 
                     {/* Quick links */}
                     <nav className="flex flex-col gap-0.5 border-t border-border pt-3">
-                      <Link
-                        href="/business"
-                        className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-                        onClick={closeMobile}
-                      >
-                        For Business
-                      </Link>
+                      <MobileForBusinessSection onLinkClick={closeMobile} />
                       <Link
                         href="/write-review"
                         className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"

@@ -19,6 +19,8 @@ export {
   Filter,
   MapPinned,
   Building2,
+  CirclePlus,
+  LogIn,
   UtensilsCrossed,
   PenLine,
   User,
