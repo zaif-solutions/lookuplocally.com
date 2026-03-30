@@ -78,6 +78,7 @@ import {
   Dumbbell,
   Menu,
   Search,
+  ChevronDown,
 } from "@/components/ui/Icon";
 
 const restaurantLinks = [
@@ -399,7 +400,7 @@ export function Header() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-full max-w-sm bg-background"
+                className="w-full max-w-sm bg-background overflow-y-auto"
               >
                 <SheetHeader>
                   <SheetTitle className="sr-only">Main menu</SheetTitle>
@@ -435,50 +436,88 @@ export function Header() {
                     </form>
                   </div>
 
-                  <div className="flex gap-2">
-                    <Link
-                      href="/login"
-                      className={cn(
-                        "flex flex-1 items-center justify-center rounded-md border border-input py-2 text-sm font-medium text-foreground hover:bg-muted",
-                      )}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Log In
-                    </Link>
-                    <Link
-                      href="/signup"
-                      className={cn(
-                        "flex flex-1 items-center justify-center rounded-md bg-primary py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90",
-                      )}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Sign Up
-                    </Link>
-                  </div>
 
-                  <nav className="flex flex-col gap-1 border-t border-border pt-4 text-sm">
-                    <Link
-                      href="/business"
-                      className="border-b border-border py-3 font-medium text-foreground hover:bg-muted/50"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      For Business
-                    </Link>
-                    <Link
-                      href="/search?write-review"
-                      className="border-b border-border py-3 font-medium text-foreground hover:bg-muted/50"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Write a Review
-                    </Link>
-                    <Link
-                      href="/search?ref=project"
-                      className="py-3 font-medium text-foreground hover:bg-muted/50"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Start a Project
-                    </Link>
-                  </nav>
+
+                    <div className="flex flex-col gap-1 border-t border-border pt-4">
+                      {categories.map((cat) => (
+                        <div key={cat.label} className="border-b border-border">
+                          {cat.hasDropdown ? (
+                            <details className="group">
+                              <summary className="flex cursor-pointer list-none items-center justify-between py-3 font-bold text-foreground">
+                                {cat.label}
+                                <ChevronDown className="size-4 transition-transform group-open:rotate-180" />
+                              </summary>
+                              <div className="flex flex-col gap-1 pb-4 pl-4">
+                                {cat.links?.map((link) => (
+                                  <Link
+                                    key={link.label}
+                                    href={link.href}
+                                    className="flex items-center gap-2 py-2 text-[15px] font-medium text-[#202124] hover:text-primary"
+                                    onClick={() => setIsOpen(false)}
+                                  >
+                                    <link.icon className="size-5 shrink-0 text-[#202124]/80" />
+                                    {link.label}
+                                  </Link>
+                                ))}
+                              </div>
+                            </details>
+                          ) : (
+                            <Link
+                              href={cat.href}
+                              className="block py-3 font-bold text-foreground hover:text-primary"
+                              onClick={() => setIsOpen(false)}
+                            >
+                              {cat.label}
+                            </Link>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex flex-col gap-1 border-t border-border pt-4 text-sm">
+                      <Link
+                        href="/business"
+                        className="border-b border-border py-3 font-medium text-foreground hover:bg-muted/50"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        For Business
+                      </Link>
+                      <Link
+                        href="/search?write-review"
+                        className="border-b border-border py-3 font-medium text-foreground hover:bg-muted/50"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Write a Review
+                      </Link>
+                      <Link
+                        href="/search?ref=project"
+                        className="py-3 font-medium text-foreground hover:bg-muted/50"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Start a Project
+                      </Link>
+                    </div>
+
+                    <div className="mt-auto flex gap-2 pt-4">
+                      <Link
+                        href="/login"
+                        className={cn(
+                          "flex flex-1 items-center justify-center rounded-md border border-input py-2 text-sm font-medium text-foreground hover:bg-muted",
+                        )}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Log In
+                      </Link>
+                      <Link
+                        href="/signup"
+                        className={cn(
+                          "flex flex-1 items-center justify-center rounded-md bg-primary py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90",
+                        )}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Sign Up
+                      </Link>
+                    </div>
                 </div>
               </SheetContent>
             </Sheet>
@@ -488,7 +527,7 @@ export function Header() {
 
         <NavigationMenu
           className={cn(
-            "w-full max-w-full justify-start",
+            "hidden xl:flex w-full max-w-full justify-start",
           )}
           aria-label="Browse categories"
           viewport={false}
@@ -502,14 +541,14 @@ export function Header() {
                       {cat.label}
                       <span className="absolute bottom-0 left-0 h-[3px] w-full scale-x-0 bg-[#d32323] group-data-[state=open]:scale-x-100" />
                     </NavigationMenuTrigger>
-                    <NavigationMenuContent className="w-max">
+                    <NavigationMenuContent className={cn("w-max", cat.label === "More" && "md:right-0 md:left-auto")}>
                       <div className="p-4"> {/* <-- ADJUST THIS PADDING FOR THE WHOLE DROPDOWN BOX --> */}
-                        <div className="grid grid-flow-col grid-rows-5 gap-x-6 gap-y-0 text-gray-900">
+                        <div className="grid grid-flow-col grid-rows-5 gap-x-6 gap-y-1 text-gray-900">
                           {cat.links?.map((link) => (
                             <NavigationMenuLink
                               key={link.label}
                               href={link.href}
-                              className="group flex w-max whitespace-nowrap flex-row items-center gap-2 rounded-lg pt-3 pb-1.5 text-[15px] font-medium transition-colors hover:bg-gray-100 hover:text-foreground"
+                              className="group flex w-max whitespace-nowrap flex-row items-center gap-2 rounded-lg px-3 py-1.5 text-[15px] 2xl:text-[17px] font-medium transition-colors hover:bg-gray-100 hover:text-foreground"
                             >
                               <link.icon className="size-[22px] shrink-0 text-[#202124]/80 transition-colors group-hover:text-[#202124]" />
                               <span className="text-[#202125] font-bold">{link.label}</span>
