@@ -75,6 +75,9 @@ import {
   Dog,
   Landmark,
   Building,
+  Dumbbell,
+  Menu,
+  Search,
 } from "@/components/ui/Icon";
 
 const restaurantLinks = [
@@ -488,6 +491,7 @@ export function Header() {
             "w-full max-w-full justify-start",
           )}
           aria-label="Browse categories"
+          viewport={false}
         >
           <NavigationMenuList className="flex-wrap justify-start gap-1">
             {categories.map((cat) => (
@@ -496,16 +500,16 @@ export function Header() {
                   <>
                     <NavigationMenuTrigger className="group relative h-auto bg-transparent px-2.5 py-4 text-[15px] font-bold text-[#202124] transition-colors hover:bg-transparent hover:text-primary data-[state=open]:text-primary 2xl:px-4 2xl:text-lg">
                       {cat.label}
-                      <span className="absolute top-0 left-0 h-[3px] w-full scale-x-0 bg-[#d32323] group-data-[state=open]:scale-x-100" />
+                      <span className="absolute bottom-0 left-0 h-[3px] w-full scale-x-0 bg-[#d32323] group-data-[state=open]:scale-x-100" />
                     </NavigationMenuTrigger>
                     <NavigationMenuContent className="w-max">
-                      <div className="p-3"> {/* <-- ADJUST THIS PADDING FOR THE WHOLE DROPDOWN BOX --> */}
+                      <div className="p-4"> {/* <-- ADJUST THIS PADDING FOR THE WHOLE DROPDOWN BOX --> */}
                         <div className="grid grid-flow-col grid-rows-5 gap-x-6 gap-y-0 text-gray-900">
                           {cat.links?.map((link) => (
                             <NavigationMenuLink
                               key={link.label}
                               href={link.href}
-                              className="group flex w-max whitespace-nowrap flex-row items-center gap-2 rounded-lg px-2 py-1 text-[15px] font-medium transition-colors hover:bg-gray-100 hover:text-foreground"
+                              className="group flex w-max whitespace-nowrap flex-row items-center gap-2 rounded-lg pt-3 pb-1.5 text-[15px] font-medium transition-colors hover:bg-gray-100 hover:text-foreground"
                             >
                               <link.icon className="size-[22px] shrink-0 text-[#202124]/80 transition-colors group-hover:text-[#202124]" />
                               <span className="text-[#202125] font-bold">{link.label}</span>
