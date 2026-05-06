@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { CONTENT_GUTTER, CONTENT_MAX } from "@/lib/content-layout";
+import { PAGE_SHELL } from "@/lib/content-layout";
 
 function HeaderSearchForm({
   className,
@@ -20,7 +20,7 @@ function HeaderSearchForm({
       action="/search"
       method="get"
       className={cn(
-        "flex w-full overflow-hidden rounded-md border border-border bg-card shadow-md",
+        "flex w-full overflow-hidden rounded-none border border-border bg-card shadow-md",
         "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch",
         className,
       )}
@@ -54,7 +54,7 @@ function HeaderSearchForm({
       <Button
         type="submit"
         size="lg"
-        className="min-h-12 w-full shrink-0 rounded-none rounded-b-md border-none px-4 py-3 text-base font-semibold sm:h-auto sm:w-auto sm:rounded-none sm:rounded-r-md sm:px-3.5 sm:text-lg"
+        className="min-h-12 w-full shrink-0 rounded-none border-none px-4 py-3 text-base font-semibold sm:h-auto sm:w-auto sm:px-3.5 sm:text-lg"
       >
         <Search className="size-5 sm:mr-1" aria-hidden />
         Search
@@ -90,7 +90,7 @@ export function Header() {
 
   const navLinkClass = (extra?: string) =>
     cn(
-      "inline-flex items-center whitespace-nowrap rounded-md px-2 py-2 text-sm font-semibold transition-colors",
+      "inline-flex items-center whitespace-nowrap rounded-none px-2 py-2 text-sm font-semibold transition-colors",
       isHome
         ? "text-white hover:bg-white/10"
         : "text-foreground hover:bg-muted",
@@ -106,7 +106,7 @@ export function Header() {
           : "sticky border-b border-border bg-card pt-[env(safe-area-inset-top)] shadow-sm",
       )}
     >
-      <div className={cn(CONTENT_MAX, CONTENT_GUTTER)}>
+      <div className={PAGE_SHELL}>
         {/*
           Desktop: grid [logo | flexible center | nav]. Search lives only in the
           center track so it can never paint under “Write a Review” / buttons.
@@ -213,7 +213,7 @@ export function Header() {
               : "border-border bg-card",
           )}
         >
-          <div className={cn(CONTENT_MAX, CONTENT_GUTTER, "py-4")}>
+          <div className={cn(PAGE_SHELL, "py-4")}>
             <HeaderSearchForm idPrefix="hdr-mob" className="shadow-lg" />
             <nav className="mt-4 flex flex-col gap-0.5" aria-label="Mobile">
               <Link

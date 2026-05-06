@@ -23,3 +23,11 @@ export interface Category {
   slug: string;
   count?: number;
 }
+
+/** Home hero carousel slide — data lives in lib/data/home.ts */
+export interface HeroSlide {
+  image: string;
+  heading: string;
+  ctaLabel: string;
+  ctaHref: string;
+}

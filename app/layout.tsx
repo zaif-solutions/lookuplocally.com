@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins, Open_Sans } from "next/font/google";
 import "./globals.css";
-import { Footer } from "@/components/layout";
+import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/sections/Header";
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
 

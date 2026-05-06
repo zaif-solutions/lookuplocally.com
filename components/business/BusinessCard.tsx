@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Star, MapPin } from "@/components/ui/Icon";
 import type { Business } from "@/types";
@@ -16,17 +17,20 @@ export function BusinessCard({ business, className }: BusinessCardProps) {
     <Link
       href={`/biz/${business.slug}`}
       className={cn(
-        "block rounded-lg border border-border bg-card p-4 transition-shadow hover:shadow-md",
-        className
+        "block rounded-none border border-border bg-card p-4 transition-shadow hover:shadow-md",
+        className,
       )}
     >
       <div className="flex gap-4">
-        <div className="size-20 shrink-0 overflow-hidden rounded bg-muted">
+        <div className="size-20 shrink-0 overflow-hidden rounded-none bg-muted">
           {business.imageUrl ? (
-            <img
+            <Image
               src={business.imageUrl}
               alt=""
+              width={80}
+              height={80}
               className="size-full object-cover"
+              sizes="80px"
             />
           ) : (
             <div className="size-full bg-muted" />

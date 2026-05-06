@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Star, ChevronRight } from "@/components/ui/Icon";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { CONTENT_GUTTER, CONTENT_MAX } from "@/lib/content-layout";
+import { PAGE_SHELL } from "@/lib/content-layout";
 import { SITE_NAME } from "@/lib/constants";
 
 export function Hero() {
@@ -32,13 +33,12 @@ export function Hero() {
       <div
         className={cn(
           "relative z-10 flex min-h-[min(85dvh,880px)] flex-col justify-center pb-10 pt-28 sm:min-h-[min(88dvh,840px)] sm:pb-16 sm:pt-32 md:pt-36 lg:pb-20 lg:pt-40",
-          CONTENT_MAX,
-          CONTENT_GUTTER,
+          PAGE_SHELL,
         )}
       >
         <div className="grid items-stretch gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_min(100%,24rem)] lg:items-end xl:grid-cols-[minmax(0,1fr)_26rem]">
           <div className="min-w-0 max-w-3xl">
-            <p className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/25 bg-white/5 px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-white/90 backdrop-blur-sm sm:text-xs">
+            <p className="inline-flex max-w-full items-center gap-2 rounded-none border border-white/25 bg-white/5 px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-white/90 backdrop-blur-sm sm:text-xs">
               <Star className="size-3.5 shrink-0" aria-hidden />
               <span className="line-clamp-2 sm:line-clamp-none">
                 Trusted local discovery platform
@@ -59,13 +59,16 @@ export function Hero() {
               Use the search bar at the top to find businesses and services near
               you.
             </p>
-            <Link
-              href="/search"
-              className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-lg transition hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto"
+            <Button
+              asChild
+              size="lg"
+              className="mt-3 w-full gap-2 px-6 py-3 text-base font-semibold shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto"
             >
-              Go to search
-              <ChevronRight className="size-4 shrink-0" aria-hidden />
-            </Link>
+              <Link href="/search">
+                Go to search
+                <ChevronRight className="size-4 shrink-0" aria-hidden />
+              </Link>
+            </Button>
 
             <div className="mt-6 flex flex-col gap-2 text-xs text-white/80 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-2 sm:text-sm">
               <span>1.2M+ monthly visitors</span>
@@ -80,7 +83,7 @@ export function Hero() {
             </div>
           </div>
 
-          <aside className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md sm:p-6">
+          <aside className="rounded-none border border-white/20 bg-white/10 p-5 backdrop-blur-md sm:p-6">
             <h2 className="text-base font-semibold text-white sm:text-lg">
               Why people choose {SITE_NAME}
             </h2>

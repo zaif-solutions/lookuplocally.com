@@ -1,0 +1,92 @@
+import type { Business, HeroSlide } from "@/types";
+
+export const homeHeroSlides: HeroSlide[] = [
+  {
+    image:
+      "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?w=1920&h=1080&fit=crop&q=80",
+    heading: "Get a deep clean",
+    ctaLabel: "Cleaners",
+    ctaHref: "/search?q=cleaners",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&h=1080&fit=crop&q=80",
+    heading: "Discover great dining",
+    ctaLabel: "Restaurants",
+    ctaHref: "/search?q=restaurants",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1676210134188-4c05dd172f89?w=1920&h=1080&fit=crop&q=80",
+    heading: "Find trusted plumbers",
+    ctaLabel: "Plumbers",
+    ctaHref: "/search?q=plumbers",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=1920&h=1080&fit=crop&q=80",
+    heading: "Look your best",
+    ctaLabel: "Hair Salons",
+    ctaHref: "/search?q=hair-salons",
+  },
+];
+
+const ISO_STUB = "2024-01-01T00:00:00.000Z";
+
+export const homeRecentActivity: {
+  activityLabel: string;
+  activityTime: string;
+  business: Business;
+}[] = [
+  {
+    activityLabel: "Yi Z. added 7 photos",
+    activityTime: "1 year ago",
+    business: {
+      id: "act-1",
+      name: "Harbour Master Cafe",
+      slug: "harbour-master-cafe",
+      category: "Cafes",
+      address: "Waterfront District",
+      rating: 4.6,
+      reviewCount: 128,
+      imageUrl:
+        "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop",
+      createdAt: ISO_STUB,
+      updatedAt: ISO_STUB,
+    },
+  },
+  {
+    activityLabel: "Diana C. wrote a review",
+    activityTime: "1 year ago",
+    business: {
+      id: "act-2",
+      name: "Cafe Luna",
+      slug: "cafe-luna",
+      category: "Coffee & Tea",
+      address: "Downtown",
+      rating: 4.8,
+      reviewCount: 214,
+      imageUrl:
+        "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=400&fit=crop",
+      createdAt: ISO_STUB,
+      updatedAt: ISO_STUB,
+    },
+  },
+  {
+    activityLabel: "Diana C. added a photo",
+    activityTime: "1 year ago",
+    business: {
+      id: "act-3",
+      name: "Dynamic Maintenance Solutions",
+      slug: "dynamic-maintenance-solutions",
+      category: "Home Services",
+      address: "Metro area",
+      rating: 4.9,
+      reviewCount: 89,
+      imageUrl:
+        "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=400&fit=crop",
+      createdAt: ISO_STUB,
+      updatedAt: ISO_STUB,
+    },
+  },
+];

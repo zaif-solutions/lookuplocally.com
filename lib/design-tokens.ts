@@ -22,14 +22,14 @@ export const colors = {
   },
 } as const;
 
-/** Default rounded = md (0.5rem). Use rounded-md or rounded for UI. */
+/** Square corners — matches CSS variables in app/globals.css */
 export const radius = {
-  sm: "0.25rem",
-  DEFAULT: "0.5rem", // md — design system default
-  md: "0.5rem",
-  lg: "0.5rem",
-  xl: "0.75rem",
-  "2xl": "1rem",
+  sm: "0",
+  DEFAULT: "0",
+  md: "0",
+  lg: "0",
+  xl: "0",
+  "2xl": "0",
 } as const;
 
 export const fonts = {

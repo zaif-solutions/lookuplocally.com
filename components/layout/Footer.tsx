@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SITE_NAME } from "@/lib/constants";
-import { CONTENT_GUTTER, CONTENT_MAX } from "@/lib/content-layout";
+import { PAGE_SHELL } from "@/lib/content-layout";
 import { cn } from "@/lib/utils";
 
 const footerColumns = [
@@ -51,7 +51,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-border bg-muted">
-      <div className={cn(CONTENT_MAX, CONTENT_GUTTER, "py-10 sm:py-12 lg:py-14")}>
+      <div className={cn(PAGE_SHELL, "py-10 sm:py-12 lg:py-14")}>
         <div className="grid gap-x-8 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {footerColumns.map((column) => (
             <nav key={column.title} aria-label={column.title}>

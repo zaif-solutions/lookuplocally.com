@@ -62,6 +62,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { SITE_NAME } from "@/lib/constants";
+import { PAGE_SHELL } from "@/lib/content-layout";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -233,7 +234,7 @@ function DesktopSearchForm({
       action="/search"
       method="get"
       className={cn(
-        "flex w-full overflow-hidden rounded-md  bg-card shadow-md",
+        "flex w-full overflow-hidden rounded-none bg-card shadow-md",
         "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch",
         className,
       )}
@@ -267,7 +268,7 @@ function DesktopSearchForm({
       <Button
         type="button"
         size="lg"
-        className="h-full shrink-0 rounded-l-lg text-lg font-semibold"
+        className="h-full shrink-0 text-lg font-semibold"
       >
         <Search className="size-5" />
         <Label
@@ -302,8 +303,8 @@ function DesktopCategoryMegaItem({ cat, isTransparent = false }: { cat: Category
           "box-border max-w-[calc(100vw-2.5rem)]! min-w-0",
           "w-[min(800px,calc(100vw-2.5rem))] md:w-[min(620px,calc(100vw-2.5rem))]!",
           "z-50 p-4! pb-4! pl-4! pr-4! pt-4!",
-          "overflow-hidden rounded-xl border border-black/10 bg-white shadow-none",
-          "dark:border-border dark:bg-card dark:shadow-none rounded-none",
+          "overflow-hidden rounded-none border border-black/10 bg-white shadow-none",
+          "dark:border-border dark:bg-card dark:shadow-none",
         )}
       >
         <div
@@ -315,7 +316,7 @@ function DesktopCategoryMegaItem({ cat, isTransparent = false }: { cat: Category
             <NavigationMenuLink
               key={link.label}
               href={link.href}
-              className="group/row flex! min-w-0 w-full flex-row! items-center gap-3 whitespace-nowrap rounded-lg px-2 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80 [&_svg]:shrink-0"
+              className="group/row flex! min-w-0 w-full flex-row! items-center gap-3 whitespace-nowrap rounded-none px-2 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80 [&_svg]:shrink-0"
             >
               <link.icon
                 className="size-[18px] shrink-0 text-foreground/80"
@@ -343,7 +344,7 @@ function MobileCategorySection({
     return (
       <Link
         href={category.href}
-        className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+        className="flex min-h-11 items-center rounded-none px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
         onClick={onLinkClick}
       >
         {category.label}
@@ -353,7 +354,7 @@ function MobileCategorySection({
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
-      <CollapsibleTrigger className="flex w-full min-h-11 items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted">
+      <CollapsibleTrigger className="flex w-full min-h-11 items-center justify-between rounded-none px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted">
         <span>{category.label}</span>
         <ChevronDown
           className={cn(
@@ -368,7 +369,7 @@ function MobileCategorySection({
             <Link
               key={link.label}
               href={link.href}
-              className="flex items-center gap-2.5 whitespace-nowrap rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted lg:px-1 lg:py-1"
+              className="flex items-center gap-2.5 whitespace-nowrap rounded-none px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted lg:px-1 lg:py-1"
               onClick={onLinkClick}
             >
               <link.icon className="size-4 shrink-0 text-muted-foreground" />
@@ -386,7 +387,7 @@ function MobileForBusinessSection({ onLinkClick }: { onLinkClick: () => void }) 
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
-      <CollapsibleTrigger className="flex w-full min-h-11 items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted">
+      <CollapsibleTrigger className="flex w-full min-h-11 items-center justify-between rounded-none px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted">
         <span>For Business</span>
         <ChevronDown
           className={cn(
@@ -399,7 +400,7 @@ function MobileForBusinessSection({ onLinkClick }: { onLinkClick: () => void }) 
         <div className="flex flex-col gap-0.5 pb-1 pl-2">
           <Link
             href="/biz/add"
-            className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+            className="flex items-center gap-2.5 rounded-none px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
             onClick={onLinkClick}
           >
             <CirclePlus className="size-4 shrink-0 text-muted-foreground" />
@@ -407,7 +408,7 @@ function MobileForBusinessSection({ onLinkClick }: { onLinkClick: () => void }) 
           </Link>
           <Link
             href="/biz/claim"
-            className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+            className="flex items-center gap-2.5 rounded-none px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
             onClick={onLinkClick}
           >
             <Shield className="size-4 shrink-0 text-muted-foreground" />
@@ -415,7 +416,7 @@ function MobileForBusinessSection({ onLinkClick }: { onLinkClick: () => void }) 
           </Link>
           <Link
             href="/biz/login"
-            className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+            className="flex items-center gap-2.5 rounded-none px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
             onClick={onLinkClick}
           >
             <LogIn className="size-4 shrink-0 text-muted-foreground" />
@@ -455,7 +456,7 @@ export function Header() {
             : "border-b border-border bg-background/95 shadow-sm backdrop-blur-md",
         )}
       >
-        <div className="mx-auto w-full content-max overflow-visible px-2 md:px-8 lg:px-12">
+        <div className={cn(PAGE_SHELL, "overflow-visible")}>
           {/* ─── Main header row ─── */}
           <div
             className={cn(
@@ -485,7 +486,7 @@ export function Header() {
             <div className="hidden min-w-0 w-full justify-self-center sm:flex">
               <DesktopSearchForm
                 idPrefix="hdr-desk"
-                className="w-full min-w-0 max-w-full 2xl:max-w-3xl"
+                className="w-full min-w-0 max-w-full 3xl:max-w-3xl"
               />
             </div>
 
@@ -497,7 +498,7 @@ export function Header() {
                     <NavigationMenuItem className="relative overflow-visible">
                       <NavigationMenuTrigger
                         className={cn(
-                          "h-10 gap-1 rounded-md border-0 bg-transparent px-3 text-sm font-semibold shadow-none transition-colors duration-300",
+                          "h-10 gap-1 rounded-none border-0 bg-transparent px-3 text-sm font-semibold shadow-none transition-colors duration-300",
                           "hover:bg-transparent focus:bg-transparent focus-visible:ring-0",
                           "data-[state=open]:bg-transparent data-[state=open]:hover:bg-transparent",
                           "[&_svg]:text-current",
@@ -512,28 +513,28 @@ export function Header() {
                         className={cn(
                           "z-50 p-2!",
                           "w-[270px]!",
-                          "overflow-hidden rounded-xl border border-black/10 bg-white shadow-none",
+                          "overflow-hidden rounded-none border border-black/10 bg-white shadow-none",
                           "dark:border-border dark:bg-card dark:shadow-none",
                         )}
                       >
                         <div className="flex w-full flex-col gap-0.5">
                           <NavigationMenuLink
                             href="/biz/add"
-                            className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
+                            className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-none px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
                           >
                             <CirclePlus className="size-[18px] shrink-0 text-foreground/80" strokeWidth={1.35} />
                             <span className="leading-tight">Add a Business</span>
                           </NavigationMenuLink>
                           <NavigationMenuLink
                             href="/biz/claim"
-                            className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
+                            className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-none px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
                           >
                             <Shield className="size-[18px] shrink-0 text-foreground/80" strokeWidth={1.35} />
                             <span className="leading-tight">Claim Your Business</span>
                           </NavigationMenuLink>
                           <NavigationMenuLink
                             href="/biz/login"
-                            className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
+                            className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-none px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
                           >
                             <LogIn className="size-[18px] shrink-0 text-foreground/80" strokeWidth={1.35} />
                             <span className="leading-tight">Login to Business Account</span>
@@ -584,7 +585,7 @@ export function Header() {
                   <button
                     type="button"
                     className={cn(
-                      "inline-flex shrink-0 items-center justify-center rounded-md p-2 transition-colors xl:hidden",
+                      "inline-flex shrink-0 items-center justify-center rounded-none p-2 transition-colors xl:hidden",
                       isTransparent
                         ? "text-white hover:bg-white/15"
                         : "text-foreground hover:bg-muted",
@@ -618,13 +619,13 @@ export function Header() {
                           name="q"
                           type="search"
                           placeholder="things to do, nail salons…"
-                          className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          className="w-full rounded-none border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         />
                         <input
                           name="loc"
                           type="text"
                           placeholder="Location"
-                          className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          className="w-full rounded-none border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         />
                         <Button type="submit" className="w-full">
                           Search
@@ -651,14 +652,14 @@ export function Header() {
                       <MobileForBusinessSection onLinkClick={closeMobile} />
                       <Link
                         href="/write-review"
-                        className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                        className="flex min-h-11 items-center rounded-none px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                         onClick={closeMobile}
                       >
                         Write a Review
                       </Link>
                       <Link
                         href="/search?ref=project"
-                        className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                        className="flex min-h-11 items-center rounded-none px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                         onClick={closeMobile}
                       >
                         Start a Project
@@ -702,7 +703,7 @@ export function Header() {
                     <NavigationMenuLink
                       href={cat.href}
                       className={cn(
-                        "flex h-auto items-center px-3 py-3 text-[15px] font-medium transition-colors 2xl:px-4 2xl:text-base",
+                        "flex h-auto items-center px-3 py-3 text-[15px] font-medium transition-colors 3xl:px-4 3xl:text-base",
                         isTransparent
                           ? "text-white/80 hover:text-white"
                           : "text-muted-foreground hover:text-foreground",

@@ -3,15 +3,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { PAGE_SHELL } from "@/lib/content-layout";
 import { cn } from "@/lib/utils";
-import { CONTENT_GUTTER, CONTENT_MAX } from "@/lib/content-layout";
-
-export interface HeroSlide {
-  image: string;
-  heading: string;
-  ctaLabel: string;
-  ctaHref: string;
-}
+import type { HeroSlide } from "@/types";
 
 interface HeroCarouselProps {
   slides: HeroSlide[];
@@ -21,6 +16,8 @@ interface HeroCarouselProps {
 export function HeroCarousel({ slides, interval = 6000 }: HeroCarouselProps) {
   const [active, setActive] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const n = slides.length;
+  const prevIndex = n > 0 ? (active - 1 + n) % n : 0;
 
   const startTimer = useCallback(() => {
     timerRef.current = setInterval(() => {
@@ -49,43 +46,45 @@ export function HeroCarousel({ slides, interval = 6000 }: HeroCarouselProps) {
     [stopTimer, startTimer],
   );
 
+  const shouldMountImage = (i: number) =>
+    n <= 1 ? i === active : i === active || i === prevIndex;
+
   return (
     <section
-      className="relative isolate w-full overflow-hidden h-dvh md:h-[85vh] md:min-h-[500px]"
+      className="relative isolate h-dvh w-full overflow-hidden md:h-[85vh] md:min-h-[500px]"
       aria-labelledby="hero-heading"
       aria-roledescription="carousel"
       aria-label="Featured categories"
     >
-      {/* ─── Stacked images with crossfade ─── */}
-      {slides.map((slide, i) => (
-        <div
-          key={slide.image}
-          className={cn(
-            "absolute inset-0 transition-opacity duration-1000 ease-in-out",
-            i === active ? "opacity-100" : "opacity-0",
-          )}
-          aria-hidden={i !== active}
-        >
-          <Image
-            src={slide.image}
-            alt=""
-            fill
-            priority={i === 0}
-            sizes="100vw"
-            className="object-cover object-center"
-          />
-        </div>
-      ))}
+      {/* Only active + previous slide stay mounted — avoids decoding every hero asset at once */}
+      {slides.map((slide, i) =>
+        shouldMountImage(i) ? (
+          <div
+            key={slide.image}
+            className={cn(
+              "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+              i === active ? "z-[1] opacity-100" : "z-0 opacity-0",
+            )}
+            aria-hidden={i !== active}
+          >
+            <Image
+              src={slide.image}
+              alt=""
+              fill
+              priority={i === 0}
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          </div>
+        ) : null,
+      )}
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50" aria-hidden />
+      <div className="absolute inset-0 z-[2] bg-black/50" aria-hidden />
 
-      {/* ─── Content ─── */}
       <div
         className={cn(
-          "relative flex h-full w-full flex-col justify-center border items-center px-2 md:px-8 lg:px-12",
-          // CONTENT_MAX,
-          // CONTENT_GUTTER,
+          "relative z-[3] flex h-full w-full flex-col items-center justify-center",
+          PAGE_SHELL,
         )}
       >
         <div className="w-full min-w-0">
@@ -95,8 +94,8 @@ export function HeroCarousel({ slides, interval = 6000 }: HeroCarouselProps) {
               className={cn(
                 "transition-all duration-700 ease-out",
                 i === active
-                  ? "visible relative opacity-100 translate-y-0"
-                  : "invisible absolute opacity-0 translate-y-3",
+                  ? "visible relative translate-y-0 opacity-100"
+                  : "invisible absolute translate-y-3 opacity-0",
               )}
               aria-hidden={i !== active}
             >
@@ -106,18 +105,15 @@ export function HeroCarousel({ slides, interval = 6000 }: HeroCarouselProps) {
               >
                 {slide.heading}
               </h2>
-              <Link
-                href={slide.ctaHref}
-                className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-2.5 text-lg font-bold text-primary-foreground transition hover:bg-primary/90 sm:text-base"
-                tabIndex={i === active ? 0 : -1}
-              >
-                {slide.ctaLabel}
-              </Link>
+              <Button asChild size="lg" className="text-base font-bold sm:text-lg">
+                <Link href={slide.ctaHref} tabIndex={i === active ? 0 : -1}>
+                  {slide.ctaLabel}
+                </Link>
+              </Button>
             </div>
           ))}
         </div>
 
-        {/* ─── Dots ─── */}
         <div
           className="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-2 sm:bottom-10"
           role="tablist"
@@ -132,13 +128,13 @@ export function HeroCarousel({ slides, interval = 6000 }: HeroCarouselProps) {
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => goTo(i)}
               className={cn(
-                "relative h-2 overflow-hidden rounded-full transition-all duration-300",
+                "relative h-2 overflow-hidden rounded-none transition-all duration-300",
                 i === active ? "w-8 bg-white" : "w-2 bg-white/50 hover:bg-white/70",
               )}
             >
               {i === active && (
                 <span
-                  className="absolute inset-y-0 left-0 rounded-full bg-primary"
+                  className="absolute inset-y-0 left-0 bg-primary"
                   style={{
                     animation: `hero-dot-fill ${interval}ms linear forwards`,
                   }}
