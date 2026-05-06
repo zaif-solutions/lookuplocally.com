@@ -4,16 +4,15 @@ import { Star, ChevronRight } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { PAGE_SHELL } from "@/lib/content-layout";
-import { SITE_NAME } from "@/lib/constants";
 
 export function Hero() {
   return (
     <section
-      className="relative isolate w-full max-w-[100vw] overflow-x-hidden bg-neutral-950 text-white"
+      className="relative isolate h-dvh min-h-[500px] w-full overflow-x-hidden md:h-[85vh] md:min-h-[500px]"
       aria-labelledby="hero-heading"
     >
       <Image
-        src="/hero-slides/painter.jpg"
+        src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&h=1080&fit=crop&q=80"
         alt="Professional painting a wall"
         fill
         priority
@@ -22,27 +21,29 @@ export function Hero() {
       />
 
       <div
-        className="pointer-events-none absolute inset-0 z-2 bg-linear-to-b from-black/75 via-black/35 to-black/70"
+        className="pointer-events-none absolute inset-0 z-[1] bg-linear-to-b from-black/75 via-black/35 to-black/70"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-0 z-2 bg-linear-to-r from-black/70 via-black/40 to-black/10"
+        className="pointer-events-none absolute inset-0 z-[1] bg-linear-to-r from-black/70 via-black/40 to-black/10"
         aria-hidden
       />
 
-      <div
-        className={cn(
-          "relative z-10 flex min-h-[min(85dvh,880px)] flex-col justify-center pb-10 pt-28 sm:min-h-[min(88dvh,840px)] sm:pb-16 sm:pt-32 md:pt-36 lg:pb-20 lg:pt-40",
-          PAGE_SHELL,
-        )}
-      >
-        <div className="grid items-stretch gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_min(100%,24rem)] lg:items-end xl:grid-cols-[minmax(0,1fr)_26rem]">
+      {/* Pin copy to bottom of the hero image; bottom inset mirrors header clearance from top */}
+      <div className="absolute inset-0 z-10 flex flex-col justify-end">
+        <div
+          className={cn(
+            PAGE_SHELL,
+           
+            "pb-[max(8rem,env(safe-area-inset-bottom))] sm:pb-[max(9rem,env(safe-area-inset-bottom))] md:pb-[max(10rem,env(safe-area-inset-bottom))]",
+          )}
+        >
           <div className="min-w-0 max-w-3xl">
             <p className="inline-flex max-w-full items-center gap-2 rounded-none border border-white/25 bg-white/5 px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-white/90 backdrop-blur-sm sm:text-xs">
-              <Star className="size-3.5 shrink-0" aria-hidden />
-              <span className="line-clamp-2 sm:line-clamp-none">
-                Trusted local discovery platform
-              </span>
+            <Star className="size-3.5 shrink-0" aria-hidden />
+            <span className="line-clamp-2 sm:line-clamp-none">
+              Trusted local discovery platform
+            </span>
             </p>
             <h1
               id="hero-heading"
@@ -50,15 +51,11 @@ export function Hero() {
             >
               Find the right local business in minutes.
             </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/85 sm:mt-5 sm:text-base md:text-lg">
+            <p className="my-4 max-w-2xl text-sm leading-relaxed text-white/85 sm:my-5 sm:text-base md:text-lg">
               Compare real reviews, check service quality, and connect with
               top-rated businesses near you - all in one trusted place.
             </p>
 
-            <p className="mt-6 text-sm text-white/75 sm:mt-8">
-              Use the search bar at the top to find businesses and services near
-              you.
-            </p>
             <Button
               asChild
               size="lg"
@@ -69,38 +66,7 @@ export function Hero() {
                 <ChevronRight className="size-4 shrink-0" aria-hidden />
               </Link>
             </Button>
-
-            <div className="mt-6 flex flex-col gap-2 text-xs text-white/80 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-2 sm:text-sm">
-              <span>1.2M+ monthly visitors</span>
-              <span className="hidden sm:inline" aria-hidden>
-                ·
-              </span>
-              <span>250K+ verified reviews</span>
-              <span className="hidden sm:inline" aria-hidden>
-                ·
-              </span>
-              <span>100+ categories</span>
-            </div>
           </div>
-
-          <aside className="rounded-none border border-white/20 bg-white/10 p-5 backdrop-blur-md sm:p-6">
-            <h2 className="text-base font-semibold text-white sm:text-lg">
-              Why people choose {SITE_NAME}
-            </h2>
-            <ul className="mt-3 flex flex-col gap-2.5 text-sm leading-relaxed text-white/85 sm:mt-4 sm:gap-3">
-              <li>Verified review moderation to reduce fake ratings.</li>
-              <li>Faster response rates from active local businesses.</li>
-              <li>Location-aware search built for neighborhood intent.</li>
-              <li>Transparent business profiles with recent updates.</li>
-            </ul>
-            <Link
-              href="/biz"
-              className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/90"
-            >
-              Browse all categories
-              <ChevronRight className="size-4" aria-hidden />
-            </Link>
-          </aside>
         </div>
       </div>
     </section>
