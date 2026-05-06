@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   Menu,
@@ -41,8 +41,6 @@ import {
   Music,
   Bike,
   Sailboat,
-  Briefcase,
-  GraduationCap,
   PawPrint,
   Shirt,
   Store,
@@ -225,17 +223,22 @@ const categories: Category[] = [
 function DesktopSearchForm({
   className,
   idPrefix = "header",
+  overHero = false,
 }: {
   className?: string;
   idPrefix?: string;
+  overHero?: boolean;
 }) {
   return (
     <form
       action="/search"
       method="get"
       className={cn(
-        "flex w-full overflow-hidden rounded-none bg-card shadow-md",
+        "flex w-full overflow-hidden rounded-none border shadow-md",
         "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch",
+        overHero
+          ? "border-white/20 bg-white/10 backdrop-blur-md"
+          : "border-border bg-card",
         className,
       )}
       role="search"
@@ -249,10 +252,18 @@ function DesktopSearchForm({
         type="search"
         name="q"
         placeholder="restaurants, services..."
-        className="min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm"
+        className={cn(
+          "min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm",
+          overHero
+            ? "text-white placeholder:text-white/60"
+            : "text-foreground placeholder:text-muted-foreground",
+        )}
       />
       <span
-        className="hidden h-auto w-px shrink-0 bg-border sm:block"
+        className={cn(
+          "hidden h-auto w-px shrink-0 sm:block",
+          overHero ? "bg-white/25" : "bg-border",
+        )}
         aria-hidden
       />
       <label htmlFor={`${idPrefix}-near`} className="sr-only">
@@ -263,7 +274,12 @@ function DesktopSearchForm({
         type="text"
         name="loc"
         placeholder="address, city..."
-        className="min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm"
+        className={cn(
+          "min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm",
+          overHero
+            ? "text-white placeholder:text-white/60"
+            : "text-foreground placeholder:text-muted-foreground",
+        )}
       />
       <Button
         type="button"
@@ -273,7 +289,10 @@ function DesktopSearchForm({
         <Search className="size-5" />
         <Label
           htmlFor={`${idPrefix}-find`}
-          className="hidden xl:block xl:text-lg xl:font-semibold"
+          className={cn(
+            "hidden xl:block xl:text-lg xl:font-semibold",
+            overHero && "text-white",
+          )}
         >
           Search
         </Label>
@@ -284,12 +303,12 @@ function DesktopSearchForm({
 
 function DesktopCategoryMegaItem({
   cat,
-  isTransparent = false,
   isFirst = false,
+  overHero = false,
 }: {
   cat: Category;
-  isTransparent?: boolean;
   isFirst?: boolean;
+  overHero?: boolean;
 }) {
   return (
     <>
@@ -300,7 +319,7 @@ function DesktopCategoryMegaItem({
           "hover:bg-transparent focus:bg-transparent focus-visible:ring-0",
           "data-[state=open]:bg-transparent data-[state=open]:hover:bg-transparent",
           "[&_svg]:text-current",
-          isTransparent
+          overHero
             ? "text-white/80 hover:text-white data-[state=open]:text-white"
             : "text-muted-foreground hover:text-foreground data-[state=open]:text-foreground",
         )}
@@ -441,30 +460,18 @@ export function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    if (!isHome) return;
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [isHome]);
 
   const closeMobile = useCallback(() => setIsOpen(false), []);
 
-  const isTransparent = isHome && !scrolled;
-
   return (
-    <>
-      <header
-        className={cn(
-          "fixed top-0 z-50 w-full overflow-visible transition-all duration-300",
-          isTransparent
-            ? "border-b border-transparent bg-transparent"
-            : "border-b border-border bg-background/95 shadow-sm backdrop-blur-md",
-        )}
-      >
+    <header
+      className={cn(
+        "relative z-50 w-full overflow-visible",
+        isHome
+          ? "bg-transparent pt-[env(safe-area-inset-top)] shadow-none"
+          : "bg-background shadow-sm",
+      )}
+    >
         <div className={cn(PAGE_SHELL, "overflow-visible")}>
           {/* ─── Main header row ─── */}
           <div
@@ -485,7 +492,7 @@ export function Header() {
                   height={200}
                   className={cn(
                     "size-full object-contain transition-all duration-300",
-                    isTransparent && "brightness-0 invert",
+                    isHome && "brightness-0 invert",
                   )}
                 />
               </Link>
@@ -495,6 +502,7 @@ export function Header() {
             <div className="hidden min-w-0 w-full justify-self-center sm:flex">
               <DesktopSearchForm
                 idPrefix="hdr-desk"
+                overHero={isHome}
                 className="w-full min-w-0 max-w-full 3xl:max-w-3xl"
               />
             </div>
@@ -511,7 +519,7 @@ export function Header() {
                           "hover:bg-transparent focus:bg-transparent focus-visible:ring-0",
                           "data-[state=open]:bg-transparent data-[state=open]:hover:bg-transparent",
                           "[&_svg]:text-current",
-                          isTransparent
+                          isHome
                             ? "text-white hover:bg-white/10 data-[state=open]:text-white"
                             : "text-foreground hover:bg-muted data-[state=open]:text-foreground",
                         )}
@@ -556,10 +564,8 @@ export function Header() {
                 <Button
                   size="lg"
                   className={cn(
-                    "h-10 shrink-0 px-3 font-semibold transition-colors duration-300",
-                    isTransparent
-                      ? "text-white hover:bg-white/10"
-                      : "",
+                    "h-10 shrink-0 px-3 font-semibold",
+                    isHome && "text-white hover:bg-white/10",
                   )}
                   asChild
                   variant="ghost"
@@ -569,10 +575,8 @@ export function Header() {
                 <Button
                   size="lg"
                   className={cn(
-                    "h-10 shrink-0 px-3 font-semibold transition-colors duration-300",
-                    isTransparent
-                      ? "text-white hover:bg-white/10"
-                      : "",
+                    "h-10 shrink-0 px-3 font-semibold",
+                    isHome && "text-white hover:bg-white/10",
                   )}
                   asChild
                   variant="ghost"
@@ -595,7 +599,7 @@ export function Header() {
                     type="button"
                     className={cn(
                       "inline-flex shrink-0 items-center justify-center rounded-none p-2 transition-colors xl:hidden",
-                      isTransparent
+                      isHome
                         ? "text-white hover:bg-white/15"
                         : "text-foreground hover:bg-muted",
                     )}
@@ -709,8 +713,8 @@ export function Header() {
                   {cat.hasDropdown ? (
                     <DesktopCategoryMegaItem
                       cat={cat}
-                      isTransparent={isTransparent}
                       isFirst={index === 0}
+                      overHero={isHome}
                     />
                   ) : (
                     <NavigationMenuLink
@@ -718,7 +722,7 @@ export function Header() {
                       className={cn(
                         "flex h-auto items-center py-3 text-[15px] font-medium transition-colors 3xl:text-base",
                         index === 0 ? "px-0 pr-3" : "px-3 3xl:px-4",
-                        isTransparent
+                        isHome
                           ? "text-white/80 hover:text-white"
                           : "text-muted-foreground hover:text-foreground",
                       )}
@@ -732,6 +736,5 @@ export function Header() {
           </NavigationMenu>
         </div>
       </header>
-    </>
   );
 }

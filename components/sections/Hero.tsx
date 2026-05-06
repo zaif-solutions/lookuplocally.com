@@ -3,10 +3,11 @@ import Link from "next/link";
 import { Star, ChevronRight } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { PAGE_SHELL } from "@/lib/content-layout";
+import { HOME_HERO_OVERLAP, PAGE_SHELL } from "@/lib/content-layout";
 
 export function Hero() {
   return (
+    <div className={HOME_HERO_OVERLAP}>
     <section
       className="relative isolate h-dvh min-h-[500px] w-full overflow-x-hidden md:h-[85vh] md:min-h-[500px]"
       aria-labelledby="hero-heading"
@@ -70,5 +71,6 @@ export function Hero() {
         </div>
       </div>
     </section>
+    </div>
   );
 }

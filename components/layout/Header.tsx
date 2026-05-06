@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { Search, Menu, X } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
-import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { PAGE_SHELL } from "@/lib/content-layout";
@@ -64,8 +63,6 @@ function HeaderSearchForm({
 }
 
 export function Header() {
-  const pathname = usePathname();
-  const isHome = pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
@@ -83,29 +80,17 @@ export function Header() {
     };
   }, [mobileOpen]);
 
-  const logoClass = cn(
-    "min-w-0 shrink-0 truncate text-base font-bold tracking-tight sm:text-lg",
-    isHome ? "text-white" : "text-foreground",
-  );
+  const logoClass =
+    "min-w-0 shrink-0 truncate text-base font-bold tracking-tight text-foreground sm:text-lg";
 
   const navLinkClass = (extra?: string) =>
     cn(
-      "inline-flex items-center whitespace-nowrap rounded-none px-2 py-2 text-sm font-semibold transition-colors",
-      isHome
-        ? "text-white hover:bg-white/10"
-        : "text-foreground hover:bg-muted",
+      "inline-flex items-center whitespace-nowrap rounded-none px-2 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted",
       extra,
     );
 
   return (
-    <header
-      className={cn(
-        "relative top-0 z-50 w-full",
-        isHome
-          ? "fixed pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:pb-4 sm:pt-[max(1rem,env(safe-area-inset-top))]"
-          : "sticky border-b border-border bg-card pt-[env(safe-area-inset-top)] shadow-sm",
-      )}
-    >
+    <header className="relative z-50 w-full bg-card pt-[env(safe-area-inset-top)] shadow-sm">
       <div className={PAGE_SHELL}>
         {/*
           Desktop: grid [logo | flexible center | nav]. Search lives only in the
@@ -133,12 +118,7 @@ export function Header() {
             </Link>
             <Button
               size="lg"
-              className={cn(
-                "h-10 shrink-0 px-2.5 text-sm font-semibold sm:px-3",
-                isHome
-                  ? "border-0 text-white hover:bg-white/10"
-                  : "border-0 hover:bg-muted",
-              )}
+              className="h-10 shrink-0 border-0 px-2.5 text-sm font-semibold hover:bg-muted sm:px-3"
               asChild
               variant="ghost"
             >
@@ -163,24 +143,14 @@ export function Header() {
           <div className="flex shrink-0 items-center gap-1">
             <Link
               href="/search"
-              className={cn(
-                "flex size-11 items-center justify-center rounded-full transition-colors",
-                isHome
-                  ? "text-white hover:bg-white/15"
-                  : "text-foreground hover:bg-muted",
-              )}
+              className="flex size-11 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
               aria-label="Search"
             >
               <Search className="size-5" />
             </Link>
             <button
               type="button"
-              className={cn(
-                "flex size-11 items-center justify-center rounded-full transition-colors",
-                isHome
-                  ? "text-white hover:bg-white/15"
-                  : "text-foreground hover:bg-muted",
-              )}
+              className="flex size-11 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
               aria-expanded={mobileOpen}
               aria-controls="mobile-nav"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -192,12 +162,7 @@ export function Header() {
         </div>
 
         {/* Medium screens: full-width search under logo row (no overlap) */}
-        <div
-          className={cn(
-            "mt-3 hidden md:block lg:hidden",
-            isHome && "border-t border-white/10 pt-3",
-          )}
-        >
+        <div className="mt-3 hidden border-t border-border pt-3 md:block lg:hidden">
           <HeaderSearchForm idPrefix="hdr-md" />
         </div>
       </div>
@@ -206,32 +171,21 @@ export function Header() {
       {mobileOpen ? (
         <div
           id="mobile-nav"
-          className={cn(
-            "absolute left-0 right-0 top-full z-60 max-h-[min(75dvh,32rem)] overflow-y-auto overscroll-contain border-b shadow-xl lg:hidden",
-            isHome
-              ? "border-white/15 bg-neutral-950/98 backdrop-blur-md"
-              : "border-border bg-card",
-          )}
+          className="absolute left-0 right-0 top-full z-60 max-h-[min(75dvh,32rem)] overflow-y-auto overscroll-contain border-b border-border bg-card shadow-xl lg:hidden"
         >
           <div className={cn(PAGE_SHELL, "py-4")}>
             <HeaderSearchForm idPrefix="hdr-mob" className="shadow-lg" />
             <nav className="mt-4 flex flex-col gap-0.5" aria-label="Mobile">
               <Link
                 href="/search?write-review"
-                className={cn(
-                  "flex min-h-11 items-center rounded-lg px-3 py-3 text-base font-semibold",
-                  isHome ? "text-white hover:bg-white/10" : "text-foreground hover:bg-muted",
-                )}
+                className="flex min-h-11 items-center rounded-lg px-3 py-3 text-base font-semibold text-foreground hover:bg-muted"
                 onClick={closeMobile}
               >
                 Write a Review
               </Link>
               <Link
                 href="/login"
-                className={cn(
-                  "flex min-h-11 items-center rounded-lg px-3 py-3 text-base font-semibold",
-                  isHome ? "text-white hover:bg-white/10" : "text-foreground hover:bg-muted",
-                )}
+                className="flex min-h-11 items-center rounded-lg px-3 py-3 text-base font-semibold text-foreground hover:bg-muted"
                 onClick={closeMobile}
               >
                 Log In

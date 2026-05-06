@@ -7,3 +7,10 @@
  */
 export const PAGE_SHELL =
   "mx-auto w-full md:container px-5 md:px-8 lg:px-12 2xl:px-0 3xl:px-24";
+
+/**
+ * Pull the first hero under the transparent home header (header is `relative`, not fixed).
+ * Matches main row h-14 / sm:h-16 / md:h-20 plus the xl category bar (~3rem).
+ */
+export const HOME_HERO_OVERLAP =
+  "relative z-0 -mt-14 sm:-mt-16 md:-mt-20 xl:-mt-32";
