@@ -282,12 +282,21 @@ function DesktopSearchForm({
   );
 }
 
-function DesktopCategoryMegaItem({ cat, isTransparent = false }: { cat: Category; isTransparent?: boolean }) {
+function DesktopCategoryMegaItem({
+  cat,
+  isTransparent = false,
+  isFirst = false,
+}: {
+  cat: Category;
+  isTransparent?: boolean;
+  isFirst?: boolean;
+}) {
   return (
     <>
       <NavigationMenuTrigger
         className={cn(
-          "h-auto gap-1 rounded-none border-0 bg-transparent px-3 py-3 text-[15px] font-medium shadow-none transition-colors duration-300",
+          "h-auto gap-1 rounded-none border-0 bg-transparent py-3 text-[15px] font-medium shadow-none transition-colors duration-300",
+          isFirst ? "px-0 pr-3" : "px-3",
           "hover:bg-transparent focus:bg-transparent focus-visible:ring-0",
           "data-[state=open]:bg-transparent data-[state=open]:hover:bg-transparent",
           "[&_svg]:text-current",
@@ -692,18 +701,23 @@ export function Header() {
             aria-label="Browse categories"
           >
             <NavigationMenuList className="flex-wrap justify-start gap-0 overflow-visible">
-              {categories.map((cat) => (
+              {categories.map((cat, index) => (
                 <NavigationMenuItem
                   key={cat.label}
                   className="relative shrink-0 overflow-visible"
                 >
                   {cat.hasDropdown ? (
-                    <DesktopCategoryMegaItem cat={cat} isTransparent={isTransparent} />
+                    <DesktopCategoryMegaItem
+                      cat={cat}
+                      isTransparent={isTransparent}
+                      isFirst={index === 0}
+                    />
                   ) : (
                     <NavigationMenuLink
                       href={cat.href}
                       className={cn(
-                        "flex h-auto items-center px-3 py-3 text-[15px] font-medium transition-colors 3xl:px-4 3xl:text-base",
+                        "flex h-auto items-center py-3 text-[15px] font-medium transition-colors 3xl:text-base",
+                        index === 0 ? "px-0 pr-3" : "px-3 3xl:px-4",
                         isTransparent
                           ? "text-white/80 hover:text-white"
                           : "text-muted-foreground hover:text-foreground",
@@ -718,11 +732,6 @@ export function Header() {
           </NavigationMenu>
         </div>
       </header>
-
-      {/* Spacer: pushes content below the fixed header on non-home pages */}
-      {!isHome && (
-        <div className="h-14 sm:h-16 md:h-20 xl:h-[calc(5rem+3rem)]" aria-hidden />
-      )}
     </>
   );
 }
