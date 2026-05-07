@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Search } from "@/components/ui/Icon";
@@ -25,56 +25,14 @@ interface HeroCarouselProps {
 export function HeroCarousel({ slides, interval = 6500 }: HeroCarouselProps) {
   const n = slides.length;
   const [active, setActive] = useState(0);
-  const [hovered, setHovered] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const isPaused = hovered;
-
-  const stopTimer = useCallback(() => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  }, []);
-
-  const startTimer = useCallback(() => {
-    stopTimer();
+  useEffect(() => {
     if (n <= 1) return;
-    timerRef.current = setInterval(() => {
+    const id = setInterval(() => {
       setActive((prev) => (prev + 1) % n);
     }, interval);
-  }, [n, interval, stopTimer]);
-
-  useEffect(() => {
-    if (isPaused || n <= 1) {
-      stopTimer();
-      return;
-    }
-    startTimer();
-    return stopTimer;
-  }, [isPaused, n, active, startTimer, stopTimer]);
-
-  const goTo = useCallback(
-    (index: number) => {
-      const next = ((index % n) + n) % n;
-      setActive(next);
-    },
-    [n],
-  );
-
-  // Keyboard nav: ← / → when carousel is in viewport-ish (skip when typing)
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-      const target = e.target as HTMLElement | null;
-      if (target?.closest?.("input, textarea, select, [contenteditable=true]"))
-        return;
-      e.preventDefault();
-      goTo(active + (e.key === "ArrowLeft" ? -1 : 1));
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [active, goTo]);
+    return () => clearInterval(id);
+  }, [n, interval]);
 
   const prevIndex = n > 0 ? (active - 1 + n) % n : 0;
   const nextIndex = n > 0 ? (active + 1) % n : 0;
@@ -92,9 +50,8 @@ export function HeroCarousel({ slides, interval = 6500 }: HeroCarouselProps) {
   const current = slides[active];
 
   /**
-   * Bar progress restarts whenever the slide changes by re-keying the animated
-   * span. Using inline `animation-play-state` lets hover-pause stay cheap with
-   * no JS-driven interval bookkeeping.
+   * Bar progress restarts whenever the slide changes by re-keying the
+   * animated span — keeps the fill in sync with the autoplay timer.
    */
   const barAnimationKey = useMemo(
     () => `${current?.id ?? "slide"}-${active}`,
@@ -107,8 +64,6 @@ export function HeroCarousel({ slides, interval = 6500 }: HeroCarouselProps) {
       aria-labelledby="hero-heading"
       aria-roledescription="carousel"
       aria-label="Featured local categories"
-      onPointerEnter={() => setHovered(true)}
-      onPointerLeave={() => setHovered(false)}
     >
       {slides.map((slide, i) =>
         shouldMountImage(i) ? (
@@ -163,47 +118,40 @@ export function HeroCarousel({ slides, interval = 6500 }: HeroCarouselProps) {
       */}
       <div className="absolute inset-0 z-3">
         <div className={cn(PAGE_SHELL, "relative h-full")}>
-          {/* Vertical progress rail — anchored to PAGE_SHELL's inner left edge */}
-          <div className="absolute top-1/2 flex -translate-y-1/2 flex-col items-center gap-3">
-            <div
-              className="flex flex-col items-center gap-2"
-              role="tablist"
-              aria-label="Slide controls"
-            >
-              {slides.map((slide, i) => (
-                <button
-                  key={slide.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={i === active}
-                  aria-label={`Go to slide ${i + 1}: ${slide.heading}`}
-                  onClick={() => goTo(i)}
-                  className="group relative flex h-20 w-3 items-center justify-center sm:h-20"
-                >
-                  <span
-                    className={cn(
-                      "block h-full w-[16px] overflow-hidden rounded-full transition-colors",
-                      i === active
-                        ? "bg-white/30"
-                        : "bg-white/35 group-hover:bg-white/55",
-                    )}
-                  />
-                  {i === active && (
-                    <span
-                      key={barAnimationKey}
-                      className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 rounded-full bg-white"
-                      style={{
-                        width: "10px",
-                        height: "0%",
-                        animation: `hero-bar-fill ${interval}ms linear forwards`,
-                        animationPlayState: isPaused ? "paused" : "running",
-                      }}
-                      aria-hidden
-                    />
+          {/*
+            Vertical progress rail — passive indicator only. Bars are not
+            clickable so users can't jump between slides; the carousel
+            advances on its own at `interval`.
+          */}
+          <div
+            className="pointer-events-none absolute top-1/2 flex -translate-y-1/2 flex-col items-center gap-2"
+            role="presentation"
+            aria-hidden
+          >
+            {slides.map((slide, i) => (
+              <div
+                key={slide.id}
+                className="relative flex h-20 w-3 items-center justify-center"
+              >
+                <span
+                  className={cn(
+                    "block h-full w-[16px] overflow-hidden rounded-full",
+                    i === active ? "bg-white/30" : "bg-white/35",
                   )}
-                </button>
-              ))}
-            </div>
+                />
+                {i === active && (
+                  <span
+                    key={barAnimationKey}
+                    className="absolute left-1/2 top-0 -translate-x-1/2 rounded-full bg-white"
+                    style={{
+                      width: "10px",
+                      height: "0%",
+                      animation: `hero-bar-fill ${interval}ms linear forwards`,
+                    }}
+                  />
+                )}
+              </div>
+            ))}
           </div>
 
           {/* Headline + CTA — flow inside PAGE_SHELL, with a small inset to clear the rail */}
