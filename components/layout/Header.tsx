@@ -29,11 +29,8 @@ export function Header() {
   const logoClass =
     "min-w-0 shrink-0 truncate text-base font-bold tracking-tight text-foreground sm:text-lg";
 
-  const navLinkClass = (extra?: string) =>
-    cn(
-      "inline-flex items-center whitespace-nowrap rounded-md px-2 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted",
-      extra,
-    );
+  const ghostNavBtn =
+    "h-10 shrink-0 px-2.5 text-sm font-semibold text-foreground hover:bg-muted hover:text-foreground sm:px-3";
 
   return (
     <header className="relative z-50 w-full bg-card pt-[env(safe-area-inset-top)] shadow-sm">
@@ -56,25 +53,13 @@ export function Header() {
 
           <nav
             className="flex min-w-0 shrink-0 items-center justify-end justify-self-end gap-1 xl:gap-2"
-            aria-label="Account"
+            aria-label="Site"
           >
-            <Link href="/search?write-review" className={navLinkClass()}>
-              Write a Review
-            </Link>
-            <Button
-              size="lg"
-              className="h-10 shrink-0 border-0 px-2.5 text-sm font-semibold hover:bg-muted sm:px-3"
-              asChild
-              variant="ghost"
-            >
-              <Link href="/login">Log In</Link>
+            <Button variant="ghost" size="lg" className={ghostNavBtn} asChild>
+              <Link href="/biz/add">Add a Business</Link>
             </Button>
-            <Button
-              asChild
-              size="lg"
-              className="h-10 shrink-0 px-2.5 text-sm font-semibold sm:px-3"
-            >
-              <Link href="/signup">Sign Up</Link>
+            <Button variant="ghost" size="lg" className={ghostNavBtn} asChild>
+              <Link href="/contact">Contact</Link>
             </Button>
           </nav>
         </div>
@@ -124,24 +109,18 @@ export function Header() {
               className="shadow-lg"
               onSubmitSuccess={closeMobile}
             />
-            <nav className="mt-4 flex flex-col gap-0.5" aria-label="Mobile">
-              <Link
-                href="/search?write-review"
-                className="flex min-h-11 items-center rounded-md px-3 py-3 text-base font-semibold text-foreground hover:bg-muted"
-                onClick={closeMobile}
-              >
-                Write a Review
-              </Link>
-              <Link
-                href="/login"
-                className="flex min-h-11 items-center rounded-md px-3 py-3 text-base font-semibold text-foreground hover:bg-muted"
-                onClick={closeMobile}
-              >
-                Log In
-              </Link>
-              <Button asChild className="mt-2 h-11 w-full" size="lg">
-                <Link href="/signup" onClick={closeMobile}>
-                  Sign Up
+            <nav
+              className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap"
+              aria-label="Mobile"
+            >
+              <Button variant="ghost" size="lg" className={ghostNavBtn} asChild>
+                <Link href="/biz/add" onClick={closeMobile}>
+                  Add a Business
+                </Link>
+              </Button>
+              <Button variant="ghost" size="lg" className={ghostNavBtn} asChild>
+                <Link href="/contact" onClick={closeMobile}>
+                  Contact
                 </Link>
               </Button>
             </nav>
