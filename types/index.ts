@@ -29,6 +29,8 @@ export interface HeroSlide {
   id: string;
   image: string;
   heading: string;
+  /** Optional sub-headline shown under `heading` (1–2 short lines). */
+  description?: string;
   ctaLabel: string;
   ctaHref: string;
   /** Bottom-left photo credit, e.g. business name shown in the photo */

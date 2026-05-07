@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Search } from "@/components/ui/Icon";
+import { Button } from "@/components/ui/button";
 import { PAGE_SHELL } from "@/lib/content-layout";
 import { cn } from "@/lib/utils";
 import type { HeroSlide } from "@/types";
@@ -132,12 +133,23 @@ export function HeroCarousel({ slides, interval = 6500 }: HeroCarouselProps) {
         ) : null,
       )}
 
-      {/* Single merged overlay — avoids stacking duplicate full-screen gradients (extra compositing / jank). */}
+      {/*
+        Layered scrim — single div, composited once. Each gradient has one job:
+        1) Strong fade behind the transparent header so logo + nav links stay
+           readable on bright photos (top 0–35%).
+        2) Bottom fade so the headline, description, photo credit, and progress
+           rail keep contrast (bottom 0–55%).
+        3) Subtle left bias so the copy block sits on a slightly darker plane
+           without dimming the photo subject on the right.
+      */}
       <div
         className="pointer-events-none absolute inset-0 z-2"
         style={{
-          backgroundImage:
-            "linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.55)), linear-gradient(to right, rgba(0,0,0,0.45), rgba(0,0,0,0.15) 48%, transparent)",
+          backgroundImage: [
+            "linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.15) 92%, transparent 95%)",
+            "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 55%)",
+            "linear-gradient(to right, rgba(0,0,0,0.4) 40%, transparent 55%)",
+          ].join(", "),
         }}
         aria-hidden
       />
@@ -210,28 +222,35 @@ export function HeroCarousel({ slides, interval = 6500 }: HeroCarouselProps) {
                 >
                   <h1
                     id={i === active ? "hero-heading" : undefined}
-                    className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] sm:text-5xl md:text-[3.5rem] lg:text-6xl"
+                    className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-primary-foreground drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl md:text-[3.5rem] lg:text-6xl"
                   >
                     {slide.heading}
                   </h1>
 
+                  {slide.description ? (
+                    <p className="mt-3 max-w-xl text-base font-medium leading-relaxed text-primary-foreground drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] sm:mt-4 sm:text-lg md:text-xl">
+                      {slide.description}
+                    </p>
+                  ) : null}
+
                   <div className="mt-5 flex flex-wrap items-center gap-3 sm:mt-6">
-                    <Link
-                      href={slide.ctaHref}
-                      tabIndex={i === active ? 0 : -1}
-                      className={cn(
-                        "group inline-flex items-center gap-2.5 rounded-full bg-primary py-2 pl-2 pr-5 text-sm font-semibold text-primary-foreground shadow-lg transition-colors hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:text-base",
-                      )}
+                    <Button
+                      asChild
+                      size="lg"
+                      className="h-10 font-semibold shadow-lg"
                     >
-                      <span className="flex size-7 items-center justify-center rounded-full bg-white text-primary shadow-sm">
+                      <Link
+                        href={slide.ctaHref}
+                        tabIndex={i === active ? 0 : -1}
+                      >
                         <Search
-                          className="size-3.5"
+                          className="size-4"
                           aria-hidden
                           strokeWidth={2.5}
                         />
-                      </span>
-                      {slide.ctaLabel}
-                    </Link>
+                        {slide.ctaLabel}
+                      </Link>
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -242,12 +261,12 @@ export function HeroCarousel({ slides, interval = 6500 }: HeroCarouselProps) {
           {current?.photoCredit ? (
             <div
               key={`credit-${current.id}`}
-              className="absolute inset-x-0 bottom-5 pl-9 text-white/95 sm:bottom-7 sm:pl-12 md:pl-14"
+              className="absolute inset-x-0 bottom-5 pl-9 text-primary-foreground sm:bottom-7 sm:pl-12 md:pl-14"
             >
-              <p className="text-sm font-semibold leading-tight drop-shadow-[0_1px_8px_rgba(0,0,0,0.55)] sm:text-[0.95rem]">
+              <p className="text-sm font-semibold leading-tight drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)] sm:text-[0.95rem]">
                 {current.photoCredit}
               </p>
-              <p className="text-xs leading-tight text-white/75 drop-shadow-[0_1px_8px_rgba(0,0,0,0.55)] sm:text-sm">
+              <p className="text-xs leading-tight text-primary-foreground/80 drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)] sm:text-sm">
                 Photo from the business owner
               </p>
             </div>

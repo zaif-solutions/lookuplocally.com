@@ -6,6 +6,8 @@ export const homeHeroSlides: HeroSlide[] = [
     image:
       "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?w=1920&h=1080&fit=crop&q=82",
     heading: "Get a deep clean",
+    description:
+      "Vetted cleaners with transparent pricing and reviews from neighbors who actually hired them.",
     ctaLabel: "Cleaners",
     ctaHref: "/search?q=cleaners",
     photoCredit: "Sparkle & Shine Cleaners",
@@ -15,6 +17,8 @@ export const homeHeroSlides: HeroSlide[] = [
     image:
       "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&h=1080&fit=crop&q=82",
     heading: "Discover great dining",
+    description:
+      "Real diner reviews, curated by cuisine and ambience — find your next favorite spot in minutes.",
     ctaLabel: "Restaurants",
     ctaHref: "/search?q=restaurants",
     photoCredit: "Harbour Master Cafe",
@@ -24,6 +28,8 @@ export const homeHeroSlides: HeroSlide[] = [
     image:
       "https://images.unsplash.com/photo-1676210134188-4c05dd172f89?w=1920&h=1080&fit=crop&q=82",
     heading: "Find trusted plumbers",
+    description:
+      "Licensed pros for leaks, water heaters, and remodels. Compare response times and credentials first.",
     ctaLabel: "Plumbers",
     ctaHref: "/search?q=plumbers",
     photoCredit: "Dynamic Maintenance Solutions",
@@ -33,6 +39,8 @@ export const homeHeroSlides: HeroSlide[] = [
     image:
       "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=1920&h=1080&fit=crop&q=82",
     heading: "Look your best",
+    description:
+      "Browse stylist portfolios, read chair-side reviews, and book cuts, color, and spa with confidence.",
     ctaLabel: "Hair Salons",
     ctaHref: "/search?q=hair-salons",
     photoCredit: "The Salt Room",
