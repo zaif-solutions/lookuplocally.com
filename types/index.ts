@@ -26,8 +26,11 @@ export interface Category {
 
 /** Home hero carousel slide — data lives in lib/data/home.ts */
 export interface HeroSlide {
+  id: string;
   image: string;
   heading: string;
   ctaLabel: string;
   ctaHref: string;
+  /** Bottom-left photo credit, e.g. business name shown in the photo */
+  photoCredit?: string;
 }

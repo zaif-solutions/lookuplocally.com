@@ -190,15 +190,15 @@ a[data-link="secondary"]:hover {
   text-decoration: underline;
 }
 
-/* Hero carousel dot progress */
-@keyframes hero-dot-fill {
-  from { width: 0%; }
-  to { width: 100%; }
+/* Hero carousel — Yelp-style vertical bar fill (top → bottom) */
+@keyframes hero-bar-fill {
+  from { height: 0%; }
+  to { height: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [style*="hero-dot-fill"] {
+  [style*="hero-bar-fill"] {
     animation: none !important;
-    width: 100% !important;
+    height: 100% !important;
   }
 }

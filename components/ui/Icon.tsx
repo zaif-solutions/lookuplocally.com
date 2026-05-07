@@ -77,5 +77,7 @@ export {
   Scale,
   Shield,
   Salad,
+  Pause,
+  Play,
 } from "lucide-react";
 export type { LucideIcon } from "lucide-react";

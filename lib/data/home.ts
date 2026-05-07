@@ -2,32 +2,40 @@ import type { Business, HeroSlide } from "@/types";
 
 export const homeHeroSlides: HeroSlide[] = [
   {
+    id: "cleaners",
     image:
-      "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?w=1920&h=1080&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?w=1920&h=1080&fit=crop&q=82",
     heading: "Get a deep clean",
     ctaLabel: "Cleaners",
     ctaHref: "/search?q=cleaners",
+    photoCredit: "Sparkle & Shine Cleaners",
   },
   {
+    id: "restaurants",
     image:
-      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&h=1080&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&h=1080&fit=crop&q=82",
     heading: "Discover great dining",
     ctaLabel: "Restaurants",
     ctaHref: "/search?q=restaurants",
+    photoCredit: "Harbour Master Cafe",
   },
   {
+    id: "plumbers",
     image:
-      "https://images.unsplash.com/photo-1676210134188-4c05dd172f89?w=1920&h=1080&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1676210134188-4c05dd172f89?w=1920&h=1080&fit=crop&q=82",
     heading: "Find trusted plumbers",
     ctaLabel: "Plumbers",
     ctaHref: "/search?q=plumbers",
+    photoCredit: "Dynamic Maintenance Solutions",
   },
   {
+    id: "beauty",
     image:
-      "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=1920&h=1080&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=1920&h=1080&fit=crop&q=82",
     heading: "Look your best",
     ctaLabel: "Hair Salons",
     ctaHref: "/search?q=hair-salons",
+    photoCredit: "The Salt Room",
   },
 ];
 
