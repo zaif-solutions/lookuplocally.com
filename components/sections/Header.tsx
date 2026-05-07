@@ -408,33 +408,34 @@ export function Header() {
           className={cn(
             "grid h-14 w-full items-center sm:h-16 md:h-20",
             "grid-cols-[1fr_auto] gap-x-3 gap-y-0",
-            "sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-x-3",
+            "sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-x-3",
             "lg:gap-x-4 xl:gap-x-6",
           )}
         >
-          {/* Logo */}
-          <div className="min-w-0 w-32 justify-self-start sm:w-40 md:w-48">
-            <Link href="/">
-              <Image
-                src="/logo.svg"
-                alt={SITE_NAME}
-                width={200}
-                height={200}
-                className={cn(
-                  "size-full object-contain transition-all duration-300",
-                  isHome && "brightness-0 invert",
-                )}
-              />
-            </Link>
-          </div>
+          {/* Logo + desktop search (side by side; search no longer centered away from logo) */}
+          <div className="flex min-w-0 items-center gap-3 md:gap-4">
+            <div className="min-w-0 w-32 shrink-0 sm:w-40 md:w-48">
+              <Link href="/">
+                <Image
+                  src="/logo.svg"
+                  alt={SITE_NAME}
+                  width={200}
+                  height={200}
+                  className={cn(
+                    "size-full object-contain transition-all duration-300",
+                    isHome && "brightness-0 invert",
+                  )}
+                />
+              </Link>
+            </div>
 
-          {/* Desktop search */}
-          <div className="relative z-60 hidden min-w-0 w-full justify-self-center overflow-visible sm:flex">
-            <DirectorySearchBar
-              idPrefix="hdr-desk"
-              tone={isHome ? "hero" : "default"}
-              className="w-full min-w-0 max-w-full 3xl:max-w-3xl"
-            />
+            <div className="relative z-60 hidden min-w-0 flex-1 overflow-visible sm:block sm:max-w-xl md:max-w-2xl xl:max-w-176">
+              <DirectorySearchBar
+                idPrefix="hdr-desk"
+                tone={isHome ? "hero" : "default"}
+                className="w-full min-w-0"
+              />
+            </div>
           </div>
 
           {/* Desktop nav buttons + mobile hamburger */}

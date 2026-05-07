@@ -39,18 +39,17 @@ export function Header() {
     <header className="relative z-50 w-full bg-card pt-[env(safe-area-inset-top)] shadow-sm">
       <div className={PAGE_SHELL}>
         {/*
-          Desktop: grid [logo | flexible center | nav]. Search lives only in the
-          center track so it can never paint under “Write a Review” / buttons.
+          Desktop: [logo + search | nav]. Search sits beside the logo; nav stays right.
         */}
-        <div className="hidden min-h-13 items-center gap-3 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center">
-          <div className="flex min-w-0 items-center justify-self-start">
-            <Link href="/" className={cn(logoClass, "max-w-48 xl:max-w-none")}>
+        <div className="hidden min-h-13 items-center gap-3 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+          <div className="flex min-w-0 items-center gap-3 md:gap-4">
+            <Link
+              href="/"
+              className={cn(logoClass, "max-w-48 shrink-0 xl:max-w-none")}
+            >
               Lookup Locally
             </Link>
-          </div>
-
-          <div className="flex min-w-0 justify-center justify-self-stretch px-2">
-            <div className="relative z-60 w-full max-w-xl overflow-visible">
+            <div className="relative z-60 min-w-0 flex-1 max-w-xl overflow-visible md:max-w-2xl xl:max-w-176">
               <DirectorySearchBar idPrefix="hdr-desk" />
             </div>
           </div>

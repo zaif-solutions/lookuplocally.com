@@ -298,7 +298,7 @@ export function DirectorySearchBar({
         className={cn(
           "relative flex min-w-0 flex-col",
           isInline &&
-            "min-h-12 w-full min-w-0 flex-1 sm:h-full sm:min-h-0 sm:w-44 sm:flex-none md:w-52 lg:w-60",
+            "min-h-12 w-full min-w-0 flex-1 sm:h-full sm:min-h-0 sm:w-44 sm:flex-none md:w-48 lg:w-52",
         )}
       >
         <div className={rowShell("near", activePanel === "loc")}>
