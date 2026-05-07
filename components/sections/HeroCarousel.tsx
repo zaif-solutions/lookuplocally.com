@@ -77,8 +77,13 @@ export function HeroCarousel({ slides, interval = 6500 }: HeroCarouselProps) {
 
   const prevIndex = n > 0 ? (active - 1 + n) % n : 0;
   const nextIndex = n > 0 ? (active + 1) % n : 0;
+  /**
+   * Keep every slide mounted when the deck is small so wrap last→first never
+   * waits on decode / layout from a cold mount. Hero counts are tiny vs memory.
+   */
   const shouldMountImage = (i: number) => {
     if (n <= 1) return i === active;
+    if (n <= 10) return true;
     if (n === 2) return i === active || i === prevIndex;
     return i === active || i === prevIndex || i === nextIndex;
   };
@@ -109,7 +114,7 @@ export function HeroCarousel({ slides, interval = 6500 }: HeroCarouselProps) {
           <div
             key={slide.id}
             className={cn(
-              "absolute inset-0 transition-opacity duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              "absolute inset-0 transform-gpu transition-opacity duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity backface-hidden",
               i === active ? "z-1 opacity-100" : "z-0 opacity-0",
             )}
             aria-hidden={i !== active}
@@ -118,7 +123,7 @@ export function HeroCarousel({ slides, interval = 6500 }: HeroCarouselProps) {
               src={slide.image}
               alt=""
               fill
-              priority={i === 0}
+              priority={i === 0 || i === n - 1}
               quality={85}
               sizes="100vw"
               className="object-cover object-center"
@@ -127,16 +132,13 @@ export function HeroCarousel({ slides, interval = 6500 }: HeroCarouselProps) {
         ) : null,
       )}
 
+      {/* Single merged overlay — avoids stacking duplicate full-screen gradients (extra compositing / jank). */}
       <div
-        className="pointer-events-none absolute inset-0 z-2 bg-linear-to-b from-black/45 via-black/20 to-black/55"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-0 z-2 bg-linear-to-r from-black/45 via-black/15 to-transparent"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-0 z-2 bg-linear-to-b from-black/45 via-black/20 to-black/55"
+        className="pointer-events-none absolute inset-0 z-2"
+        style={{
+          backgroundImage:
+            "linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.55)), linear-gradient(to right, rgba(0,0,0,0.45), rgba(0,0,0,0.15) 48%, transparent)",
+        }}
         aria-hidden
       />
 
