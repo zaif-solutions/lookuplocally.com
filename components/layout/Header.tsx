@@ -19,7 +19,7 @@ function HeaderSearchForm({
       action="/search"
       method="get"
       className={cn(
-        "flex w-full overflow-hidden rounded-none border border-border bg-card shadow-md",
+        "flex w-full overflow-hidden rounded-md border border-border bg-card shadow-md",
         "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch",
         className,
       )}
@@ -53,7 +53,7 @@ function HeaderSearchForm({
       <Button
         type="submit"
         size="lg"
-        className="min-h-12 w-full shrink-0 rounded-none border-none px-4 py-3 text-base font-semibold sm:h-auto sm:w-auto sm:px-3.5 sm:text-lg"
+        className="min-h-12 w-full shrink-0 rounded-md border-none px-4 py-3 text-base font-semibold sm:h-auto sm:w-auto sm:px-3.5 sm:text-lg"
       >
         <Search className="size-5 sm:mr-1" aria-hidden />
         Search
@@ -85,7 +85,7 @@ export function Header() {
 
   const navLinkClass = (extra?: string) =>
     cn(
-      "inline-flex items-center whitespace-nowrap rounded-none px-2 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted",
+      "inline-flex items-center whitespace-nowrap rounded-md px-2 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted",
       extra,
     );
 
@@ -143,14 +143,14 @@ export function Header() {
           <div className="flex shrink-0 items-center gap-1">
             <Link
               href="/search"
-              className="flex size-11 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
+              className="flex size-11 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted"
               aria-label="Search"
             >
               <Search className="size-5" />
             </Link>
             <button
               type="button"
-              className="flex size-11 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
+              className="flex size-11 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted"
               aria-expanded={mobileOpen}
               aria-controls="mobile-nav"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -178,14 +178,14 @@ export function Header() {
             <nav className="mt-4 flex flex-col gap-0.5" aria-label="Mobile">
               <Link
                 href="/search?write-review"
-                className="flex min-h-11 items-center rounded-lg px-3 py-3 text-base font-semibold text-foreground hover:bg-muted"
+                className="flex min-h-11 items-center rounded-md px-3 py-3 text-base font-semibold text-foreground hover:bg-muted"
                 onClick={closeMobile}
               >
                 Write a Review
               </Link>
               <Link
                 href="/login"
-                className="flex min-h-11 items-center rounded-lg px-3 py-3 text-base font-semibold text-foreground hover:bg-muted"
+                className="flex min-h-11 items-center rounded-md px-3 py-3 text-base font-semibold text-foreground hover:bg-muted"
                 onClick={closeMobile}
               >
                 Log In

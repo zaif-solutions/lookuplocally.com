@@ -128,7 +128,7 @@ export function HeroCarousel({ slides, interval = 6000 }: HeroCarouselProps) {
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => goTo(i)}
               className={cn(
-                "relative h-2 overflow-hidden rounded-none transition-all duration-300",
+                "relative h-2 overflow-hidden rounded-md transition-all duration-300",
                 i === active ? "w-8 bg-white" : "w-2 bg-white/50 hover:bg-white/70",
               )}
             >

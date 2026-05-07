@@ -9,7 +9,7 @@ export default function SearchPage() {
       <p className="mt-2 text-muted-foreground">
         Search functionality will be implemented here.
       </p>
-      <div className="mt-6 flex items-center gap-2 rounded-full border border-border bg-card px-4 py-3">
+      <div className="mt-6 flex items-center gap-2 rounded-md border border-border bg-card px-4 py-3">
         <Search className="size-5 text-muted-foreground" />
         <input
           type="search"

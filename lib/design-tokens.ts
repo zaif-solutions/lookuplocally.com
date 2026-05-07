@@ -22,14 +22,12 @@ export const colors = {
   },
 } as const;
 
-/** Square corners — matches CSS variables in app/globals.css */
+/**
+ * Base corner radius — `app/globals.css` `--radius` (all `--radius-*` alias it).
+ * In UI prefer Tailwind `rounded-md` (and `rounded-sm` / `rounded-lg` — same token).
+ */
 export const radius = {
-  sm: "0",
-  DEFAULT: "0",
-  md: "0",
-  lg: "0",
-  xl: "0",
-  "2xl": "0",
+  DEFAULT: "0.375rem",
 } as const;
 
 export const fonts = {

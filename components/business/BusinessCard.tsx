@@ -17,12 +17,12 @@ export function BusinessCard({ business, className }: BusinessCardProps) {
     <Link
       href={`/biz/${business.slug}`}
       className={cn(
-        "block rounded-none border border-border bg-card p-4 transition-shadow hover:shadow-md",
+        "block rounded-md border border-border bg-card p-4 transition-shadow hover:shadow-md",
         className,
       )}
     >
       <div className="flex gap-4">
-        <div className="size-20 shrink-0 overflow-hidden rounded-none bg-muted">
+        <div className="size-20 shrink-0 overflow-hidden rounded-md bg-muted">
           {business.imageUrl ? (
             <Image
               src={business.imageUrl}
