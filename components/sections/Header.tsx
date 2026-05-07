@@ -5,8 +5,6 @@ import { useCallback, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   Menu,
-  MapPin,
-  Search,
   ChevronDown,
   ShoppingBag,
   Truck,
@@ -64,6 +62,7 @@ import { SITE_NAME } from "@/lib/constants";
 import { PAGE_SHELL } from "@/lib/content-layout";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { DirectorySearchBar } from "@/components/search/DirectorySearchBar";
 import Image from "next/image";
 import {
   NavigationMenu,
@@ -227,100 +226,6 @@ const categories: Category[] = [
     links: moreLinks,
   },
 ];
-
-function DesktopSearchForm({
-  className,
-  idPrefix = "header",
-  overHero = false,
-}: {
-  className?: string;
-  idPrefix?: string;
-  overHero?: boolean;
-}) {
-  return (
-    <form
-      action="/search"
-      method="get"
-      className={cn(
-        "flex w-full overflow-hidden rounded-md border shadow-md",
-        "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch",
-        overHero
-          ? "border-white/20 bg-white/10 backdrop-blur-md"
-          : "border-border bg-card",
-        className,
-      )}
-      role="search"
-      aria-label="Search businesses"
-    >
-      <label htmlFor={`${idPrefix}-find`} className="sr-only">
-        Find
-      </label>
-      <div className="flex min-h-12 w-full min-w-0 flex-1 items-center gap-2 px-3 sm:min-h-0 sm:basis-0 sm:py-0 sm:pl-3 sm:pr-2">
-        <Search
-          className={cn(
-            "size-5 shrink-0",
-            overHero ? "text-white/70" : "text-muted-foreground",
-          )}
-          aria-hidden
-        />
-        <input
-          id={`${idPrefix}-find`}
-          type="search"
-          name="q"
-          placeholder="restaurants, services..."
-          className={cn(
-            "min-h-10 min-w-0 flex-1 border-0 bg-transparent py-2 text-base focus:outline-none focus:ring-0 sm:min-h-0 sm:py-2.5 sm:text-sm",
-            overHero
-              ? "text-white placeholder:text-white/60"
-              : "text-foreground placeholder:text-muted-foreground",
-          )}
-        />
-      </div>
-      <span
-        className={cn(
-          "hidden h-auto w-px shrink-0 sm:block",
-          overHero ? "bg-white/25" : "bg-border",
-        )}
-        aria-hidden
-      />
-      <label htmlFor={`${idPrefix}-near`} className="sr-only">
-        Near
-      </label>
-      <div className="flex min-h-12 w-full min-w-0 flex-1 items-center gap-2 px-3 sm:min-h-0 sm:basis-0 sm:py-0 sm:pl-3 sm:pr-2">
-        <MapPin
-          className={cn(
-            "size-5 shrink-0",
-            overHero ? "text-white/70" : "text-muted-foreground",
-          )}
-          aria-hidden
-        />
-        <input
-          id={`${idPrefix}-near`}
-          type="text"
-          name="loc"
-          placeholder="address, city..."
-          className={cn(
-            "min-h-10 min-w-0 flex-1 border-0 bg-transparent py-2 text-base focus:outline-none focus:ring-0 sm:min-h-0 sm:py-2.5 sm:text-sm",
-            overHero
-              ? "text-white placeholder:text-white/60"
-              : "text-foreground placeholder:text-muted-foreground",
-          )}
-        />
-      </div>
-      <Button
-        type="submit"
-        size="lg"
-        aria-label="Search"
-        className="h-full shrink-0 text-lg font-semibold"
-      >
-        <Search className="size-5" aria-hidden />
-        <span className="hidden xl:inline xl:text-lg xl:font-semibold">
-          Search
-        </span>
-      </Button>
-    </form>
-  );
-}
 
 function DesktopCategoryMegaItem({
   cat,
@@ -524,10 +429,10 @@ export function Header() {
           </div>
 
           {/* Desktop search */}
-          <div className="hidden min-w-0 w-full justify-self-center sm:flex">
-            <DesktopSearchForm
+          <div className="relative z-60 hidden min-w-0 w-full justify-self-center overflow-visible sm:flex">
+            <DirectorySearchBar
               idPrefix="hdr-desk"
-              overHero={isHome}
+              tone={isHome ? "hero" : "default"}
               className="w-full min-w-0 max-w-full 3xl:max-w-3xl"
             />
           </div>
@@ -662,45 +567,11 @@ export function Header() {
                 <div className="flex flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-4 pb-6 pt-4">
                   {/* Mobile search (only below sm where the header search is hidden) */}
                   <div className="sm:hidden">
-                    <form
-                      action="/search"
-                      method="get"
-                      className="flex flex-col gap-2.5"
-                      role="search"
-                      onSubmit={closeMobile}
-                    >
-                      <div className="flex w-full items-center gap-2 rounded-md border border-input bg-background px-3 py-0.5 focus-within:ring-2 focus-within:ring-ring">
-                        <Search
-                          className="size-4 shrink-0 text-muted-foreground"
-                          aria-hidden
-                        />
-                        <input
-                          name="q"
-                          type="search"
-                          placeholder="things to do, nail salons…"
-                          className="min-h-10 w-full flex-1 border-0 bg-transparent py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none"
-                        />
-                      </div>
-                      <div className="flex w-full items-center gap-2 rounded-md border border-input bg-background px-3 py-0.5 focus-within:ring-2 focus-within:ring-ring">
-                        <MapPin
-                          className="size-4 shrink-0 text-muted-foreground"
-                          aria-hidden
-                        />
-                        <input
-                          name="loc"
-                          type="text"
-                          placeholder="Location"
-                          className="min-h-10 w-full flex-1 border-0 bg-transparent py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none"
-                        />
-                      </div>
-                      <Button
-                        type="submit"
-                        className="h-10 shrink-0 px-3 font-semibold"
-                      >
-                        <Search className="size-5" />
-                        Search
-                      </Button>
-                    </form>
+                    <DirectorySearchBar
+                      idPrefix="hdr-sheet"
+                      variant="stacked"
+                      onSubmitSuccess={closeMobile}
+                    />
                   </div>
 
                   {/* Auth buttons */}

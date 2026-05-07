@@ -5,6 +5,9 @@
 export {
   Star,
   MapPin,
+  Loader2,
+  LocateFixed,
+  History,
   Search,
   Menu,
   X,

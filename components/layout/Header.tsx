@@ -1,78 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { MapPin, Menu, Search, X } from "@/components/ui/Icon";
+import { Menu, Search, X } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
+import { DirectorySearchBar } from "@/components/search/DirectorySearchBar";
 import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { PAGE_SHELL } from "@/lib/content-layout";
-
-function HeaderSearchForm({
-  className,
-  idPrefix = "header",
-}: {
-  className?: string;
-  idPrefix?: string;
-}) {
-  return (
-    <form
-      action="/search"
-      method="get"
-      className={cn(
-        "flex w-full overflow-hidden rounded-md border border-border bg-card shadow-md",
-        "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch",
-        className,
-      )}
-      role="search"
-      aria-label="Search businesses"
-    >
-      <label htmlFor={`${idPrefix}-find`} className="sr-only">
-        Find
-      </label>
-      <div className="flex min-h-12 min-w-0 flex-1 items-center gap-2 px-3 sm:min-h-0 sm:py-0 sm:pl-3 sm:pr-2">
-        <Search
-          className="size-5 shrink-0 text-muted-foreground"
-          aria-hidden
-        />
-        <input
-          id={`${idPrefix}-find`}
-          type="search"
-          name="q"
-          placeholder="restaurants, services..."
-          className="min-h-10 min-w-0 flex-1 border-0 bg-transparent py-2 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:py-2.5 sm:text-sm"
-        />
-      </div>
-      <span
-        className="hidden h-auto w-px shrink-0 bg-border sm:block"
-        aria-hidden
-      />
-      <label htmlFor={`${idPrefix}-near`} className="sr-only">
-        Near
-      </label>
-      <div className="flex min-h-12 w-full min-w-0 items-center gap-2 px-3 sm:min-h-0 sm:w-44 sm:shrink-0 sm:px-3 sm:pr-2 md:w-52 lg:w-60">
-        <MapPin
-          className="size-5 shrink-0 text-muted-foreground"
-          aria-hidden
-        />
-        <input
-          id={`${idPrefix}-near`}
-          type="text"
-          name="loc"
-          placeholder="address, city..."
-          className="min-h-10 min-w-0 flex-1 border-0 bg-transparent py-2 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:py-2.5 sm:text-sm"
-        />
-      </div>
-      <Button
-        type="submit"
-        size="lg"
-        className="min-h-12 w-full shrink-0 rounded-md border-none px-4 py-3 text-base font-semibold sm:h-auto sm:w-auto sm:px-3.5 sm:text-lg"
-      >
-        <Search className="size-5 sm:mr-1" aria-hidden />
-        Search
-      </Button>
-    </form>
-  );
-}
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -116,8 +50,8 @@ export function Header() {
           </div>
 
           <div className="flex min-w-0 justify-center justify-self-stretch px-2">
-            <div className="w-full max-w-xl ">
-              <HeaderSearchForm idPrefix="hdr-desk" />
+            <div className="relative z-60 w-full max-w-xl overflow-visible">
+              <DirectorySearchBar idPrefix="hdr-desk" />
             </div>
           </div>
 
@@ -175,7 +109,7 @@ export function Header() {
 
         {/* Medium screens: full-width search under logo row (no overlap) */}
         <div className="mt-3 hidden border-t border-border pt-3 md:block lg:hidden">
-          <HeaderSearchForm idPrefix="hdr-md" />
+          <DirectorySearchBar idPrefix="hdr-md" />
         </div>
       </div>
 
@@ -186,7 +120,11 @@ export function Header() {
           className="absolute left-0 right-0 top-full z-60 max-h-[min(75dvh,32rem)] overflow-y-auto overscroll-contain border-b border-border bg-card shadow-xl lg:hidden"
         >
           <div className={cn(PAGE_SHELL, "py-4")}>
-            <HeaderSearchForm idPrefix="hdr-mob" className="shadow-lg" />
+            <DirectorySearchBar
+              idPrefix="hdr-mob"
+              className="shadow-lg"
+              onSubmitSuccess={closeMobile}
+            />
             <nav className="mt-4 flex flex-col gap-0.5" aria-label="Mobile">
               <Link
                 href="/search?write-review"
