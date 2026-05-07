@@ -158,6 +158,25 @@ body {
   font-family: var(--font-open-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
+/*
+ * Native search field UI (clear “×”, magnifier chrome) uses the browser accent
+ * (often blue) and cannot match our Lucide / muted-foreground icons. Hide it
+ * so header search stays visually consistent; users can still clear with keyboard.
+ */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+  display: none;
+}
+
+input[type="search"]::-moz-search-clear-button {
+  display: none;
+}
+
 .font-display {
   font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
 }

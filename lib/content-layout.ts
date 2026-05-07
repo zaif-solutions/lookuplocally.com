@@ -6,7 +6,7 @@
  * so large laptops at the default 2xl width keep tighter gutters.
  */
 export const PAGE_SHELL =
-  "mx-auto w-full md:container px-5 md:px-8 lg:px-12 2xl:px-0 3xl:px-24";
+  "mx-auto w-full md:container px-5 md:px-8 lg:px-8 2xl:px-0 3xl:px-24";
 
 /**
  * Pull the first hero under the transparent home header (header is `relative`, not fixed).

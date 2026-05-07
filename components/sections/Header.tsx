@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   Menu,
+  MapPin,
   Search,
   ChevronDown,
   ShoppingBag,
@@ -63,7 +64,6 @@ import { SITE_NAME } from "@/lib/constants";
 import { PAGE_SHELL } from "@/lib/content-layout";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import {
   NavigationMenu,
@@ -115,7 +115,11 @@ const homeGardenLinks: CategoryLink[] = [
   { label: "HVAC", href: "/search?q=hvac", icon: Wind },
   { label: "Pest Control", href: "/search?q=pest-control", icon: Bug },
   { label: "Moving Services", href: "/search?q=movers", icon: Truck },
-  { label: "Appliance Repair", href: "/search?q=appliance-repair", icon: Wrench },
+  {
+    label: "Appliance Repair",
+    href: "/search?q=appliance-repair",
+    icon: Wrench,
+  },
   { label: "Pool Service", href: "/search?q=pool-service", icon: Waves },
   { label: "House Cleaning", href: "/search?q=house-cleaning", icon: Sparkles },
   { label: "Contractors", href: "/search?q=contractors", icon: Hammer },
@@ -165,7 +169,11 @@ const travelLinks: CategoryLink[] = [
   { label: "Travel Agents", href: "/search?q=travel-agents", icon: Plane },
   { label: "Museums", href: "/search?q=museums", icon: Landmark },
   { label: "Beaches", href: "/search?q=beaches", icon: Waves },
-  { label: "Adventure Parks", href: "/search?q=adventure-parks", icon: Mountain },
+  {
+    label: "Adventure Parks",
+    href: "/search?q=adventure-parks",
+    icon: Mountain,
+  },
 ];
 
 const moreLinks: CategoryLink[] = [
@@ -247,18 +255,27 @@ function DesktopSearchForm({
       <label htmlFor={`${idPrefix}-find`} className="sr-only">
         Find
       </label>
-      <input
-        id={`${idPrefix}-find`}
-        type="search"
-        name="q"
-        placeholder="restaurants, services..."
-        className={cn(
-          "min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm",
-          overHero
-            ? "text-white placeholder:text-white/60"
-            : "text-foreground placeholder:text-muted-foreground",
-        )}
-      />
+      <div className="flex min-h-12 w-full min-w-0 flex-1 items-center gap-2 px-3 sm:min-h-0 sm:basis-0 sm:py-0 sm:pl-3 sm:pr-2">
+        <Search
+          className={cn(
+            "size-5 shrink-0",
+            overHero ? "text-white/70" : "text-muted-foreground",
+          )}
+          aria-hidden
+        />
+        <input
+          id={`${idPrefix}-find`}
+          type="search"
+          name="q"
+          placeholder="restaurants, services..."
+          className={cn(
+            "min-h-10 min-w-0 flex-1 border-0 bg-transparent py-2 text-base focus:outline-none focus:ring-0 sm:min-h-0 sm:py-2.5 sm:text-sm",
+            overHero
+              ? "text-white placeholder:text-white/60"
+              : "text-foreground placeholder:text-muted-foreground",
+          )}
+        />
+      </div>
       <span
         className={cn(
           "hidden h-auto w-px shrink-0 sm:block",
@@ -269,33 +286,37 @@ function DesktopSearchForm({
       <label htmlFor={`${idPrefix}-near`} className="sr-only">
         Near
       </label>
-      <input
-        id={`${idPrefix}-near`}
-        type="text"
-        name="loc"
-        placeholder="address, city..."
-        className={cn(
-          "min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base focus:outline-none focus:ring-0 sm:min-h-0 sm:flex-1 sm:basis-0 sm:py-2.5 sm:text-sm",
-          overHero
-            ? "text-white placeholder:text-white/60"
-            : "text-foreground placeholder:text-muted-foreground",
-        )}
-      />
+      <div className="flex min-h-12 w-full min-w-0 flex-1 items-center gap-2 px-3 sm:min-h-0 sm:basis-0 sm:py-0 sm:pl-3 sm:pr-2">
+        <MapPin
+          className={cn(
+            "size-5 shrink-0",
+            overHero ? "text-white/70" : "text-muted-foreground",
+          )}
+          aria-hidden
+        />
+        <input
+          id={`${idPrefix}-near`}
+          type="text"
+          name="loc"
+          placeholder="address, city..."
+          className={cn(
+            "min-h-10 min-w-0 flex-1 border-0 bg-transparent py-2 text-base focus:outline-none focus:ring-0 sm:min-h-0 sm:py-2.5 sm:text-sm",
+            overHero
+              ? "text-white placeholder:text-white/60"
+              : "text-foreground placeholder:text-muted-foreground",
+          )}
+        />
+      </div>
       <Button
-        type="button"
+        type="submit"
         size="lg"
+        aria-label="Search"
         className="h-full shrink-0 text-lg font-semibold"
       >
-        <Search className="size-5" />
-        <Label
-          htmlFor={`${idPrefix}-find`}
-          className={cn(
-            "hidden xl:block xl:text-lg xl:font-semibold",
-            overHero && "text-white",
-          )}
-        >
+        <Search className="size-5" aria-hidden />
+        <span className="hidden xl:inline xl:text-lg xl:font-semibold">
           Search
-        </Label>
+        </span>
       </Button>
     </form>
   );
@@ -410,7 +431,11 @@ function MobileCategorySection({
   );
 }
 
-function MobileForBusinessSection({ onLinkClick }: { onLinkClick: () => void }) {
+function MobileForBusinessSection({
+  onLinkClick,
+}: {
+  onLinkClick: () => void;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -472,269 +497,309 @@ export function Header() {
           : "bg-background shadow-sm",
       )}
     >
-        <div className={cn(PAGE_SHELL, "overflow-visible")}>
-          {/* ─── Main header row ─── */}
-          <div
-            className={cn(
-              "grid h-14 w-full items-center sm:h-16 md:h-20",
-              "grid-cols-[1fr_auto] gap-x-3 gap-y-0",
-              "sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-x-3",
-              "lg:gap-x-4 xl:gap-x-6",
-            )}
-          >
-            {/* Logo */}
-            <div className="min-w-0 w-32 justify-self-start sm:w-40 md:w-48">
-              <Link href="/">
-                <Image
-                  src="/logo.svg"
-                  alt={SITE_NAME}
-                  width={200}
-                  height={200}
-                  className={cn(
-                    "size-full object-contain transition-all duration-300",
-                    isHome && "brightness-0 invert",
-                  )}
-                />
-              </Link>
-            </div>
-
-            {/* Desktop search */}
-            <div className="hidden min-w-0 w-full justify-self-center sm:flex">
-              <DesktopSearchForm
-                idPrefix="hdr-desk"
-                overHero={isHome}
-                className="w-full min-w-0 max-w-full 3xl:max-w-3xl"
+      <div className={cn(PAGE_SHELL, "overflow-visible")}>
+        {/* ─── Main header row ─── */}
+        <div
+          className={cn(
+            "grid h-14 w-full items-center sm:h-16 md:h-20",
+            "grid-cols-[1fr_auto] gap-x-3 gap-y-0",
+            "sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-x-3",
+            "lg:gap-x-4 xl:gap-x-6",
+          )}
+        >
+          {/* Logo */}
+          <div className="min-w-0 w-32 justify-self-start sm:w-40 md:w-48">
+            <Link href="/">
+              <Image
+                src="/logo.svg"
+                alt={SITE_NAME}
+                width={200}
+                height={200}
+                className={cn(
+                  "size-full object-contain transition-all duration-300",
+                  isHome && "brightness-0 invert",
+                )}
               />
+            </Link>
+          </div>
+
+          {/* Desktop search */}
+          <div className="hidden min-w-0 w-full justify-self-center sm:flex">
+            <DesktopSearchForm
+              idPrefix="hdr-desk"
+              overHero={isHome}
+              className="w-full min-w-0 max-w-full 3xl:max-w-3xl"
+            />
+          </div>
+
+          {/* Desktop nav buttons + mobile hamburger */}
+          <div className="flex shrink-0 items-center justify-end justify-self-end gap-1 xl:gap-2">
+            <div className="hidden shrink-0 items-center gap-1 xl:flex xl:gap-2">
+              <NavigationMenu
+                viewport={false}
+                className="relative overflow-visible"
+              >
+                <NavigationMenuList className="overflow-visible">
+                  <NavigationMenuItem className="relative overflow-visible">
+                    <NavigationMenuTrigger
+                      className={cn(
+                        "h-10 gap-1 rounded-md border-0 bg-transparent px-3 text-sm font-semibold shadow-none transition-colors duration-300",
+                        "hover:bg-transparent focus:bg-transparent focus-visible:ring-0",
+                        "data-[state=open]:bg-transparent data-[state=open]:hover:bg-transparent",
+                        "[&_svg]:text-current",
+                        isHome
+                          ? "text-white hover:bg-white/10 data-[state=open]:text-white"
+                          : "text-foreground hover:bg-muted data-[state=open]:text-foreground",
+                      )}
+                    >
+                      <span className="whitespace-nowrap">For Business</span>
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent
+                      className={cn(
+                        "z-50 p-2!",
+                        "w-[270px]!",
+                        "overflow-hidden rounded-md border border-black/10 bg-white shadow-none",
+                        "dark:border-border dark:bg-card dark:shadow-none",
+                      )}
+                    >
+                      <div className="flex w-full flex-col gap-0.5">
+                        <NavigationMenuLink
+                          href="/biz/add"
+                          className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-md px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
+                        >
+                          <CirclePlus
+                            className="size-[18px] shrink-0 text-foreground/80"
+                            strokeWidth={1.35}
+                          />
+                          <span className="leading-tight">Add a Business</span>
+                        </NavigationMenuLink>
+                        <NavigationMenuLink
+                          href="/biz/claim"
+                          className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-md px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
+                        >
+                          <Shield
+                            className="size-[18px] shrink-0 text-foreground/80"
+                            strokeWidth={1.35}
+                          />
+                          <span className="leading-tight">
+                            Claim Your Business
+                          </span>
+                        </NavigationMenuLink>
+                        <NavigationMenuLink
+                          href="/biz/login"
+                          className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-md px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
+                        >
+                          <LogIn
+                            className="size-[18px] shrink-0 text-foreground/80"
+                            strokeWidth={1.35}
+                          />
+                          <span className="leading-tight">
+                            Login to Business Account
+                          </span>
+                        </NavigationMenuLink>
+                      </div>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
+              <Button
+                size="lg"
+                className={cn(
+                  "h-10 shrink-0 px-3 font-semibold",
+                  isHome && "text-white hover:bg-white/10",
+                )}
+                asChild
+                variant="ghost"
+              >
+                <Link href="/write-review">Write a Review</Link>
+              </Button>
+              <Button
+                size="lg"
+                className={cn(
+                  "h-10 shrink-0 px-3 font-semibold",
+                  isHome && "text-white hover:bg-white/10",
+                )}
+                asChild
+                variant="ghost"
+              >
+                <Link href="/login">Log In</Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                className="h-10 shrink-0 px-3 font-semibold"
+              >
+                <Link href="/signup">Sign Up</Link>
+              </Button>
             </div>
 
-            {/* Desktop nav buttons + mobile hamburger */}
-            <div className="flex shrink-0 items-center justify-end justify-self-end gap-1 xl:gap-2">
-              <div className="hidden shrink-0 items-center gap-1 xl:flex xl:gap-2">
-                <NavigationMenu viewport={false} className="relative overflow-visible">
-                  <NavigationMenuList className="overflow-visible">
-                    <NavigationMenuItem className="relative overflow-visible">
-                      <NavigationMenuTrigger
-                        className={cn(
-                          "h-10 gap-1 rounded-md border-0 bg-transparent px-3 text-sm font-semibold shadow-none transition-colors duration-300",
-                          "hover:bg-transparent focus:bg-transparent focus-visible:ring-0",
-                          "data-[state=open]:bg-transparent data-[state=open]:hover:bg-transparent",
-                          "[&_svg]:text-current",
-                          isHome
-                            ? "text-white hover:bg-white/10 data-[state=open]:text-white"
-                            : "text-foreground hover:bg-muted data-[state=open]:text-foreground",
-                        )}
-                      >
-                        <span className="whitespace-nowrap">For Business</span>
-                      </NavigationMenuTrigger>
-                      <NavigationMenuContent
-                        className={cn(
-                          "z-50 p-2!",
-                          "w-[270px]!",
-                          "overflow-hidden rounded-md border border-black/10 bg-white shadow-none",
-                          "dark:border-border dark:bg-card dark:shadow-none",
-                        )}
-                      >
-                        <div className="flex w-full flex-col gap-0.5">
-                          <NavigationMenuLink
-                            href="/biz/add"
-                            className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-md px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
-                          >
-                            <CirclePlus className="size-[18px] shrink-0 text-foreground/80" strokeWidth={1.35} />
-                            <span className="leading-tight">Add a Business</span>
-                          </NavigationMenuLink>
-                          <NavigationMenuLink
-                            href="/biz/claim"
-                            className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-md px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
-                          >
-                            <Shield className="size-[18px] shrink-0 text-foreground/80" strokeWidth={1.35} />
-                            <span className="leading-tight">Claim Your Business</span>
-                          </NavigationMenuLink>
-                          <NavigationMenuLink
-                            href="/biz/login"
-                            className="flex! w-full flex-row! items-center gap-3 whitespace-nowrap rounded-md px-3 py-2.5 text-left text-[15px] font-semibold text-foreground transition-colors hover:bg-zinc-100 focus:ring-0 dark:hover:bg-muted/80"
-                          >
-                            <LogIn className="size-[18px] shrink-0 text-foreground/80" strokeWidth={1.35} />
-                            <span className="leading-tight">Login to Business Account</span>
-                          </NavigationMenuLink>
-                        </div>
-                      </NavigationMenuContent>
-                    </NavigationMenuItem>
-                  </NavigationMenuList>
-                </NavigationMenu>
-                <Button
-                  size="lg"
+            {/* Mobile / tablet hamburger */}
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <button
+                  type="button"
                   className={cn(
-                    "h-10 shrink-0 px-3 font-semibold",
-                    isHome && "text-white hover:bg-white/10",
+                    "inline-flex shrink-0 items-center justify-center rounded-md p-2 transition-colors xl:hidden",
+                    isHome
+                      ? "text-white hover:bg-white/15"
+                      : "text-foreground hover:bg-muted",
                   )}
-                  asChild
-                  variant="ghost"
+                  aria-label="Open menu"
                 >
-                  <Link href="/write-review">Write a Review</Link>
-                </Button>
-                <Button
-                  size="lg"
-                  className={cn(
-                    "h-10 shrink-0 px-3 font-semibold",
-                    isHome && "text-white hover:bg-white/10",
-                  )}
-                  asChild
-                  variant="ghost"
-                >
-                  <Link href="/login">Log In</Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  className="h-10 shrink-0 px-3 font-semibold"
-                >
-                  <Link href="/signup">Sign Up</Link>
-                </Button>
-              </div>
+                  <Menu className="size-6" />
+                </button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="flex w-full max-w-sm flex-col overflow-hidden bg-background p-0"
+              >
+                <SheetHeader className="border-b border-border px-4 py-3">
+                  <SheetTitle className="text-left text-base font-semibold">
+                    Menu
+                  </SheetTitle>
+                </SheetHeader>
 
-              {/* Mobile / tablet hamburger */}
-              <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                <SheetTrigger asChild>
-                  <button
-                    type="button"
-                    className={cn(
-                      "inline-flex shrink-0 items-center justify-center rounded-md p-2 transition-colors xl:hidden",
-                      isHome
-                        ? "text-white hover:bg-white/15"
-                        : "text-foreground hover:bg-muted",
-                    )}
-                    aria-label="Open menu"
-                  >
-                    <Menu className="size-6" />
-                  </button>
-                </SheetTrigger>
-                <SheetContent
-                  side="right"
-                  className="flex w-full max-w-sm flex-col overflow-hidden bg-background p-0"
-                >
-                  <SheetHeader className="border-b border-border px-4 py-3">
-                    <SheetTitle className="text-left text-base font-semibold">
-                      Menu
-                    </SheetTitle>
-                  </SheetHeader>
-
-                  <div className="flex flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-4 pb-6 pt-4">
-                    {/* Mobile search (only below sm where the header search is hidden) */}
-                    <div className="sm:hidden">
-                      <form
-                        action="/search"
-                        method="get"
-                        className="flex flex-col gap-2.5"
-                        role="search"
-                        onSubmit={closeMobile}
-                      >
+                <div className="flex flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-4 pb-6 pt-4">
+                  {/* Mobile search (only below sm where the header search is hidden) */}
+                  <div className="sm:hidden">
+                    <form
+                      action="/search"
+                      method="get"
+                      className="flex flex-col gap-2.5"
+                      role="search"
+                      onSubmit={closeMobile}
+                    >
+                      <div className="flex w-full items-center gap-2 rounded-md border border-input bg-background px-3 py-0.5 focus-within:ring-2 focus-within:ring-ring">
+                        <Search
+                          className="size-4 shrink-0 text-muted-foreground"
+                          aria-hidden
+                        />
                         <input
                           name="q"
                           type="search"
                           placeholder="things to do, nail salons…"
-                          className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          className="min-h-10 w-full flex-1 border-0 bg-transparent py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none"
+                        />
+                      </div>
+                      <div className="flex w-full items-center gap-2 rounded-md border border-input bg-background px-3 py-0.5 focus-within:ring-2 focus-within:ring-ring">
+                        <MapPin
+                          className="size-4 shrink-0 text-muted-foreground"
+                          aria-hidden
                         />
                         <input
                           name="loc"
                           type="text"
                           placeholder="Location"
-                          className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          className="min-h-10 w-full flex-1 border-0 bg-transparent py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none"
                         />
-                        <Button type="submit" className="w-full">
-                          Search
-                        </Button>
-                      </form>
-                    </div>
-
-                    {/* Auth buttons */}
-                    <div className="flex gap-2">
-                      <Button variant="outline" className="flex-1" asChild>
-                        <Link href="/login" onClick={closeMobile}>
-                          Log In
-                        </Link>
-                      </Button>
-                      <Button className="flex-1" asChild>
-                        <Link href="/signup" onClick={closeMobile}>
-                          Sign Up
-                        </Link>
-                      </Button>
-                    </div>
-
-                    {/* Quick links */}
-                    <nav className="flex flex-col gap-0.5 border-t border-border pt-3">
-                      <MobileForBusinessSection onLinkClick={closeMobile} />
-                      <Link
-                        href="/write-review"
-                        className="flex min-h-11 items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-                        onClick={closeMobile}
+                      </div>
+                      <Button
+                        type="submit"
+                        className="h-10 shrink-0 px-3 font-semibold"
                       >
-                        Write a Review
-                      </Link>
-                      <Link
-                        href="/search?ref=project"
-                        className="flex min-h-11 items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-                        onClick={closeMobile}
-                      >
-                        Start a Project
-                      </Link>
-                    </nav>
-
-                    {/* Categories (with collapsible sub-links) */}
-                    <div className="flex flex-col gap-0.5 border-t border-border pt-3">
-                      <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Browse Categories
-                      </p>
-                      {categories.map((cat) => (
-                        <MobileCategorySection
-                          key={cat.label}
-                          category={cat}
-                          onLinkClick={closeMobile}
-                        />
-                      ))}
-                    </div>
+                        <Search className="size-5" />
+                        Search
+                      </Button>
+                    </form>
                   </div>
-                </SheetContent>
-              </Sheet>
-            </div>
-          </div>
 
-          {/* ─── Desktop category navigation bar (xl+ only) ─── */}
-          <NavigationMenu
-            viewport={false}
-            className="relative z-50 hidden w-full max-w-full justify-start overflow-visible xl:flex"
-            aria-label="Browse categories"
-          >
-            <NavigationMenuList className="flex-wrap justify-start gap-0 overflow-visible">
-              {categories.map((cat, index) => (
-                <NavigationMenuItem
-                  key={cat.label}
-                  className="relative shrink-0 overflow-visible"
-                >
-                  {cat.hasDropdown ? (
-                    <DesktopCategoryMegaItem
-                      cat={cat}
-                      isFirst={index === 0}
-                      overHero={isHome}
-                    />
-                  ) : (
-                    <NavigationMenuLink
-                      href={cat.href}
-                      className={cn(
-                        "flex h-auto items-center py-3 text-[15px] font-medium transition-colors 3xl:text-base",
-                        index === 0 ? "px-0 pr-3" : "px-3 3xl:px-4",
-                        isHome
-                          ? "text-white/80 hover:text-white"
-                          : "text-muted-foreground hover:text-foreground",
-                      )}
+                  {/* Auth buttons */}
+                  <div className="flex gap-2">
+                    <Button variant="outline" className="flex-1" asChild>
+                      <Link
+                        href="/login"
+                        className="h-10 shrink-0 px-3 font-semibold"
+                        onClick={closeMobile}
+                      >
+                        Log In
+                      </Link>
+                    </Button>
+                    <Button className="flex-1" asChild>
+                      <Link
+                        href="/signup"
+                        className="h-10 shrink-0 px-3 font-semibold"
+                        onClick={closeMobile}
+                      >
+                        Sign Up
+                      </Link>
+                    </Button>
+                  </div>
+
+                  {/* Quick links */}
+                  <nav className="flex flex-col gap-0.5 border-t border-border pt-3">
+                    <MobileForBusinessSection onLinkClick={closeMobile} />
+                    <Link
+                      href="/write-review"
+                      className="flex min-h-11 items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                      onClick={closeMobile}
                     >
-                      {cat.label}
-                    </NavigationMenuLink>
-                  )}
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
+                      Write a Review
+                    </Link>
+                    <Link
+                      href="/search?ref=project"
+                      className="flex min-h-11 items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                      onClick={closeMobile}
+                    >
+                      Start a Project
+                    </Link>
+                  </nav>
+
+                  {/* Categories (with collapsible sub-links) */}
+                  <div className="flex flex-col gap-0.5 border-t border-border pt-3">
+                    <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Browse Categories
+                    </p>
+                    {categories.map((cat) => (
+                      <MobileCategorySection
+                        key={cat.label}
+                        category={cat}
+                        onLinkClick={closeMobile}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
-      </header>
+
+        {/* ─── Desktop category navigation bar (xl+ only) ─── */}
+        <NavigationMenu
+          viewport={false}
+          className="relative z-50 hidden w-full max-w-full justify-start overflow-visible xl:flex"
+          aria-label="Browse categories"
+        >
+          <NavigationMenuList className="flex-wrap justify-start gap-0 overflow-visible">
+            {categories.map((cat, index) => (
+              <NavigationMenuItem
+                key={cat.label}
+                className="relative shrink-0 overflow-visible"
+              >
+                {cat.hasDropdown ? (
+                  <DesktopCategoryMegaItem
+                    cat={cat}
+                    isFirst={index === 0}
+                    overHero={isHome}
+                  />
+                ) : (
+                  <NavigationMenuLink
+                    href={cat.href}
+                    className={cn(
+                      "flex h-auto items-center py-3 text-[15px] font-medium transition-colors 3xl:text-base",
+                      index === 0 ? "px-0 pr-3" : "px-3 3xl:px-4",
+                      isHome
+                        ? "text-white/80 hover:text-white"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {cat.label}
+                  </NavigationMenuLink>
+                )}
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
+    </header>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Search, Menu, X } from "@/components/ui/Icon";
+import { MapPin, Menu, Search, X } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
 import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -29,13 +29,19 @@ function HeaderSearchForm({
       <label htmlFor={`${idPrefix}-find`} className="sr-only">
         Find
       </label>
-      <input
-        id={`${idPrefix}-find`}
-        type="search"
-        name="q"
-        placeholder="restaurants, services..."
-        className="min-h-12 min-w-0 flex-1 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:py-2.5 sm:text-sm"
-      />
+      <div className="flex min-h-12 min-w-0 flex-1 items-center gap-2 px-3 sm:min-h-0 sm:py-0 sm:pl-3 sm:pr-2">
+        <Search
+          className="size-5 shrink-0 text-muted-foreground"
+          aria-hidden
+        />
+        <input
+          id={`${idPrefix}-find`}
+          type="search"
+          name="q"
+          placeholder="restaurants, services..."
+          className="min-h-10 min-w-0 flex-1 border-0 bg-transparent py-2 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:py-2.5 sm:text-sm"
+        />
+      </div>
       <span
         className="hidden h-auto w-px shrink-0 bg-border sm:block"
         aria-hidden
@@ -43,13 +49,19 @@ function HeaderSearchForm({
       <label htmlFor={`${idPrefix}-near`} className="sr-only">
         Near
       </label>
-      <input
-        id={`${idPrefix}-near`}
-        type="text"
-        name="loc"
-        placeholder="address, city..."
-        className="min-h-12 w-full min-w-0 border-0 bg-transparent px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:w-44 sm:shrink-0 sm:py-2.5 sm:text-sm md:w-52 lg:w-60"
-      />
+      <div className="flex min-h-12 w-full min-w-0 items-center gap-2 px-3 sm:min-h-0 sm:w-44 sm:shrink-0 sm:px-3 sm:pr-2 md:w-52 lg:w-60">
+        <MapPin
+          className="size-5 shrink-0 text-muted-foreground"
+          aria-hidden
+        />
+        <input
+          id={`${idPrefix}-near`}
+          type="text"
+          name="loc"
+          placeholder="address, city..."
+          className="min-h-10 min-w-0 flex-1 border-0 bg-transparent py-2 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 sm:min-h-0 sm:py-2.5 sm:text-sm"
+        />
+      </div>
       <Button
         type="submit"
         size="lg"
