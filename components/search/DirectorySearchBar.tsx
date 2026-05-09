@@ -75,14 +75,14 @@ export function DirectorySearchBar({
       isInline &&
         segmentOpen &&
         segment === "near" &&
-        "relative z-[1] rounded-t-md border border-b-0 border-border bg-popover",
+        "relative z-[1] rounded-none border-0 bg-popover",
       !isInline &&
         cn(
-          "border border-input bg-background px-3 py-0.5 focus-within:ring-2 focus-within:ring-ring",
+          "border-0 bg-background px-3 py-0.5 focus-within:ring-2 focus-within:ring-ring",
           !segmentOpen && "rounded-md",
           segmentOpen &&
             segment === "near" &&
-            "rounded-t-md rounded-b-none border-b-0 bg-popover",
+            "rounded-none border-0 bg-popover",
         ),
     );
 
@@ -129,7 +129,7 @@ export function DirectorySearchBar({
   const locSuggestions = filterLocationSuggestions(loc);
 
   const panelSurfaceBase = cn(
-    "overflow-hidden border-border bg-popover text-popover-foreground shadow-md",
+    "overflow-hidden bg-popover text-popover-foreground shadow-lg",
     "animate-in fade-in-0 slide-in-from-top-1 duration-200 ease-out",
     "motion-reduce:animate-none",
   );
@@ -137,9 +137,8 @@ export function DirectorySearchBar({
   const locationPanelSurface = cn(
     panelSurfaceBase,
     isInline &&
-      "absolute left-0 right-0 top-full z-100 mt-0 rounded-b-md border border-t-0 border-border",
-    !isInline &&
-      "-mt-px rounded-b-md rounded-t-none border border-t-0 border-border shadow-sm",
+      "absolute left-0 right-0 top-full z-100 mt-0 rounded-none border-0",
+    !isInline && "rounded-none border-0",
   );
 
   const panelItemClass =
@@ -203,9 +202,9 @@ export function DirectorySearchBar({
         "shrink-0 gap-2 border-0 shadow-none",
         isInline &&
           cn(
-            "min-h-12 h-12 w-full rounded-md py-0 text-base font-semibold sm:text-sm",
-            "sm:h-full sm:min-h-0 sm:w-auto sm:rounded-none sm:rounded-r-md",
-            "sm:border-l sm:border-border sm:px-5 sm:py-0",
+            "min-h-12 h-12 w-full rounded-r-full py-0 text-base font-semibold sm:text-sm",
+            "sm:h-full sm:min-h-0 sm:w-auto sm:rounded-r-full",
+            "sm:px-5 sm:py-0",
           ),
         !isInline && "h-10 w-full py-0 font-semibold",
       )}
@@ -236,11 +235,9 @@ export function DirectorySearchBar({
       className={cn(
         isInline &&
           cn(
-            "flex w-full overflow-visible rounded-md border shadow-md",
+            "flex w-full overflow-visible rounded-full shadow-md",
             "flex-col gap-0 sm:h-12 sm:flex-row sm:items-stretch",
-            homeSolidBar || !isHero
-              ? "border-border bg-card"
-              : "border-white/20 bg-white/10 backdrop-blur-md",
+            homeSolidBar || !isHero ? "bg-card" : "bg-white/10 backdrop-blur-md",
           ),
         !isInline && "flex w-full flex-col gap-2.5 overflow-visible",
         className,
@@ -280,16 +277,6 @@ export function DirectorySearchBar({
           />
         </div>
       </div>
-
-      {isInline ? (
-        <span
-          className={cn(
-            "hidden h-auto w-px shrink-0 sm:block",
-            homeSolidBar || !isHero ? "bg-border" : "bg-white/25",
-          )}
-          aria-hidden
-        />
-      ) : null}
 
       <label htmlFor={idLoc} className="sr-only">
         Near

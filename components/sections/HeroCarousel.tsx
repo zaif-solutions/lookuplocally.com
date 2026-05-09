@@ -185,18 +185,19 @@ export function HeroCarousel({ slides, interval = 6500 }: HeroCarouselProps) {
                     <Button
                       asChild
                       size="lg"
-                      className="h-10 font-semibold shadow-lg"
+                      className="h-14 rounded-full px-10 font-semibold shadow-lg"
                     >
                       <Link
                         href={slide.ctaHref}
                         tabIndex={i === active ? 0 : -1}
+                        className="flex items-center gap-2"
                       >
                         <Search
-                          className="size-4"
+                          className="size-5"
                           aria-hidden
-                          strokeWidth={2.5}
+                          strokeWidth={"2.5"}
                         />
-                        {slide.ctaLabel}
+                        <span className="text-lg font-semibold">{slide.ctaLabel}</span>
                       </Link>
                     </Button>
                   </div>

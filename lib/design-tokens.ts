@@ -27,7 +27,7 @@ export const colors = {
  * In UI prefer Tailwind `rounded-md` (and `rounded-sm` / `rounded-lg` — same token).
  */
 export const radius = {
-  DEFAULT: "0.375rem",
+  DEFAULT: "0.295rem",
 } as const;
 
 export const fonts = {

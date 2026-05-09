@@ -25,7 +25,7 @@
 
   /*
    * One dial (like shadcn): change only --radius; all rounded-sm/md/lg/xl/2xl follow it.
-   * Tailwind v4 still defines separate --radius-* theme keys — they alias this value.
+   * Tailwind v4 maps these to the theme radius tokens (menus, buttons, cards).
    */
   --radius: 0.295rem;
   --radius-sm: var(--radius);
